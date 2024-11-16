@@ -1,71 +1,31 @@
 <?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    header('Location: ../../admin/login.php');
-    exit();
-}
-
 include '../../database/connection.php'; // Include database connection
 
-if (isset($_POST['memberId']) && isset($_POST['action'])) {
-    $memberId = $_POST['memberId'];
-    $action = $_POST['action'];
+if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
+    $memberID = $_POST['memberID'];
 
-    // Fetch the latest attendance record
-    $sql = "SELECT * FROM Attendance WHERE MemberID = ? ORDER BY AttendanceDate DESC LIMIT 1";
-    $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("i", $memberId);
+    // Check the current attendance status
+    $checkSql = "SELECT * FROM Attendance WHERE MemberID = ? ORDER BY AttendanceDate DESC LIMIT 1";
+    $stmt = $conn1->prepare($checkSql);
+    $stmt->bind_param("i", $memberID);
     $stmt->execute();
     $result = $stmt->get_result();
+    $attendance = $result->fetch_assoc();
 
-    if ($result->num_rows > 0) {
-        $attendance = $result->fetch_assoc();
-
-        if ($action == 'checkin' && $attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // If the member hasn't checked out yet, allow check-in
-            $checkInTime = date('Y-m-d H:i:s');
-            $updateSql = "UPDATE Attendance SET CheckIn = ?, AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
-            $updateStmt = $conn1->prepare($updateSql);
-            $updateStmt->bind_param("si", $checkInTime, $attendance['AttendanceID']);
-            if ($updateStmt->execute()) {
-                echo json_encode(['message' => 'Check-in successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-in']);
-            }
-        } elseif ($action == 'checkout' && $attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // If the member hasn't checked out yet, allow check-out
-            $checkOutTime = date('Y-m-d H:i:s');
-            $updateSql = "UPDATE Attendance SET CheckOut = ?, AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
-            $updateStmt = $conn1->prepare($updateSql);
-            $updateStmt->bind_param("si", $checkOutTime, $attendance['AttendanceID']);
-            if ($updateStmt->execute()) {
-                echo json_encode(['message' => 'Check-out successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-out']);
-            }
-        } else {
-            echo json_encode(['message' => 'Action not possible']);
-        }
+    if ($attendance && empty($attendance['CheckOut'])) {
+        // Member is checked in, so we check them out
+        $updateSql = "UPDATE Attendance SET CheckOut = NOW(), AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
+        $stmt = $conn1->prepare($updateSql);
+        $stmt->bind_param("i", $attendance['AttendanceID']);
+        $stmt->execute();
+        echo 'checkedOut';
     } else {
-        if ($action == 'checkin') {
-            // Create new record if none exists
-            $checkInTime = date('Y-m-d H:i:s');
-            $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceDate, AttendanceCount) VALUES (?, ?, ?, 1)";
-            $insertStmt = $conn1->prepare($insertSql);
-            $insertStmt->bind_param("iss", $memberId, $checkInTime, $checkInTime);
-            if ($insertStmt->execute()) {
-                echo json_encode(['message' => 'Check-in successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-in']);
-            }
-        } else {
-            echo json_encode(['message' => 'No check-in record found']);
-        }
+        // Member is not checked in, so we check them in
+        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceCount) VALUES (?, NOW(), 1)";
+        $stmt = $conn1->prepare($insertSql);
+        $stmt->bind_param("i", $memberID);
+        $stmt->execute();
+        echo 'checkedIn';
     }
-
-    $stmt->close();
-    $conn1->close();
-} else {
-    echo json_encode(['message' => 'Invalid request']);
 }
 ?>
