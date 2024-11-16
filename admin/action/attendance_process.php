@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             echo json_encode(['message' => 'Check-In successful.', 'action' => 'Check In']);
         } else {
-            echo json_encode(['message' => 'Error during check-in.']);
+            echo json_encode(['message' => 'Error during check-in: ' . $stmt->error]);
         }
         $stmt->close();
     } elseif ($action === 'Check Out') {
@@ -51,8 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE()";
             $updateStmt = $conn1->prepare($updateCountSql);
             $updateStmt->bind_param("i", $memberId);
-            $updateStmt->execute();
-            echo json_encode(['message' => 'Check-Out successful.', 'action' => 'Check Out']);
+            if ($updateStmt->execute()) {
+                echo json_encode(['message' => 'Check-Out successful.', 'action' => 'Check Out']);
+            } else {
+                echo json_encode(['message' => 'Error updating attendance count.']);
+            }
             $updateStmt->close();
         } else {
             echo json_encode(['message' => 'Error during check-out.']);
