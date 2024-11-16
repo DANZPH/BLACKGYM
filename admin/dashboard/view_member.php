@@ -22,22 +22,12 @@ include '../../database/connection.php'; // Include database connection
     <!-- header.php -->
     <link rel="stylesheet" href="../../styles.css">
     <style>
-        /* Apply responsive scrolling only to the table */
+        /* Add this to prevent table overflow and enable scrolling */
         .table-responsive {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
-
-        /* Ensure that the pagination controls and search box stay in place */
-        .dataTables_wrapper .dataTables_paginate,
-        .dataTables_wrapper .dataTables_filter {
-            float: none;
-            text-align: right;
-            margin-top: 10px;
-        }
-
-        .dataTables_wrapper .dataTables_length {
-            margin-top: 10px;
+        .card-body {
+            padding: 0;
         }
     </style>
 </head>
@@ -62,7 +52,7 @@ include '../../database/connection.php'; // Include database connection
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Wrap table in a responsive div to enable scrolling -->
+                    <!-- Wrap table in a responsive div -->
                     <div class="table-responsive">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
