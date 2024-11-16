@@ -3,7 +3,7 @@
         <ul class="list-unstyled">
             <!-- Manage Members Dropdown -->
             <li class="nav-item">
-                <a class="nav-link" href="#manageMembers">Manage Members</a>
+                <a class="nav-link" href="index.php">dashboard</a>
 
                 
             <li class="nav-item">
