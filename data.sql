@@ -1,160 +1,153 @@
-<?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
-    header('Location: ../../admin/login.php');
-    exit();
-}
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-include '../../database/connection.php'; // Include database connection
-?>
+CREATE TABLE `Admins` (
+  `AdminID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `Role` varchar(50) DEFAULT 'Admin',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="../../styles.css">
-    <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .card-body {
-            padding: 0;
-        }
-        .checkin-btn {
-            color: white;
-            background-color: green;
-        }
-        .checkout-btn {
-            color: white;
-            background-color: red;
-        }
-    </style>
-</head>
+CREATE TABLE `Announcements` (
+  `AnnouncementID` int(11) NOT NULL,
+  `Title` varchar(100) NOT NULL,
+  `Content` text NOT NULL,
+  `CreatedAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ExpiryDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Audience` enum('All','Members','Staff') DEFAULT 'All'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-<body>
+CREATE TABLE `Attendance` (
+  `AttendanceID` int(11) NOT NULL,
+  `MemberID` int(11) DEFAULT NULL,
+  `CheckIn` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `CheckOut` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `AttendanceDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `AttendanceCount` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-<!-- Include Header -->
-<?php include 'includes/header.php'; ?>
+CREATE TABLE `Members` (
+  `MemberID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `Gender` enum('Male','Female','Other') NOT NULL,
+  `Age` int(11) DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
+  `MembershipStatus` enum('Active','Inactive','Suspended') DEFAULT 'Inactive',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-<div class="container-fluid mt-3">
-    <div class="row">
-        <!-- Include Sidebar -->
-        <?php include 'includes/sidebar.php'; ?>
+CREATE TABLE `Membership` (
+  `MembershipID` int(11) NOT NULL,
+  `MemberID` int(11) DEFAULT NULL,
+  `Subscription` decimal(10,2) DEFAULT 0.00,
+  `SessionPrice` decimal(10,2) DEFAULT 0.00,
+  `Status` enum('Expired','Pending','Active') DEFAULT 'Pending',
+  `StartDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `EndDate` timestamp GENERATED ALWAYS AS (`StartDate` + interval 1 month) STORED
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <h2 class="mb-4">Member Attendance</h2>
+CREATE TABLE `Payments` (
+  `PaymentID` int(11) NOT NULL,
+  `MemberID` int(11) DEFAULT NULL,
+  `Amount` decimal(10,2) NOT NULL,
+  `PaymentDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ReceiptNumber` varchar(20) NOT NULL DEFAULT concat('REC-',lpad(floor(rand() * 1000000),6,'0')),
+  `PaymentMethod` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-            <!-- Card Container for the Table -->
-            <div class="card">
-                <div class="card-header">
-                    <h5>Member Attendance</h5>
-                </div>
-                <div class="card-body">
-                    <!-- Wrap table in a responsive div -->
-                    <div class="table-responsive">
-                        <table id="attendanceTable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Member ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Attendance Count</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Fetch all members
-                                $sql = "
-                                    SELECT 
-                                        Members.MemberID, 
-                                        Users.Username, 
-                                        Users.Email, 
-                                        Members.Gender, 
-                                        Members.Age, 
-                                        Members.MembershipStatus,
-                                        (SELECT COUNT(*) FROM Attendance WHERE MemberID = Members.MemberID) AS AttendanceCount
-                                    FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID
-                                ";
-                                $result = $conn1->query($sql);
+CREATE TABLE `Staff` (
+  `StaffID` int(11) NOT NULL,
+  `UserID` int(11) DEFAULT NULL,
+  `JobTitle` enum('Trainer','Cashier') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['Gender']}</td>
-                                            <td>{$row['Age']}</td>
-                                            <td>{$row['AttendanceCount']}</td>
-                                            <td>";
-                                            
-                                            // Action buttons for Check-in/Check-out
-                                            if ($row['MembershipStatus'] === 'Active') {
-                                                echo "<button class='btn checkin-btn' onclick='handleAttendance({$row['MemberID']}, \"checkin\")'>Check In</button>";
-                                                echo "<button class='btn checkout-btn' onclick='handleAttendance({$row['MemberID']}, \"checkout\")'>Check Out</button>";
-                                            } else {
-                                                echo "Inactive Member";
-                                            }
+CREATE TABLE `Users` (
+  `UserID` int(11) NOT NULL,
+  `Username` varchar(50) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  `OTP` varchar(6) DEFAULT NULL,
+  `OTPExpiration` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `Verified` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ResetToken` varchar(64) DEFAULT NULL,
+  `ResetTokenExpiration` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
-                                            echo "</td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='7' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+ALTER TABLE `Admins`
+  ADD PRIMARY KEY (`AdminID`),
+  ADD KEY `UserID` (`UserID`);
 
-<!-- Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+ALTER TABLE `Announcements`
+  ADD PRIMARY KEY (`AnnouncementID`);
 
-<script>
-    $(document).ready(function() {
-        $('#attendanceTable').DataTable({
-            scrollX: true // Enable horizontal scrolling for the DataTable
-        });
-    });
+ALTER TABLE `Attendance`
+  ADD PRIMARY KEY (`AttendanceID`),
+  ADD KEY `MemberID` (`MemberID`);
 
-    function handleAttendance(memberId, action) {
-        $.ajax({
-            url: 'attendance_process.php',
-            type: 'POST',
-            data: {
-                memberId: memberId,
-                action: action
-            },
-            success: function(response) {
-                alert(response.message);
-                location.reload();  // Refresh the page to update attendance status
-            }
-        });
-    }
-</script>
+ALTER TABLE `Members`
+  ADD PRIMARY KEY (`MemberID`),
+  ADD KEY `UserID` (`UserID`);
 
-</body>
-</html>
+ALTER TABLE `Membership`
+  ADD PRIMARY KEY (`MembershipID`),
+  ADD KEY `MemberID` (`MemberID`);
+
+ALTER TABLE `Payments`
+  ADD PRIMARY KEY (`PaymentID`),
+  ADD KEY `MemberID` (`MemberID`);
+
+ALTER TABLE `Staff`
+  ADD PRIMARY KEY (`StaffID`),
+  ADD KEY `UserID` (`UserID`);
+
+ALTER TABLE `Users`
+  ADD PRIMARY KEY (`UserID`),
+  ADD UNIQUE KEY `Email` (`Email`);
+
+ALTER TABLE `Admins`
+  MODIFY `AdminID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Announcements`
+  MODIFY `AnnouncementID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Attendance`
+  MODIFY `AttendanceID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Members`
+  MODIFY `MemberID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Membership`
+  MODIFY `MembershipID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Payments`
+  MODIFY `PaymentID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Staff`
+  MODIFY `StaffID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Users`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `Admins`
+  ADD CONSTRAINT `Admins_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`) ON DELETE CASCADE;
+
+ALTER TABLE `Attendance`
+  ADD CONSTRAINT `Attendance_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `Members` (`MemberID`) ON DELETE CASCADE;
+
+ALTER TABLE `Members`
+  ADD CONSTRAINT `Members_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`) ON DELETE CASCADE;
+
+ALTER TABLE `Membership`
+  ADD CONSTRAINT `Membership_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `Members` (`MemberID`) ON DELETE CASCADE;
+
+ALTER TABLE `Payments`
+  ADD CONSTRAINT `Payments_ibfk_1` FOREIGN KEY (`MemberID`) REFERENCES `Members` (`MemberID`) ON DELETE CASCADE;
+
+ALTER TABLE `Staff`
+  ADD CONSTRAINT `Staff_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`) ON DELETE CASCADE;
+
+COMMIT;
