@@ -1,11 +1,12 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
+    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
 
-include '../../database/connection.php';
+include '../../database/connection.php'; // Include database connection
 ?>
 
 <!DOCTYPE html>
@@ -15,8 +16,11 @@ include '../../database/connection.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <style>
+        body {
+            background-color: #f4f4f4;
+        }
         .sidebar {
             position: fixed;
             top: 0;
@@ -29,11 +33,13 @@ include '../../database/connection.php';
         .sidebar a {
             color: #fff;
             padding: 15px;
-            display: block;
             text-decoration: none;
         }
         .sidebar a:hover {
             background-color: #575757;
+        }
+        .navbar {
+            padding: 0.75rem 1rem;
         }
         .content-wrapper {
             margin-left: 250px;
@@ -41,75 +47,56 @@ include '../../database/connection.php';
         }
     </style>
 </head>
+
 <body>
-    <!-- Include Header -->
-    <?php include 'includes/header.php'; ?>
 
-    <div class="container-fluid mt-3">
-        <div class="row">
-            <!-- Include Sidebar -->
-            <?php include 'includes/sidebar.php'; ?>
+<!-- Include Header -->
+<?php include 'includes/header.php'; ?>
 
-            <div class="col-md-9">
-                <h2 class="mb-4">Attendance</h2>
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Check-In/Check-Out Members</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Include Sidebar -->
+        <?php include 'includes/sidebar.php'; ?>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2 class="mb-4">Attendance</h2>
+
+            <!-- Card Container for the Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Members Attendance</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Wrap table in a responsive div -->
+                    <div class="table-responsive">
+                        <table id="attendanceTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Member ID</th>
-                                    <th>Name</th>
-                                    <th>Status</th>
+                                    <th>Username</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = "SELECT Members.MemberID, Users.Username 
-                                        FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID";
+                                // Fetch all members and their information
+                                $sql = "SELECT MemberID, Username FROM Members";
                                 $result = $conn1->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-                                        // Check current attendance status
-                                        $attendanceCheck = "SELECT CheckOut FROM Attendance 
-                                                            WHERE MemberID = {$row['MemberID']} 
-                                                            AND DATE(AttendanceDate) = CURDATE()";
-                                        $attendanceResult = $conn1->query($attendanceCheck);
-                                        $status = "Not Checked In";
-                                        $action = "Check In";
-
-                                        if ($attendanceResult->num_rows > 0) {
-                                            $attendanceData = $attendanceResult->fetch_assoc();
-                                            if ($attendanceData['CheckOut'] == '0000-00-00 00:00:00') {
-                                                $status = "Checked In";
-                                                $action = "Check Out";
-                                            } else {
-                                                $status = "Checked Out";
-                                                $action = "Completed";
-                                            }
-                                        }
-
                                         echo "<tr>
                                             <td>{$row['MemberID']}</td>
                                             <td>{$row['Username']}</td>
-                                            <td>{$status}</td>
                                             <td>
-                                                <button 
-                                                    class='btn btn-primary attendance-btn' 
-                                                    data-memberid='{$row['MemberID']}' 
-                                                    data-action='{$action}'" . ($action === "Completed" ? "disabled" : "") . ">
-                                                    {$action}
-                                                </button>
+                                                <button class='btn btn-primary attendance-btn' data-memberid='{$row['MemberID']}' data-action='Check In'>Check In</button>
+                                                <button class='btn btn-danger attendance-btn' data-memberid='{$row['MemberID']}' data-action='Check Out'>Check Out</button>
                                             </td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='4' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='3' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -119,19 +106,30 @@ include '../../database/connection.php';
             </div>
         </div>
     </div>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
+<!-- Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#attendanceTable').DataTable();
+
+        // Handle Check In / Check Out button clicks
         $(document).on('click', '.attendance-btn', function () {
             const memberId = $(this).data('memberid');
             const action = $(this).data('action');
-            if (action !== 'Completed') {
-                $.post('action/attendance_process.php', { memberId, action }, function (response) {
-                    alert(response.message);
-                    location.reload();
-                }, 'json');
-            }
+            
+            $.post('action/attendance_process.php', { memberId, action }, function (response) {
+                alert(response.message);
+                location.reload(); // Reload the page to reflect changes
+            }, 'json');
         });
-    </script>
+    });
+</script>
 </body>
 </html>
