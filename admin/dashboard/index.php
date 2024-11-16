@@ -1,5 +1,41 @@
 <?php include 'includes/header.php'; ?>
 
+<style>
+    .monitor-card {
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .monitor-card .card-header {
+        background-color: #343a40;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .monitor-card .card-body {
+        background-color: #f8f9fa;
+        text-align: center;
+    }
+
+    .monitor-card h2 {
+        font-size: 3rem;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    .container {
+        padding-top: 20px;
+    }
+
+    .btn-info {
+        margin-top: 10px;
+    }
+
+    .btn-warning {
+        margin-top: 10px;
+    }
+</style>
+
 <div class="d-flex">
     <!-- Sidebar -->
     <?php include 'includes/sidebar.php'; ?>
