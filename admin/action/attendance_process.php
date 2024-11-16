@@ -1,17 +1,24 @@
 <?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    echo json_encode(['message' => 'Unauthorized access.']);
-    exit();
-}
+include '../../database/connection.php'; // Include database connection
 
-include '../../database/connection.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $memberId = intval($_POST['memberId']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $memberId = $_POST['memberId'];
     $action = $_POST['action'];
 
     if ($action === 'Check In') {
+        // Check if the member is already checked in
+        $sqlCheck = "SELECT * FROM Attendance WHERE MemberID = ? AND CheckOut = '0000-00-00 00:00:00'";
+        $stmtCheck = $conn1->prepare($sqlCheck);
+        $stmtCheck->bind_param("i", $memberId);
+        $stmtCheck->execute();
+        $stmtCheck->store_result();
+
+        if ($stmtCheck->num_rows > 0) {
+            echo json_encode(['message' => 'Already checked in.']);
+            $stmtCheck->close();
+            exit();
+        }
+
         // Insert check-in record
         $sql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceDate) VALUES (?, NOW(), NOW())";
         $stmt = $conn1->prepare($sql);
@@ -23,11 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->close();
     } elseif ($action === 'Check Out') {
-        // Update check-out time
-        $sql = "UPDATE Attendance SET CheckOut = NOW() WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE() AND CheckOut = '0000-00-00 00:00:00'";
+        // Update the check-out record
+        $sql = "UPDATE Attendance SET CheckOut = NOW() WHERE MemberID = ? AND CheckOut = '0000-00-00 00:00:00'";
         $stmt = $conn1->prepare($sql);
         $stmt->bind_param("i", $memberId);
-        if ($stmt->execute() && $stmt->affected_rows > 0) {
+        if ($stmt->execute()) {
             echo json_encode(['message' => 'Check-Out successful.']);
         } else {
             echo json_encode(['message' => 'Error during check-out.']);
@@ -36,5 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['message' => 'Invalid action.']);
     }
+} else {
+    echo json_encode(['message' => 'Invalid request method.']);
 }
-$conn1->close();
+?>
