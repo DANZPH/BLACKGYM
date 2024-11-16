@@ -19,10 +19,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
 
     if ($attendance) {
         if ($attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // Member is already checked in, so check out and increment attendance count
+            // Member is already checked in, check them out but do not increment attendance count
             $updateSql = "UPDATE Attendance 
-                          SET CheckOut = NOW(), 
-                              AttendanceCount = AttendanceCount + 1 
+                          SET CheckOut = NOW() 
                           WHERE AttendanceID = ?";
             $stmt = $conn1->prepare($updateSql);
             $stmt->bind_param("i", $attendance['AttendanceID']);
@@ -35,7 +34,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         } else {
             // Member is checked out, create a new check-in record and increment attendance count
             $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
-                          VALUES (?, NOW(), '0000-00-00 00:00:00', 1)";
+                          VALUES (?, NOW(), '0000-00-00 00:00:00', AttendanceCount + 1)";
             $stmt = $conn1->prepare($insertSql);
             $stmt->bind_param("i", $memberID);
 
