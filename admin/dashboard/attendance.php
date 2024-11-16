@@ -142,17 +142,17 @@ include '../../database/connection.php'; // Include database connection
         },
         success: function(response) {
             if (response == 'checkedIn') {
-                alert('Member checked in.');
+                alert('Member successfully checked in.');
                 location.reload();
             } else if (response == 'checkedOut') {
-                alert('Member checked out.');
+                alert('Member successfully checked out.');
                 location.reload();
             } else {
                 alert('An error occurred. Please try again.');
             }
         }
     });
-}
+
 </script>
 
 </body>
