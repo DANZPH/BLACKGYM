@@ -95,8 +95,7 @@ include '../../database/connection.php'; // Include database connection
         }
         ?>
     </tbody>
-</table>
-                    </div>
+</table></div>
                 </div>
             </div>
         </div>
