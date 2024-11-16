@@ -68,4 +68,73 @@ include '../../database/connection.php'; // Include database connection
                                     while ($row = $result->fetch_assoc()) {
                                         // Check attendance status
                                         $attendanceSql = "SELECT * FROM Attendance WHERE MemberID = ? AND CheckOut = '0000-00-00 00:00:00' LIMIT 1";
-                                        $
+                                        $stmt = $conn1->prepare($attendanceSql);
+                                        $stmt->bind_param("i", $row['MemberID']);
+                                        $stmt->execute();
+                                        $attendanceResult = $stmt->get_result();
+                                        $attendance = $attendanceResult->fetch_assoc();
+
+                                        $buttonLabel = 'Check In';
+                                        $buttonClass = 'btn-success';
+                                        if ($attendance) {
+                                            $buttonLabel = 'Check Out';
+                                            $buttonClass = 'btn-danger';
+                                        }
+
+                                        echo "<tr>
+                                            <td>{$row['MemberID']}</td>
+                                            <td>{$row['Username']}</td>
+                                            <td>{$row['Email']}</td>
+                                            <td>{$row['Gender']}</td>
+                                            <td>{$row['Age']}</td>
+                                            <td>{$row['Address']}</td>
+                                            <td>{$row['MembershipStatus']}</td>
+                                            <td><button class='btn $buttonClass' onclick='toggleAttendance({$row['MemberID']})'>$buttonLabel</button></td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#membersTable').DataTable();
+    });
+
+    function toggleAttendance(memberID) {
+        $.ajax({
+            url: '../action/attendance_process.php',
+            method: 'POST',
+            data: {
+                action: 'toggleAttendance',
+                memberID: memberID
+            },
+            success: function(response) {
+                if (response == 'checkedIn') {
+                    alert('Member checked in.');
+                    location.reload();
+                } else if (response == 'checkedOut') {
+                    alert('Member checked out.');
+                    location.reload();
+                } else {
+                    alert('Error occurred.');
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
