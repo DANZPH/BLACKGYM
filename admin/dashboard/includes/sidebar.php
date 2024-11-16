@@ -1,7 +1,7 @@
-<div class="sidebar">
+<div id="sidebar-wrapper" class="col-lg-3">
     <div class="container">
-        <!-- Removed the Toggle Button for Sidebar Collapse -->
-        
+
+
         <ul class="list-unstyled mt-3 collapse" id="sidebarMenu">
             <!-- Manage Members Dropdown -->
             <li class="nav-item">
