@@ -24,26 +24,61 @@ include '../../database/connection.php'; // Include database connection
     <style>
         body {
             background-color: #f4f4f4;
+            margin-top: 60px; /* Space for fixed navbar */
         }
+
         .table-responsive {
             overflow-x: auto;
         }
+
         .card-body {
             padding: 0;
         }
+
         .table th, .table td {
             vertical-align: middle;
         }
+
         .table thead {
             background-color: #343a40;
             color: white;
         }
+
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #f9f9f9;
         }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 20px;
+            z-index: 1050;
+        }
+
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .content-wrapper {
+            margin-left: 250px;
+            padding-top: 20px; /* Space for the fixed sidebar */
+        }
+
         .navbar, .sidebar {
             z-index: 1030;
         }
+
         .content-wrapper {
             margin-left: 250px;
             padding-top: 60px; /* Space for fixed navbar */
@@ -56,7 +91,7 @@ include '../../database/connection.php'; // Include database connection
 <!-- Include Header -->
 <?php include 'includes/header.php'; ?>
 
-<div class="container-fluid mt-3">
+<div class="container-fluid">
     <div class="row">
         <!-- Include Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
