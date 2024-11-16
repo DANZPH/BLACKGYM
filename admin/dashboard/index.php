@@ -36,8 +36,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="../../css/styles.css">
-<!--    <style>
+    <style>
         /* Sidebar Customization */
         .sidebar {
             position: fixed;
@@ -72,24 +71,24 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             justify-content: space-between;
             align-items: center;
         }
-    </style>-->
-</head><body>
-    <!-- Sidebar -->
+    </style>
+</head>
+<body>
+
+    <!-- Include Sidebar -->
     <?php include 'includes/sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="content-wrapper">
-        <!-- Header -->
+        <!-- Include Header -->
         <?php include 'includes/header.php'; ?>
 
-        <!-- Dashboard Content -->
         <div class="container mt-5">
             <h2>Welcome to the Admin Dashboard</h2>
             <p>Monitor and manage system activities below.</p>
 
             <!-- Monitoring Section -->
             <div class="row mt-4">
-                <!-- Total Active Members -->
+                <!-- Total Members with Active Status -->
                 <div class="col-md-4">
                     <div class="card monitor-card shadow-sm">
                         <div class="card-header">
@@ -98,6 +97,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                         <div class="card-body">
                             <div>
                                 <h2><?php echo $totalMembers; ?></h2>
+
                             </div>
                             <div>
                                 <a href="members.php" class="btn btn-info btn-sm">View</a>
@@ -123,7 +123,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                     </div>
                 </div>
 
-                <!-- Pending Memberships -->
+                <!-- Pending Payments (Based on Pending Membership Status) -->
                 <div class="col-md-4">
                     <div class="card monitor-card shadow-sm">
                         <div class="card-header">
@@ -140,8 +140,14 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                     </div>
                 </div>
             </div>
+
+            <!-- Other Content Can Go Here -->
         </div>
     </div>
-</body>
 
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
