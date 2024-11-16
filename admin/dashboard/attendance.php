@@ -116,7 +116,7 @@ include '../../database/connection.php'; // Include database connection
             var button = $(this);
             
             $.ajax({
-                url: 'action/attendance_process.php',
+                url: '../action/attendance_process.php',
                 type: 'POST',
                 data: { action: 'toggleAttendance', memberID: memberID },
                 success: function(response) {
