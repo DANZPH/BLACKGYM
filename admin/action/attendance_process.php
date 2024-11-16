@@ -8,7 +8,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
     $checkSql = "SELECT AttendanceID, CheckOut, AttendanceCount FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
     $stmt = $conn1->prepare($checkSql);
     $stmt->bind_param("i", $memberID);
-
+    
     if (!$stmt->execute()) {
         echo "Error: " . $conn1->error;
         exit();
@@ -19,17 +19,25 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
 
     if ($attendance) {
         if ($attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // Member is already checked in, no further action
-            echo 'alreadyCheckedIn';
-        } else {
-            // Member is checked out, update to check-in and increment AttendanceCount
+            // Member is already checked in, so check out and increment attendance count
             $updateSql = "UPDATE Attendance 
-                          SET CheckIn = NOW(), 
-                              CheckOut = '0000-00-00 00:00:00',
+                          SET CheckOut = NOW(), 
                               AttendanceCount = AttendanceCount + 1 
                           WHERE AttendanceID = ?";
             $stmt = $conn1->prepare($updateSql);
             $stmt->bind_param("i", $attendance['AttendanceID']);
+
+            if ($stmt->execute()) {
+                echo 'checkedOut'; // Success: Member checked out
+            } else {
+                echo "Error: " . $conn1->error;
+            }
+        } else {
+            // Member is checked out, create a new check-in record and increment attendance count
+            $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
+                          VALUES (?, NOW(), '0000-00-00 00:00:00', 1)";
+            $stmt = $conn1->prepare($insertSql);
+            $stmt->bind_param("i", $memberID);
 
             if ($stmt->execute()) {
                 echo 'checkedIn'; // Success: Member checked in
