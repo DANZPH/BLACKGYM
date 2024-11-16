@@ -21,6 +21,25 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- header.php -->
     <link rel="stylesheet" href="../../styles.css">
+    <style>
+        /* Apply responsive scrolling only to the table */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Ensure that the pagination controls and search box stay in place */
+        .dataTables_wrapper .dataTables_paginate,
+        .dataTables_wrapper .dataTables_filter {
+            float: none;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .dataTables_wrapper .dataTables_length {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
