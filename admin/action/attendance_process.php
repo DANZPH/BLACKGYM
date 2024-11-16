@@ -1,4 +1,4 @@
-<?php
+l<?php
 include '../../database/connection.php'; // Include database connection
 
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
@@ -14,6 +14,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
 
     if ($attendance) {
         // Member is checked in, so we check them out
+        // Increment AttendanceCount only when checking out
         $updateSql = "UPDATE Attendance SET CheckOut = NOW(), AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
         $stmt = $conn1->prepare($updateSql);
         $stmt->bind_param("i", $attendance['AttendanceID']);
@@ -21,7 +22,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         echo 'checkedOut';
     } else {
         // Member is not checked in, so we check them in
-        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceCount) VALUES (?, NOW(), 1)";
+        // Insert attendance record without incrementing AttendanceCount
+        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceCount) VALUES (?, NOW(), 0)";
         $stmt = $conn1->prepare($insertSql);
         $stmt->bind_param("i", $memberID);
         $stmt->execute();
