@@ -1,6 +1,5 @@
 <div class="sidebar">
     <div class="container">
-        <!-- Admin Dashboard Links -->
         <ul class="list-unstyled">
             <!-- Manage Members Dropdown -->
             <li class="nav-item">
