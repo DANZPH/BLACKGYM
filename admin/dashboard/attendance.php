@@ -133,5 +133,29 @@ include '../../database/connection.php';
             }
         });
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).on('click', '.attendance-btn', function () {
+        const memberId = $(this).data('memberid');
+        const action = $(this).data('action');
+
+        console.log("Button clicked for member: " + memberId + " with action: " + action); // Debugging log
+
+        // Make sure the action is valid
+        if (action !== 'Completed') {
+            $.post('action/attendance_process.php', { memberId, action }, function (response) {
+                console.log("Response from server: ", response); // Debugging log
+                
+                if (response.message) {
+                    alert(response.message);  // Display message from backend
+                }
+                location.reload();  // Reload page to reflect changes
+            }, 'json').fail(function(jqXHR, textStatus, errorThrown) {
+                console.log("Error in request: ", textStatus, errorThrown); // Debugging log
+                alert("There was an error processing your request.");
+            });
+        }
+    });
+</script>
 </body>
 </html>
