@@ -29,7 +29,9 @@ include '../../database/connection.php'; // Include database connection
 
 <!-- Include Header -->
 <?php include 'includes/header.php'; ?>
-
+    <div class="content-wrapper">
+        <!-- Include Header -->
+        <?php include 'includes/header.php'; ?>
 <div class="container-fluid mt-3">
     <div class="row">
         <!-- Include Sidebar -->
