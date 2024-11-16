@@ -11,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memberId = intval($_POST['memberId']);
     $action = $_POST['action'];
 
+    // Debugging log for received values
+    error_log("Received memberId: $memberId and action: $action");
+
     if ($action === 'Check In') {
         // Check if the member is already checked in today
         $attendanceCheck = "SELECT AttendanceCount FROM Attendance 
@@ -19,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("i", $memberId);
         $stmt->execute();
         $stmt->store_result();
+
         if ($stmt->num_rows > 0) {
             // Member is already checked in for today
             echo json_encode(['message' => 'Member is already checked in today.']);
@@ -61,5 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['message' => 'Invalid action.']);
     }
+} else {
+    echo json_encode(['message' => 'Invalid request method.']);
 }
+
 $conn1->close();
