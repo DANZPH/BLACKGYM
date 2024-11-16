@@ -1,4 +1,12 @@
+
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    echo json_encode(['message' => 'Unauthorized access.']);
+    exit();
+}
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
