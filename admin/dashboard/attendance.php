@@ -75,8 +75,8 @@ include '../../database/connection.php';
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-                                        // Check current attendance status
-                                        $attendanceCheck = "SELECT CheckOut FROM Attendance 
+                                        // Check current attendance status for today
+                                        $attendanceCheck = "SELECT CheckOut, AttendanceCount FROM Attendance 
                                                             WHERE MemberID = {$row['MemberID']} 
                                                             AND DATE(AttendanceDate) = CURDATE()";
                                         $attendanceResult = $conn1->query($attendanceCheck);
