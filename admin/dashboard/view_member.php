@@ -23,7 +23,7 @@ include '../../database/connection.php'; // Include database connection
 <body>
 
 <!-- Include Header -->
-<?php include '../includes/header.php'; ?>
+<?php include 'includes/header.php'; ?>
 
 <div class="container-fluid mt-3">
     <div class="row">
