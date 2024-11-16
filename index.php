@@ -24,7 +24,7 @@
       color: #fff;
       font-family: 'Roboto', sans-serif;
       margin: 0;
-      padding: 0;
+      padding-top: 30px;
     }
 
     .navbar {
