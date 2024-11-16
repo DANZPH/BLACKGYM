@@ -8,7 +8,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
     $checkSql = "SELECT AttendanceID, CheckOut, AttendanceCount FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
     $stmt = $conn1->prepare($checkSql);
     $stmt->bind_param("i", $memberID);
-    
+
     if (!$stmt->execute()) {
         echo "Error: " . $conn1->error;
         exit();
@@ -46,7 +46,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
             }
         }
     } else {
-        // No existing record, create a new one
+        // No existing record, create a new one with AttendanceCount = 1
         $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
                       VALUES (?, NOW(), '0000-00-00 00:00:00', 1)";
         $stmt = $conn1->prepare($insertSql);
