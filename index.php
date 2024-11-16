@@ -152,7 +152,7 @@
 
       <!-- 20% Done Header (Static Design) -->
       <div class="done-header">
-        20% Done
+        30% Done
       </div>
 
       <!-- Login Buttons -->
