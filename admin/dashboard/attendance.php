@@ -152,7 +152,7 @@ include '../../database/connection.php'; // Include database connection
             }
         }
     });
-
+}
 </script>
 
 </body>
