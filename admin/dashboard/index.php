@@ -36,65 +36,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="includes/styles.css">
-        <style>
-/* Default Sidebar Style */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px;
-    height: 100vh; /* Full screen height */
-    background-color: #2c3e50;
-    color: #fff;
-    padding-top: 30px;
-    z-index: 1000;
-    overflow-y: auto;
-}
-
-/* Media Query for Landscape Orientation */
-@media (orientation: landscape) {
-    /* Make sure sidebar is visible on the left */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 250px; /* Sidebar width */
-        height: 100vh;
-        background-color: #2c3e50;
-        color: #fff;
-        padding-top: 30px;
-        z-index: 1000;
-        overflow-y: auto;
-    }
-
-    /* Main content section */
-    .main-content {
-        margin-left: 260px; /* Make space for the sidebar */
-        padding: 20px;
-        height: 100vh;
-        overflow-y: auto;
-    }
-}
-
-/* Media Query for Portrait Orientation */
-@media (orientation: portrait) {
-    /* In portrait mode, the sidebar may collapse or stack vertically */
-    .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        padding-top: 0;
-        z-index: 0;
-    }
-
-    /* Main content section */
-    .main-content {
-        margin-left: 0; /* Full width on smaller screens */
-    }
-}
-        </style>
-<!--    <style>
+    <style>
         /* Sidebar Customization */
         .sidebar {
             position: fixed;
@@ -129,7 +71,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             justify-content: space-between;
             align-items: center;
         }
-    </style>--> 
+    </style>
 </head>
 <body>
 
