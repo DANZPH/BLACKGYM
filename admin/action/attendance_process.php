@@ -19,13 +19,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         $stmt->bind_param("i", $attendance['AttendanceID']);
         $stmt->execute();
         echo 'checkedOut'; // Return this to update the button text
-    } else {
+    } /*else {
         // Member is not checked in, so we insert a new attendance record
         $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceCount) VALUES (?, NOW(), 0)";
         $stmt = $conn1->prepare($insertSql);
         $stmt->bind_param("i", $memberID);
         $stmt->execute();
         echo 'checkedIn'; // Return this to update the button text
-    }
+    }*/
 }
 ?>
