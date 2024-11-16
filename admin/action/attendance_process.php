@@ -19,7 +19,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         $stmt = $conn1->prepare($updateSql);
         $stmt->bind_param("i", $attendance['AttendanceID']);
         $stmt->execute();
-        echo 'checkedOut';
+        echo 'checkedOut'; // Return this to change button text
     } else {
         // Member is not checked in, so we check them in
         // Insert attendance record without incrementing AttendanceCount
@@ -27,7 +27,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         $stmt = $conn1->prepare($insertSql);
         $stmt->bind_param("i", $memberID);
         $stmt->execute();
-        echo 'checkedIn';
+        echo 'checkedIn'; // Return this to change button text
     }
 }
 ?>
