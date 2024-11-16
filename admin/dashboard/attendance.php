@@ -1,71 +1,136 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
+    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
 
 include '../../database/connection.php'; // Include database connection
-
-if (isset($_POST['memberId']) && isset($_POST['action'])) {
-    $memberId = $_POST['memberId'];
-    $action = $_POST['action'];
-
-    // Fetch the latest attendance record
-    $sql = "SELECT * FROM Attendance WHERE MemberID = ? ORDER BY AttendanceDate DESC LIMIT 1";
-    $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("i", $memberId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $attendance = $result->fetch_assoc();
-
-        if ($action == 'checkin' && $attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // If the member hasn't checked out yet, allow check-in
-            $checkInTime = date('Y-m-d H:i:s');
-            $updateSql = "UPDATE Attendance SET CheckIn = ?, AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
-            $updateStmt = $conn1->prepare($updateSql);
-            $updateStmt->bind_param("si", $checkInTime, $attendance['AttendanceID']);
-            if ($updateStmt->execute()) {
-                echo json_encode(['message' => 'Check-in successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-in']);
-            }
-        } elseif ($action == 'checkout' && $attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // If the member hasn't checked out yet, allow check-out
-            $checkOutTime = date('Y-m-d H:i:s');
-            $updateSql = "UPDATE Attendance SET CheckOut = ?, AttendanceCount = AttendanceCount + 1 WHERE AttendanceID = ?";
-            $updateStmt = $conn1->prepare($updateSql);
-            $updateStmt->bind_param("si", $checkOutTime, $attendance['AttendanceID']);
-            if ($updateStmt->execute()) {
-                echo json_encode(['message' => 'Check-out successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-out']);
-            }
-        } else {
-            echo json_encode(['message' => 'Action not possible']);
-        }
-    } else {
-        if ($action == 'checkin') {
-            // Create new record if none exists
-            $checkInTime = date('Y-m-d H:i:s');
-            $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceDate, AttendanceCount) VALUES (?, ?, ?, 1)";
-            $insertStmt = $conn1->prepare($insertSql);
-            $insertStmt->bind_param("iss", $memberId, $checkInTime, $checkInTime);
-            if ($insertStmt->execute()) {
-                echo json_encode(['message' => 'Check-in successful']);
-            } else {
-                echo json_encode(['message' => 'Error during check-in']);
-            }
-        } else {
-            echo json_encode(['message' => 'No check-in record found']);
-        }
-    }
-
-    $stmt->close();
-    $conn1->close();
-} else {
-    echo json_encode(['message' => 'Invalid request']);
-}
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Attendance</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body>
+
+<!-- Include Header -->
+<?php include 'includes/header.php'; ?>
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Include Sidebar -->
+        <?php include 'includes/sidebar.php'; ?>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2 class="mb-4">Member Attendance</h2>
+
+            <!-- Card Container for the Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Attendance Records</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Wrap table in a responsive div -->
+                    <div class="table-responsive">
+                        <table id="attendanceTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Member ID</th>
+                                    <th>Username</th>
+                                    <th>Check In</th>
+                                    <th>Check Out</th>
+                                    <th>Attendance Count</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // Fetch all members and their attendance status
+                                $sql = "
+                                    SELECT 
+                                        Members.MemberID, 
+                                        Users.Username, 
+                                        Attendance.CheckIn, 
+                                        Attendance.CheckOut, 
+                                        Attendance.AttendanceCount
+                                    FROM Members
+                                    LEFT JOIN Users ON Members.UserID = Users.UserID
+                                    LEFT JOIN Attendance ON Members.MemberID = Attendance.MemberID
+                                    ORDER BY Attendance.AttendanceDate DESC
+                                ";
+                                $result = $conn1->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr id='member-{$row['MemberID']}'>
+                                            <td>{$row['MemberID']}</td>
+                                            <td>{$row['Username']}</td>
+                                            <td>" . ($row['CheckIn'] ? $row['CheckIn'] : 'N/A') . "</td>
+                                            <td>" . ($row['CheckOut'] ? $row['CheckOut'] : 'N/A') . "</td>
+                                            <td>{$row['AttendanceCount']}</td>
+                                            <td><button class='btn btn-".($row['CheckOut'] ? 'danger' : 'success')." attendance-toggle' data-memberid='{$row['MemberID']}'>
+                                                ".($row['CheckOut'] ? 'Check Out' : 'Check In')."</button></td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6' class='text-center'>No attendance records found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#attendanceTable').DataTable({
+            scrollX: true // Enable horizontal scrolling for the DataTable
+        });
+
+        // Toggle Check In/Check Out
+        $('.attendance-toggle').click(function() {
+            var memberID = $(this).data('memberid');
+            var button = $(this);
+            
+            $.ajax({
+                url: 'attendance_process.php',
+                type: 'POST',
+                data: { action: 'toggleAttendance', memberID: memberID },
+                success: function(response) {
+                    if (response === 'checkedIn') {
+                        button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
+                    } else if (response === 'checkedOut') {
+                        button.removeClass('btn-danger').addClass('btn-success').text('Check In');
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
