@@ -107,43 +107,33 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // Initialize DataTable
-        $('#membersTable').DataTable();
+$(document).ready(function() {
+    // Event listener for toggle attendance button click
+    $('.toggleAttendance').click(function() {
+        var memberID = $(this).data('memberid');  // Get the member ID from data attribute
+        var button = $(this);  // Reference to the button clicked
 
-        // Toggle attendance function
-        $('.attendance-toggle').on('click', function () {
-            const memberID = $(this).data('id'); // Get MemberID from button
-            const button = $(this); // Reference the clicked button
-
-            // Send AJAX request
-            $.ajax({
-                url: '../action/attendance_process.php',
-                method: 'POST',
-                data: {
-                    action: 'toggleAttendance',
-                    memberID: memberID
-                },
-                success: function (response) {
-                    if (response === 'checkedIn') {
-                        // Update button to reflect Check Out state
-                        button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
-                        alert('Member checked in.');
-                    } else if (response === 'checkedOut') {
-                        // Update button to reflect Check In state
-                        button.removeClass('btn-danger').addClass('btn-success').text('Check In');
-                        alert('Member checked out.');
-                    } else {
-                        alert('Error: ' + response); // Show specific error
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while processing attendance.');
+        $.ajax({
+            url: '../action/attendance_process.php',
+            type: 'POST',
+            data: {
+                action: 'toggleAttendance',
+                memberID: memberID
+            },
+            success: function(response) {
+                if (response == 'checkedIn') {
+                    button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
+                } else if (response == 'checkedOut') {
+                    button.removeClass('btn-danger').addClass('btn-success').text('Check In');
+                } else {
+                    alert('An error occurred.');
                 }
-            });
+            },
+            error: function() {
+                alert('An error occurred. Please try again.');
+            }
         });
     });
-</script>
-
+});
 </body>
 </html>
