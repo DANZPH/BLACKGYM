@@ -1,12 +1,4 @@
-
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    echo json_encode(['message' => 'Unauthorized access.']);
-    exit();
-}
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
@@ -90,15 +82,18 @@ include '../../database/connection.php';
                                         $attendanceResult = $conn1->query($attendanceCheck);
                                         $status = "Not Checked In";
                                         $action = "Check In";
+                                        $btnClass = "btn-success";
 
                                         if ($attendanceResult->num_rows > 0) {
                                             $attendanceData = $attendanceResult->fetch_assoc();
                                             if ($attendanceData['CheckOut'] == '0000-00-00 00:00:00') {
                                                 $status = "Checked In";
                                                 $action = "Check Out";
+                                                $btnClass = "btn-danger";
                                             } else {
                                                 $status = "Checked Out";
                                                 $action = "Completed";
+                                                $btnClass = "btn-secondary";
                                             }
                                         }
 
@@ -108,9 +103,10 @@ include '../../database/connection.php';
                                             <td>{$status}</td>
                                             <td>
                                                 <button 
-                                                    class='btn btn-primary attendance-btn' 
+                                                    class='btn $btnClass attendance-btn' 
                                                     data-memberid='{$row['MemberID']}' 
-                                                    data-action='{$action}'" . ($action === "Completed" ? "disabled" : "") . ">
+                                                    data-action='{$action}' 
+                                                    " . ($action === "Completed" ? "disabled" : "") . ">
                                                     {$action}
                                                 </button>
                                             </td>
@@ -127,69 +123,28 @@ include '../../database/connection.php';
             </div>
         </div>
     </div>
-<script>
-  $(document).on('click', '.attendance-button', function() {
-    var memberId = $(this).data('member-id');
-    var action = $(this).hasClass('checked-in') ? 'Check Out' : 'Check In';
 
-    $.ajax({
-        url: 'path/to/attendance_process.php',
-        type: 'POST',
-        data: {
-            memberId: memberId,
-            action: action
-        },
-        dataType: 'json',
-        success: function(response) {
-            alert(response.message);
-            if (response.message === 'Check-In successful.') {
-                $(this).addClass('checked-in').text('Check Out');
-            } else if (response.message === 'Check-Out successful.') {
-                $(this).removeClass('checked-in').text('Check In');
-            }
-        },
-        error: function(xhr, status, error) {
-            alert("Request failed: " + error);
-        }
-    });
-});
-</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.attendance-btn', function () {
             const memberId = $(this).data('memberid');
             const action = $(this).data('action');
-            if (action !== 'Completed') {
-                $.post('action/attendance_process.php', { memberId, action }, function (response) {
-                    alert(response.message);
-                    location.reload();
-                }, 'json');
-            }
+            
+            // Disable the button to avoid multiple clicks
+            $(this).prop('disabled', true);
+
+            $.post('action/attendance_process.php', { memberId, action }, function (response) {
+                alert(response.message);
+
+                if (response.status === "checked_in") {
+                    $(this).removeClass('btn-success').addClass('btn-danger').text('Check Out');
+                } else if (response.status === "checked_out") {
+                    $(this).removeClass('btn-danger').addClass('btn-secondary').text('Completed');
+                }
+
+                $(this).prop('disabled', false);
+            }.bind(this), 'json');
         });
     </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).on('click', '.attendance-btn', function () {
-        const memberId = $(this).data('memberid');
-        const action = $(this).data('action');
-
-        console.log("Button clicked for member: " + memberId + " with action: " + action); // Debugging log
-
-        // Make sure the action is valid
-        if (action !== 'Completed') {
-            $.post('action/attendance_process.php', { memberId, action }, function (response) {
-                console.log("Response from server: ", response); // Debugging log
-                
-                if (response.message) {
-                    alert(response.message);  // Display message from backend
-                }
-                location.reload();  // Reload page to reflect changes
-            }, 'json').fail(function(jqXHR, textStatus, errorThrown) {
-                console.log("Error in request: ", textStatus, errorThrown); // Debugging log
-                alert("There was an error processing your request.");
-            });
-        }
-    });
-</script>
 </body>
 </html>
