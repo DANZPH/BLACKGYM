@@ -22,11 +22,31 @@ include '../../database/connection.php'; // Include database connection
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../styles.css">
     <style>
+        body {
+            background-color: #f4f4f4;
+        }
         .table-responsive {
             overflow-x: auto;
         }
         .card-body {
             padding: 0;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table thead {
+            background-color: #343a40;
+            color: white;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+        .navbar, .sidebar {
+            z-index: 1030;
+        }
+        .content-wrapper {
+            margin-left: 250px;
+            padding-top: 60px; /* Space for fixed navbar */
         }
     </style>
 </head>
@@ -42,11 +62,11 @@ include '../../database/connection.php'; // Include database connection
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="col-md-9">
+        <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
 
             <!-- Card Container for the Table -->
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
@@ -121,7 +141,8 @@ include '../../database/connection.php'; // Include database connection
 <script>
     $(document).ready(function() {
         $('#membersTable').DataTable({
-            scrollX: true // Enable horizontal scrolling for the DataTable
+            scrollX: true, // Enable horizontal scrolling for the DataTable
+            order: [[0, 'asc']] // Default sorting by Member ID
         });
     });
 </script>
