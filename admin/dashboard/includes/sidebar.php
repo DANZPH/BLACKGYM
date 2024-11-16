@@ -1,4 +1,5 @@
-<div class="sidebar">
+<div class="sidebar"
+id="sidebar-wrapper" class="col-lg-3  >
     <div class="container">
         <!-- Toggle Button for Sidebar Collapse -->
         <button class="btn btn-primary" id="sidebarToggle">
