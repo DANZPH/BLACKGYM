@@ -34,7 +34,7 @@ include '../../database/connection.php'; // Include database connection
 
         /* Adjust the content so it doesn't overlap with the fixed navbar */
         body {
-            padding-top: 70px; /* Adjust based on the height of your navbar */
+             /* Adjust based on the height of your navbar */
         }
 
         /* Sidebar Styling */
@@ -46,7 +46,7 @@ include '../../database/connection.php'; // Include database connection
             height: calc(100vh - 70px); /* Adjust height to account for the navbar */
             background-color: #2c3e50;
             color: #fff;
-            padding-top: 30px;
+            padding-top: 0px;
             z-index: 1000;
             overflow-y: auto;
         }
@@ -69,7 +69,7 @@ include '../../database/connection.php'; // Include database connection
                 height: calc(100vh - 70px); /* Adjust height to fit the screen */
                 background-color: #2c3e50;
                 color: #fff;
-                padding-top: 30px;
+                padding-top: 0px;
                 z-index: 1000;
                 overflow-y: auto;
             }
