@@ -19,7 +19,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
 
     if ($attendance) {
         if ($attendance['CheckOut'] == '0000-00-00 00:00:00') {
-            // Member is already checked in, check them out but do not increment attendance count
+            // Member is already checked in, update attendance count and set check-out time
             $updateSql = "UPDATE Attendance 
                           SET CheckOut = NOW() 
                           WHERE AttendanceID = ?";
@@ -32,14 +32,15 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
                 echo "Error: " . $conn1->error;
             }
         } else {
-            // Member is checked out, create a new check-in record and increment attendance count
+            // Member is checked out, increment attendance count and create a new check-in record
             $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
-                          VALUES (?, NOW(), '0000-00-00 00:00:00', AttendanceCount + 1)";
+                          VALUES (?, NOW(), '0000-00-00 00:00:00', 
+                          (SELECT IFNULL(MAX(AttendanceCount), 0) + 1 FROM Attendance WHERE MemberID = ?))";
             $stmt = $conn1->prepare($insertSql);
-            $stmt->bind_param("i", $memberID);
+            $stmt->bind_param("ii", $memberID, $memberID);
 
             if ($stmt->execute()) {
-                echo 'checkedIn'; // Success: Member checked in
+                echo 'checkedIn'; // Success: Member checked in and attendance count incremented
             } else {
                 echo "Error: " . $conn1->error;
             }
@@ -52,7 +53,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         $stmt->bind_param("i", $memberID);
 
         if ($stmt->execute()) {
-            echo 'checkedIn'; // Success: Member checked in
+            echo 'checkedIn'; // Success: Member checked in with initial count
         } else {
             echo "Error: " . $conn1->error;
         }
