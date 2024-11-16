@@ -127,7 +127,33 @@ include '../../database/connection.php';
             </div>
         </div>
     </div>
+<script>
+  $(document).on('click', '.attendance-button', function() {
+    var memberId = $(this).data('member-id');
+    var action = $(this).hasClass('checked-in') ? 'Check Out' : 'Check In';
 
+    $.ajax({
+        url: 'path/to/attendance_process.php',
+        type: 'POST',
+        data: {
+            memberId: memberId,
+            action: action
+        },
+        dataType: 'json',
+        success: function(response) {
+            alert(response.message);
+            if (response.message === 'Check-In successful.') {
+                $(this).addClass('checked-in').text('Check Out');
+            } else if (response.message === 'Check-Out successful.') {
+                $(this).removeClass('checked-in').text('Check In');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("Request failed: " + error);
+        }
+    });
+});
+</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.attendance-btn', function () {
