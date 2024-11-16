@@ -17,8 +17,6 @@ include '../../database/connection.php'; // Include database connection
     <title>View Members</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome (for icons) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
@@ -59,7 +57,6 @@ include '../../database/connection.php'; // Include database connection
             background-color: #343a40;
             padding-top: 20px;
             z-index: 1050;
-            transition: 0.3s;
         }
 
         .sidebar a {
@@ -86,25 +83,6 @@ include '../../database/connection.php'; // Include database connection
             margin-left: 250px;
             padding-top: 60px; /* Space for fixed navbar */
         }
-
-        .sidebar-toggler {
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* Hide sidebar on small screens */
-        @media screen and (max-width: 768px) {
-            .sidebar {
-                width: 0;
-            }
-            .sidebar-toggler {
-                display: block;
-            }
-            .content-wrapper {
-                margin-left: 0;
-            }
-        }
     </style>
 </head>
 
@@ -113,20 +91,11 @@ include '../../database/connection.php'; // Include database connection
 <!-- Include Header -->
 <?php include 'includes/header.php'; ?>
 
-<!-- Sidebar with Icon -->
-<div class="sidebar">
-    <div class="sidebar-toggler" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </div>
-    <!-- Add sidebar menu items -->
-    <a href="index.php">Dashboard</a>
-    <a href="view_member.php">View Members</a>
-    <a href="other_page.php">Other Page</a>
-    <!-- Add more links as needed -->
-</div>
-
 <div class="container-fluid">
     <div class="row">
+        <!-- Include Sidebar -->
+        <?php include 'includes/sidebar.php'; ?>
+
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
@@ -211,12 +180,6 @@ include '../../database/connection.php'; // Include database connection
             order: [[0, 'asc']] // Default sorting by Member ID
         });
     });
-
-    // Toggle Sidebar Function for Mobile View
-    function toggleSidebar() {
-        var sidebar = document.querySelector('.sidebar');
-        sidebar.style.width = sidebar.style.width === '0px' ? '250px' : '0px';
-    }
 </script>
 </body>
 </html>
