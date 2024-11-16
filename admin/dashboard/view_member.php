@@ -25,7 +25,7 @@ include '../../database/connection.php'; // Include database connection
     <style>
         body {
             background-color: #f4f4f4;
-            padding-top: 20px;
+            padding-top: 30px;
         }
         .sidebar {
             position: fixed;
