@@ -28,26 +28,6 @@ include '../../database/connection.php'; // Include database connection
         .card-body {
             padding: 0;
         }
-        
-        /* Sticky Navbar */
-.sticky-navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 9999; /* Keep navbar above other content */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Adjust the content so it doesn't overlap with the fixed navbar */
-body {
-    padding-top: 70px; /* Adjust based on the height of your navbar */
-}
-
-/* Optional: Adjust the table responsiveness for horizontal scrolling */
-.table-responsive {
-    overflow-x: auto;
-}
     </style>
 </head>
 
