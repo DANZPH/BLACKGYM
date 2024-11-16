@@ -4,8 +4,8 @@ include '../../database/connection.php'; // Include database connection
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
     $memberID = $_POST['memberID'];
 
-    // Check if the member is already checked in (no CheckOut timestamp)
-    $checkSql = "SELECT * FROM Attendance WHERE MemberID = ? AND CheckOut = '0000-00-00 00:00:00' LIMIT 1";
+    // Check if the member is already checked in
+    $checkSql = "SELECT AttendanceID, CheckOut FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
     $stmt = $conn1->prepare($checkSql);
     $stmt->bind_param("i", $memberID);
     $stmt->execute();
@@ -13,23 +13,28 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
     $attendance = $result->fetch_assoc();
 
     if ($attendance) {
-        // Member is currently checked in, so check them out
-        $updateSql = "UPDATE Attendance 
-                      SET CheckOut = NOW(), 
-                          AttendanceCount = AttendanceCount + 1 
-                      WHERE AttendanceID = ?";
-        $stmt = $conn1->prepare($updateSql);
-        $stmt->bind_param("i", $attendance['AttendanceID']);
-        $stmt->execute();
-        echo 'checkedOut'; // Return this to update button
+        if ($attendance['CheckOut'] == '0000-00-00 00:00:00') {
+            // Member is checked in, perform checkout
+            $updateSql = "UPDATE Attendance 
+                          SET CheckOut = NOW(), 
+                              AttendanceCount = AttendanceCount + 1 
+                          WHERE AttendanceID = ?";
+            $stmt = $conn1->prepare($updateSql);
+            $stmt->bind_param("i", $attendance['AttendanceID']);
+            $stmt->execute();
+            echo 'checkedOut'; // Return to frontend for button update
+        } else {
+            // Member already checked out, no action needed
+            echo 'alreadyCheckedOut';
+        }
     } else {
-        // Member is not checked in, so check them in
+        // Member is not checked in, perform check-in
         $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
                       VALUES (?, NOW(), '0000-00-00 00:00:00', 0)";
         $stmt = $conn1->prepare($insertSql);
         $stmt->bind_param("i", $memberID);
         $stmt->execute();
-        echo 'checkedIn'; // Return this to update button
+        echo 'checkedIn'; // Return to frontend for button update
     }
 }
 ?>
