@@ -1,185 +1,103 @@
-<?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
-    header('Location: ../../admin/login.php');
-    exit();
-}
-
-include '../../database/connection.php'; // Include database connection
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Members</title>
-    <!-- Bootstrap CSS -->
+    <title>Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="../../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f4f4f4;
-            margin-top: 60px; /* Space for fixed navbar */
         }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        .card-body {
-            padding: 0;
-        }
-
-        .table th, .table td {
-            vertical-align: middle;
-        }
-
-        .table thead {
-            background-color: #343a40;
-            color: white;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f9f9f9;
-        }
-
         .sidebar {
             position: fixed;
             top: 0;
-            left: 0;
-            height: 100%;
+            bottom: 0;
             width: 250px;
             background-color: #343a40;
+            color: #fff;
             padding-top: 20px;
-            z-index: 1050;
         }
-
         .sidebar a {
-            color: white;
-            padding: 10px 15px;
+            color: #fff;
+            padding: 15px;
             text-decoration: none;
-            display: block;
         }
-
         .sidebar a:hover {
             background-color: #575757;
         }
-
+        .navbar {
+            padding: 0.75rem 1rem;
+        }
         .content-wrapper {
             margin-left: 250px;
-            padding-top: 20px; /* Space for the fixed sidebar */
+            padding: 20px;
         }
-
-        .navbar, .sidebar {
-            z-index: 1030;
+        .card {
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
         }
-
-        .content-wrapper {
-            margin-left: 250px;
-            padding-top: 60px; /* Space for fixed navbar */
+        .monitor-card {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
         }
     </style>
 </head>
-
 <body>
+    <?php include 'includes/sidebar.php'; ?>
 
-<!-- Include Header -->
-<?php include 'includes/header.php'; ?>
+    <div class="content-wrapper">
+        <?php include 'includes/header.php'; ?>
+        
+        <div class="container mt-5">
+            <h2>Welcome to Admin Dashboard</h2>
+            <p>Monitor and manage system activities below.</p>
 
-<div class="container-fluid">
-    <div class="row">
-        <!-- Include Sidebar -->
-        <?php include 'includes/sidebar.php'; ?>
-
-        <!-- Main Content -->
-        <div class="col-md-9 content-wrapper">
-            <h2 class="mb-4">Member List</h2>
-
-            <!-- Card Container for the Table -->
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    <h5>Members Information</h5>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card monitor-card shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4>Total Active Members</h4>
+                                <h2><?php echo $totalMembers; ?></h2>
+                            </div>
+                            <a href="members.php" class="btn btn-info btn-sm">View</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <!-- Wrap table in a responsive div -->
-                    <div class="table-responsive">
-                        <table id="membersTable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Member ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Gender</th>
-                                    <th>Age</th>
-                                    <th>Address</th>
-                                    <th>Membership Status</th>
-                                    <th>Created At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                // Fetch all members and their information
-                                $sql = "
-                                    SELECT 
-                                        Members.MemberID, 
-                                        Users.Username, 
-                                        Users.Email, 
-                                        Members.Gender, 
-                                        Members.Age, 
-                                        Members.Address, 
-                                        Members.MembershipStatus, 
-                                        Members.created_at 
-                                    FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID
-                                ";
-                                $result = $conn1->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['Gender']}</td>
-                                            <td>{$row['Age']}</td>
-                                            <td>{$row['Address']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['created_at']}</td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                <div class="col-md-4">
+                    <div class="card monitor-card shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4>Total Payments</h4>
+                                <h2>₱<?php echo number_format($totalPayments, 2); ?></h2>
+                            </div>
+                            <a href="payments.php" class="btn btn-info btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card monitor-card shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h4>Pending Memberships</h4>
+                                <h2><?php echo $pendingPayments; ?></h2>
+                            </div>
+                            <a href="pending_memberships.php" class="btn btn-warning btn-sm">View</a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- More content can go here -->
         </div>
     </div>
-</div>
 
-<!-- Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#membersTable').DataTable({
-            scrollX: true, // Enable horizontal scrolling for the DataTable
-            order: [[0, 'asc']] // Default sorting by Member ID
-        });
-    });
-</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
