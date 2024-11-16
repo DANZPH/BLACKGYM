@@ -1,4 +1,4 @@
-<?php
+l<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
@@ -39,6 +39,14 @@ include '../../database/connection.php';
             margin-left: 250px;
             padding: 20px;
         }
+        .checkin-btn {
+            background-color: green;
+            color: white;
+        }
+        .checkout-btn {
+            background-color: red;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -76,24 +84,24 @@ include '../../database/connection.php';
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         // Check current attendance status for today
-                                        $attendanceCheck = "SELECT CheckOut, AttendanceCount FROM Attendance 
+                                        $attendanceCheck = "SELECT CheckOut, AttendanceCount, AttendanceID FROM Attendance 
                                                             WHERE MemberID = {$row['MemberID']} 
                                                             AND DATE(AttendanceDate) = CURDATE()";
                                         $attendanceResult = $conn1->query($attendanceCheck);
                                         $status = "Not Checked In";
                                         $action = "Check In";
-                                        $btnClass = "btn-success";
+                                        $btnClass = "checkin-btn";
 
                                         if ($attendanceResult->num_rows > 0) {
                                             $attendanceData = $attendanceResult->fetch_assoc();
                                             if ($attendanceData['CheckOut'] == '0000-00-00 00:00:00') {
                                                 $status = "Checked In";
                                                 $action = "Check Out";
-                                                $btnClass = "btn-danger";
+                                                $btnClass = "checkout-btn";
                                             } else {
                                                 $status = "Checked Out";
                                                 $action = "Completed";
-                                                $btnClass = "btn-secondary";
+                                                $btnClass = "";
                                             }
                                         }
 
@@ -103,10 +111,9 @@ include '../../database/connection.php';
                                             <td>{$status}</td>
                                             <td>
                                                 <button 
-                                                    class='btn $btnClass attendance-btn' 
+                                                    class='btn {$btnClass} attendance-btn' 
                                                     data-memberid='{$row['MemberID']}' 
-                                                    data-action='{$action}' 
-                                                    " . ($action === "Completed" ? "disabled" : "") . ">
+                                                    data-action='{$action}'" . ($action === "Completed" ? "disabled" : "") . ">
                                                     {$action}
                                                 </button>
                                             </td>
@@ -129,46 +136,16 @@ include '../../database/connection.php';
         $(document).on('click', '.attendance-btn', function () {
             const memberId = $(this).data('memberid');
             const action = $(this).data('action');
-            
-            // Disable the button to avoid multiple clicks
-            $(this).prop('disabled', true);
 
-            $.post('action/attendance_process.php', { memberId, action }, function (response) {
-                alert(response.message);
-
-                if (response.status === "checked_in") {
-                    $(this).removeClass('btn-success').addClass('btn-danger').text('Check Out');
-                } else if (response.status === "checked_out") {
-                    $(this).removeClass('btn-danger').addClass('btn-secondary').text('Completed');
-                }
-
-                $(this).prop('disabled', false);
-            }.bind(this), 'json');
+            if (action !== 'Completed') {
+                $.post('action/attendance_process.php', { memberId, action }, function (response) {
+                    alert(response.message);
+                    if (response.status === 'success') {
+                        location.reload();
+                    }
+                }, 'json');
+            }
         });
-    </script>
-    <script>
-      $(document).on('click', '.attendance-btn', function () {
-    const memberId = $(this).data('memberid');
-    const action = $(this).data('action');
-    
-    console.log("Sending request: memberId=" + memberId + ", action=" + action);  // Debugging line
-
-    // Disable the button to avoid multiple clicks
-    $(this).prop('disabled', true);
-
-    $.post('action/attendance_process.php', { memberId, action }, function (response) {
-        console.log(response);  // Debugging line to see the response
-        alert(response.message);
-
-        if (response.status === "checked_in") {
-            $(this).removeClass('btn-success').addClass('btn-danger').text('Check Out');
-        } else if (response.status === "checked_out") {
-            $(this).removeClass('btn-danger').addClass('btn-secondary').text('Completed');
-        }
-
-        $(this).prop('disabled', false);
-    }.bind(this), 'json');
-});
     </script>
 </body>
 </html>
