@@ -35,7 +35,46 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <title>Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="includes/styles.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #343a40;
+            color: #fff;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #fff;
+            padding: 15px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .navbar {
+            padding: 0.75rem 1rem;
+        }
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .monitor-card {
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar-nav .nav-link {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
     <?php include 'includes/sidebar.php'; ?>
@@ -74,8 +113,8 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                     <div class="card monitor-card shadow-sm">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h2><?php echo $pendingPayments; ?></h2>
                                 <h4>Pending Memberships</h4>
+                                <h2><?php echo $pendingPayments; ?></h2>
                             </div>
                             <a href="pending_memberships.php" class="btn btn-warning btn-sm">View</a>
                         </div>
