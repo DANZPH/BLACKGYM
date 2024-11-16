@@ -28,7 +28,7 @@ include '../../database/connection.php'; // Include database connection
 <div class="container-fluid mt-3">
     <div class="row">
         <!-- Include Sidebar -->
-        <?php include '../includes/sidebar.php'; ?>
+        <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
         <div class="col-md-9">
