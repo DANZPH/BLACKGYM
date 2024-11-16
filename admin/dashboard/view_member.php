@@ -21,7 +21,7 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- header.php -->
 
-    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../css/styles.css">
 
 </head>
 
