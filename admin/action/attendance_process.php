@@ -14,6 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debugging log for received values
     error_log("Received memberId: $memberId and action: $action");
 
+    // Check if MemberID exists in Members table
+    $checkMember = "SELECT * FROM Members WHERE MemberID = ?";
+    $stmt = $conn1->prepare($checkMember);
+    $stmt->bind_param("i", $memberId);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows === 0) {
+        echo json_encode(['message' => 'Member not found.']);
+        $stmt->close();
+        exit();
+    }
+    $stmt->close();
+
     if ($action === 'Check In') {
         // Check if the member is already checked in today
         $attendanceCheck = "SELECT AttendanceCount FROM Attendance 
@@ -38,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             echo json_encode(['message' => 'Check-In successful.']);
         } else {
+            error_log("Error during Check-In: " . $stmt->error); // Log SQL error
             echo json_encode(['message' => 'Error during check-in.']);
         }
         $stmt->close();
@@ -59,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['message' => 'Check-Out successful.']);
             $updateStmt->close();
         } else {
+            error_log("Error during Check-Out: " . $stmt->error); // Log SQL error
             echo json_encode(['message' => 'Error during check-out.']);
         }
         $stmt->close();
