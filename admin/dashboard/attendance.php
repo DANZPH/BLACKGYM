@@ -132,20 +132,29 @@ include '../../database/connection.php';
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).on('click', '.attendance-btn', function () {
-            const memberId = $(this).data('memberid');
-            const action = $(this).data('action');
+<script>
+  $(document).on('click', '.attendance-btn', function () {
+    const memberId = $(this).data('memberid');
+    const action = $(this).data('action');
+    console.log('MemberID:', memberId, 'Action:', action); // Debugging log
 
-            if (action !== 'Completed') {
-                $.post('action/attendance_process.php', { memberId, action }, function (response) {
-                    alert(response.message);
-                    if (response.status === 'success') {
-                        location.reload();
-                    }
-                }, 'json');
+    const button = $(this);
+
+    if (action !== 'Completed') {
+        $.post('action/attendance_process.php', { memberId, action }, function (response) {
+            console.log(response); // Log the response from the server
+            alert(response.message);
+            if (response.action === 'Check In') {
+                button.removeClass('checkin-btn').addClass('checkout-btn').text('Check Out');
+                button.data('action', 'Check Out');
+            } else if (response.action === 'Check Out') {
+                button.removeClass('checkout-btn').addClass('checkin-btn').text('Completed');
+                button.data('action', 'Completed').prop('disabled', true);
             }
-        });
-    </script>
+        }, 'json');
+    }
+});
+</script>
+    
 </body>
 </html>
