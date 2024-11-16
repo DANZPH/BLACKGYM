@@ -22,13 +22,28 @@ include '../../database/connection.php'; // Include database connection
     <!-- Custom Styles -->
     <link rel="stylesheet" href="includes/styles.css">
     <style>
-/* Default Sidebar Style */
-.sidebar {
+    /* Sticky Navbar */
+.sticky-navbar {
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    z-index: 9999; /* Keep navbar above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Adjust the content so it doesn't overlap with the fixed navbar */
+body {
+    padding-top: 70px; /* Adjust based on the height of your navbar */
+}
+
+/* Adjust Sidebar for Landscape Mode */
+.sidebar {
+    position: fixed;
+    top: 70px; /* Adjust so the sidebar doesn't overlap with the navbar */
+    left: 0;
     width: 250px;
-    height: 100vh; /* Full screen height */
+    height: calc(100vh - 70px); /* Adjust height to account for the navbar */
     background-color: #2c3e50;
     color: #fff;
     padding-top: 30px;
@@ -36,15 +51,22 @@ include '../../database/connection.php'; // Include database connection
     overflow-y: auto;
 }
 
+/* Main content should have a margin to the left to avoid overlapping the sidebar */
+.main-content {
+    margin-left: 250px; /* Sidebar width */
+    padding: 20px;
+    margin-top: 70px; /* Adjust the top margin for the fixed navbar */
+    height: calc(100vh - 70px); /* Adjust height for scrolling */
+}
+
 /* Media Query for Landscape Orientation */
 @media (orientation: landscape) {
-    /* Make sure sidebar is visible on the left */
     .sidebar {
         position: fixed;
-        top: 0;
+        top: 70px;
         left: 0;
         width: 250px; /* Sidebar width */
-        height: 100vh;
+        height: calc(100vh - 70px); /* Adjust height to fit the screen */
         background-color: #2c3e50;
         color: #fff;
         padding-top: 30px;
@@ -52,18 +74,13 @@ include '../../database/connection.php'; // Include database connection
         overflow-y: auto;
     }
 
-    /* Main content section */
     .main-content {
-        margin-left: 260px; /* Make space for the sidebar */
-        padding: 20px;
-        height: 100vh;
-        overflow-y: auto;
+        margin-left: 260px; /* Account for the sidebar */
     }
 }
 
 /* Media Query for Portrait Orientation */
 @media (orientation: portrait) {
-    /* In portrait mode, the sidebar may collapse or stack vertically */
     .sidebar {
         position: relative;
         width: 100%;
@@ -72,9 +89,9 @@ include '../../database/connection.php'; // Include database connection
         z-index: 0;
     }
 
-    /* Main content section */
+    /* Remove the left margin in portrait mode */
     .main-content {
-        margin-left: 0; /* Full width on smaller screens */
+        margin-left: 0;
     }
 }
         .table-responsive {
