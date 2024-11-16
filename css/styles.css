@@ -1,0 +1,15 @@
+/* Sticky Navbar */
+.sticky-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Ensure it's above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px 0; /* Adjust the padding as necessary */
+}
+
+/* Ensure the content doesn't overlap the sticky navbar */
+body {
+    padding-top: 60px; /* Adjust this value based on the height of your navbar */
+}
