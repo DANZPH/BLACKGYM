@@ -1,0 +1,95 @@
+/* Universal Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #343a40; /* Dark grey text */
+    margin: 0;
+    padding: 0;
+}
+
+.container-fluid {
+    padding: 20px;
+}
+
+h2 {
+    color: #007bff; /* Bootstrap primary color */
+    font-weight: bold;
+}
+
+.table {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.text-center {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Header and Sidebar Styling */
+header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+}
+
+.sidebar {
+    background-color: #007bff;
+    color: white;
+    height: 100%;
+    padding: 15px;
+    position: fixed;
+    width: 250px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+}
+
+.sidebar a:hover {
+    background-color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Adjust main content for sidebar */
+.col-md-9 {
+    margin-left: 260px;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .col-md-9 {
+        margin-left: 0;
+    }
+    .sidebar {
+        position: relative;
+        width: 100%;
+    }
+}
