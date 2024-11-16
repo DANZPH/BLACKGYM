@@ -21,14 +21,14 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../css/styles.css">
-    <style>
+<!--    <style>
         .table-responsive {
             overflow-x: auto;
         }
         .card-body {
             padding: 0;
         }
-    </style>
+    </style>-->
 </head>
 
 <body>
