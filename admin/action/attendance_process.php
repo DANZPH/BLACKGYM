@@ -1,4 +1,4 @@
-l<?php
+<?php
 include '../../database/connection.php'; // Include database connection
 
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
