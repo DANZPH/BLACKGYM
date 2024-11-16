@@ -1,3 +1,32 @@
+<?php
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    // If admin is not logged in, redirect to the login page
+    header('Location: login.php');
+    exit();
+}
+
+// Include database connection
+include '../../database/connection.php';
+
+// Fetch statistics from the database
+
+// Total Members with Active Membership Status
+$totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
+$totalMembersResult = $conn1->query($totalMembersQuery);
+$totalMembers = $totalMembersResult->fetch_assoc()['total_members'];
+
+// Total Payments
+$totalPaymentsQuery = "SELECT SUM(Amount) AS total_amount FROM Payments";
+$totalPaymentsResult = $conn1->query($totalPaymentsQuery);
+$totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'];
+
+// Total Pending Payments (Payments related to Pending Membership)
+$pendingPaymentsQuery = "SELECT COUNT(*) AS pending_payments FROM Membership WHERE Status = 'Pending'";
+$pendingPaymentsResult = $conn1->query($pendingPaymentsQuery);
+$pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
