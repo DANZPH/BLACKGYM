@@ -1,10 +1,7 @@
 <div id="sidebar-wrapper" class="col-lg-3">
     <div class="container">
-        <!-- Toggle Button for Sidebar Collapse -->
-        <button class="btn btn-primary" id="sidebarToggle" data-toggle="collapse" data-target="#sidebarMenu" aria-expanded="false" aria-controls="sidebarMenu">
-            <i class="fa fa-bars"></i> Toggle Sidebar
-        </button>
-
+        <!-- Removed the Toggle Button for Sidebar Collapse -->
+        
         <ul class="list-unstyled mt-3 collapse" id="sidebarMenu">
             <!-- Manage Members Dropdown -->
             <li class="nav-item">
