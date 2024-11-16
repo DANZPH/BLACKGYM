@@ -1,16 +1,7 @@
-<div class="sidebar"
-id="sidebar-wrapper" class="col-lg-3  >
+<div class="sidebar">
     <div class="container">
-        <!-- Toggle Button for Sidebar Collapse -->
-        <button class="btn btn-primary" id="sidebarToggle">
-            <i class="fa fa-bars"></i> Toggle Sidebar
-        </button>
-
-        <ul class="list-unstyled mt-3" id="sidebarMenu">
+        <ul class="list-unstyled">
             <!-- Manage Members Dropdown -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">Dashboard</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#manageMembers" data-toggle="collapse" aria-expanded="false">
                     <i class="fa fa-users"></i> Manage Members
