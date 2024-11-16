@@ -1,4 +1,4 @@
-<?php
+l<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     echo json_encode(['message' => 'Unauthorized access.']);
@@ -32,13 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $conn1->prepare($sql);
         $stmt->bind_param("i", $memberId);
         if ($stmt->execute()) {
-            echo json_encode(['message' => 'Check-In successful.', 'action' => 'Check In']);
+            echo json_encode(['message' => 'Check-In successful.']);
         } else {
-            echo json_encode(['message' => 'Error during check-in: ' . $stmt->error]);
+            echo json_encode(['message' => 'Error during check-in.']);
         }
         $stmt->close();
     } elseif ($action === 'Check Out') {
-        // Update check-out time and increment attendance count
+        // Update check-out time
         $sql = "UPDATE Attendance 
                 SET CheckOut = NOW() 
                 WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE() AND CheckOut = '0000-00-00 00:00:00'";
@@ -51,11 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE()";
             $updateStmt = $conn1->prepare($updateCountSql);
             $updateStmt->bind_param("i", $memberId);
-            if ($updateStmt->execute()) {
-                echo json_encode(['message' => 'Check-Out successful.', 'action' => 'Check Out']);
-            } else {
-                echo json_encode(['message' => 'Error updating attendance count.']);
-            }
+            $updateStmt->execute();
+            echo json_encode(['message' => 'Check-Out successful.']);
             $updateStmt->close();
         } else {
             echo json_encode(['message' => 'Error during check-out.']);
