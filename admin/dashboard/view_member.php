@@ -22,7 +22,42 @@ include '../../database/connection.php'; // Include database connection
     <!-- header.php -->
 
     <link rel="stylesheet" href="../../css/styles.css">
-
+   <style>
+        /* Sidebar Customization */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #343a40;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .card {
+            border-radius: 10px;
+        }
+        .monitor-card {
+            background-color: #f8f9fa;
+        }
+        .monitor-card .card-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
