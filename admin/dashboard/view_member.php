@@ -55,9 +55,9 @@ include '../../database/connection.php'; // Include database connection
         .main-content {
             margin-left: 250px; /* Sidebar width */
             padding: 20px;
-            margin-top: 70px; /* Adjust the top margin for the fixed navbar */
-            height: calc(100vh - 70px); /* Adjust height for scrolling */
-        }
+            margin-top: 10px; /* Adjust the top margin for the fixed navbar */
+/*            height: calc(100vh - 70px); /* Adjust height for scrolling */
+        }*/
 
         /* Media Query for Landscape Orientation */
         @media (orientation: landscape) {
