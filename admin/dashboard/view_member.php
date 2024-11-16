@@ -51,9 +51,9 @@ include '../../database/connection.php'; // Include database connection
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
-                <div >
+                <div class="card-body">
                     <!-- Wrap table in a responsive div -->
-                    <div class="card-body" class="table-responsive">
+                    <div class="table-responsive">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
