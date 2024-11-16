@@ -3,6 +3,10 @@
         <ul class="list-unstyled">
             <!-- Manage Members Dropdown -->
             <li class="nav-item">
+                <a class="nav-link" href="#manageMembers">Manage Members</a>
+
+                
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#manageMembers" data-toggle="collapse" aria-expanded="false">
                     <i class="fa fa-users"></i> Manage Members
                 </a>
