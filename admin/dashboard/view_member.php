@@ -21,7 +21,15 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../styles.css">
-    <style>
+<!--    <style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .card-body {
+            padding: 0;
+        }
+    </style>-->
+        <style>
         body {
             background-color: #f4f4f4;
         }
@@ -64,21 +72,23 @@ include '../../database/connection.php'; // Include database connection
 </head>
 
 <body>
-    <!-- Include Sidebar -->
-    <?php include 'includes/sidebar.php'; ?>
 
-    <div class="content-wrapper">
-        <!-- Include Header -->
-        <?php include 'includes/header.php'; ?>
+<!-- Include Header -->
+<?php include 'includes/header.php'; ?>
 
-        <div class="container mt-5">
-            <h2>Welcome to Admin Dashboard</h2>
-            <p>Monitor and manage system activities below.</p>
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Include Sidebar -->
+        <?php include 'includes/sidebar.php'; ?>
 
-            <!-- Members Table Section -->
-            <div class="card monitor-card shadow-sm">
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <h2 class="mb-4">Member List</h2>
+
+            <!-- Card Container for the Table -->
+            <div class="card">
                 <div class="card-header">
-                    <h4>Members Information</h4>
+                    <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
                     <!-- Wrap table in a responsive div -->
@@ -112,7 +122,7 @@ include '../../database/connection.php'; // Include database connection
                                     FROM Members 
                                     INNER JOIN Users ON Members.UserID = Users.UserID
                                 ";
-                                $result = $conn->query($sql);
+                                $result = $conn1->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -138,25 +148,22 @@ include '../../database/connection.php'; // Include database connection
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#membersTable').DataTable({
-                "scrollX": true,  // Enable horizontal scrolling for the DataTable
-                "searching": true, // Enable search functionality
-                "ordering": true,  // Enable sorting on columns
-                "paging": true,    // Enable pagination
-                "lengthMenu": [10, 25, 50, 100] // Options for number of entries per page
-            });
+<script>
+    $(document).ready(function() {
+        $('#membersTable').DataTable({
+            scrollX: true // Enable horizontal scrolling for the DataTable
         });
-    </script>
+    });
+</script>
 </body>
 </html>
