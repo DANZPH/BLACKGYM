@@ -21,37 +21,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->store_result();
         if ($stmt->num_rows > 0) {
             // Member is already checked in for today
-            echo json_encode(['message' => 'Member is already checked in today.', 'status' => 'error']);
+            echo json_encode(['message' => 'Member is already checked in today.']);
             $stmt->close();
             exit();
         }
 
         // Insert new check-in record
         $sql = "INSERT INTO Attendance (MemberID, CheckIn, AttendanceDate, AttendanceCount) 
-                VALUES (?, NOW(), NOW(), 1)";
+                VALUES (?, NOW(), NOW(), 0)";
         $stmt = $conn1->prepare($sql);
         $stmt->bind_param("i", $memberId);
         if ($stmt->execute()) {
-            echo json_encode(['message' => 'Check-In successful.', 'status' => 'success']);
+            echo json_encode(['message' => 'Check-In successful.', 'action' => 'Check In']);
         } else {
-            echo json_encode(['message' => 'Error during check-in.', 'status' => 'error']);
+            echo json_encode(['message' => 'Error during check-in.']);
         }
         $stmt->close();
     } elseif ($action === 'Check Out') {
-        // Update check-out time and increment AttendanceCount
+        // Update check-out time and increment attendance count
         $sql = "UPDATE Attendance 
-                SET CheckOut = NOW(), AttendanceCount = AttendanceCount + 1 
+                SET CheckOut = NOW() 
                 WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE() AND CheckOut = '0000-00-00 00:00:00'";
         $stmt = $conn1->prepare($sql);
         $stmt->bind_param("i", $memberId);
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            echo json_encode(['message' => 'Check-Out successful.', 'status' => 'success']);
+            // Update AttendanceCount after check-out
+            $updateCountSql = "UPDATE Attendance 
+                               SET AttendanceCount = AttendanceCount + 1 
+                               WHERE MemberID = ? AND DATE(AttendanceDate) = CURDATE()";
+            $updateStmt = $conn1->prepare($updateCountSql);
+            $updateStmt->bind_param("i", $memberId);
+            $updateStmt->execute();
+            echo json_encode(['message' => 'Check-Out successful.', 'action' => 'Check Out']);
+            $updateStmt->close();
         } else {
-            echo json_encode(['message' => 'Error during check-out.', 'status' => 'error']);
+            echo json_encode(['message' => 'Error during check-out.']);
         }
         $stmt->close();
     } else {
-        echo json_encode(['message' => 'Invalid action.', 'status' => 'error']);
+        echo json_encode(['message' => 'Invalid action.']);
     }
 }
 $conn1->close();
