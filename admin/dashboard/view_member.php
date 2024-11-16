@@ -19,10 +19,9 @@ include '../../database/connection.php'; // Include database connection
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-    <!-- header.php -->
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="../../styles.css">
     <style>
-        /* Add this to prevent table overflow and enable scrolling */
         .table-responsive {
             overflow-x: auto;
         }
@@ -121,11 +120,10 @@ include '../../database/connection.php'; // Include database connection
 
 <script>
     $(document).ready(function() {
-        $('#membersTable').DataTable(); // Initialize DataTable
+        $('#membersTable').DataTable({
+            scrollX: true // Enable horizontal scrolling for the DataTable
+        });
     });
-new DataTable('#membersTable', {
-    scrollX: true
-});
 </script>
 </body>
 </html>
