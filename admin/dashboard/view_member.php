@@ -1,3 +1,47 @@
+<?php
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    // Redirect to login page if not logged in as admin
+    header('Location: ../../admin/login.php');
+    exit();
+}
+
+include '../../database/connection.php'; // Include database connection
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Members</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="includes/styles.css">
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .card-body {
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Include Header -->
+<?php include 'includes/header.php'; ?>
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- Include Sidebar -->
+        <?php include 'includes/sidebar.php'; ?>
+
+        <!-- Main Content -->
 <!-- Main Content -->
 <div class="col-md-9 main-content">
     <h2 class="mb-4">Member List</h2>
@@ -64,3 +108,23 @@
         </div>
     </div>
 </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#membersTable').DataTable({
+            scrollX: true // Enable horizontal scrolling for the DataTable
+        });
+    });
+</script>
+</body>
+</html>
