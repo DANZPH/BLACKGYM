@@ -20,7 +20,7 @@ include '../../database/connection.php'; // Include database connection
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../../css/styles.css">
 <!--    <style>
         .table-responsive {
             overflow-x: auto;
