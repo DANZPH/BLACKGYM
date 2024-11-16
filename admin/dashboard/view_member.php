@@ -22,110 +22,13 @@ include '../../database/connection.php'; // Include database connection
     <!-- Custom Styles -->
     <link rel="stylesheet" href="includes/styles.css">
     <style>
-        /* Sticky Navbar */
-        .sticky-navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 9999; /* Keep navbar above other content */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Adjust the content so it doesn't overlap with the fixed navbar */
-        body {
-             /* Adjust based on the height of your navbar */
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            position: fixed;
-            top: 70px; /* Adjust so the sidebar doesn't overlap with the navbar */
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 70px); /* Adjust height to account for the navbar */
-            background-color: #2c3e50;
-            color: #fff;
-            padding-top: 0px;
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        /* Main content should have a margin to the left to avoid overlapping the sidebar */
-        .main-content {
-            margin-left: 250px; /* Sidebar width */
-            padding: 0px;
-            margin-top: 10px; /* Adjust the top margin for the fixed navbar */
-/*            height: calc(100vh - 70px); /* Adjust height for scrolling */
-        }*/
-
-        /* Media Query for Landscape Orientation */
-        @media (orientation: landscape) {
-            .sidebar {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                width: 250px; /* Sidebar width */
-                height: calc(100vh - 70px); /* Adjust height to fit the screen */
-                background-color: #2c3e50;
-                color: #fff;
-                padding-top: 0px;
-                z-index: 1000;
-                overflow-y: auto;
-            }
-
-            .main-content {
-                margin-left: 260px; /* Account for the sidebar */
-            }
-        }
-
-        /* Media Query for Portrait Orientation */
-        @media (orientation: portrait) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding-top: 0;
-                z-index: 0;
-            }
-
-            /* Remove the left margin in portrait mode */
-            .main-content {
-                margin-left: 0;
-            }
-        }
-
-        /* Table Responsive */
+    
         .table-responsive {
             overflow-x: auto;
         }
-
         .card-body {
             padding: 0;
         }
-/* Collapsed Sidebar Styles */
-.sidebar.collapsed {
-    width: 60px; /* Smaller width when collapsed */
-}
-
-.sidebar.collapsed .nav-link {
-    text-align: center; /* Center align text for icons */
-    padding-left: 15px; /* Adjust padding */
-}
-
-.sidebar.collapsed .nav-item i {
-    font-size: 20px; /* Make the icons smaller */
-}
-
-/* Hide sidebar menu items when collapsed */
-.sidebar.collapsed #sidebarMenu {
-    display: none;
-}
-
-/* Show sidebar menu items when expanded */
-.sidebar:not(.collapsed) #sidebarMenu {
-    display: block;
-}
     </style>
 </head>
 
@@ -140,7 +43,7 @@ include '../../database/connection.php'; // Include database connection
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="col-md-9 main-content">
+        <div class="col-md-9">
             <h2 class="mb-4">Member List</h2>
 
             <!-- Card Container for the Table -->
@@ -221,14 +124,6 @@ include '../../database/connection.php'; // Include database connection
         $('#membersTable').DataTable({
             scrollX: true // Enable horizontal scrolling for the DataTable
         });
-    });
-</script>
-<script>
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        var sidebar = document.querySelector('.sidebar');
-        var sidebarMenu = document.getElementById('sidebarMenu');
-        sidebar.classList.toggle('collapsed');
-        sidebarMenu.classList.toggle('d-none'); // Hide menu items when collapsed
     });
 </script>
 </body>
