@@ -146,5 +146,29 @@ include '../../database/connection.php';
             }.bind(this), 'json');
         });
     </script>
+    <script>
+      $(document).on('click', '.attendance-btn', function () {
+    const memberId = $(this).data('memberid');
+    const action = $(this).data('action');
+    
+    console.log("Sending request: memberId=" + memberId + ", action=" + action);  // Debugging line
+
+    // Disable the button to avoid multiple clicks
+    $(this).prop('disabled', true);
+
+    $.post('action/attendance_process.php', { memberId, action }, function (response) {
+        console.log(response);  // Debugging line to see the response
+        alert(response.message);
+
+        if (response.status === "checked_in") {
+            $(this).removeClass('btn-success').addClass('btn-danger').text('Check Out');
+        } else if (response.status === "checked_out") {
+            $(this).removeClass('btn-danger').addClass('btn-secondary').text('Completed');
+        }
+
+        $(this).prop('disabled', false);
+    }.bind(this), 'json');
+});
+    </script>
 </body>
 </html>
