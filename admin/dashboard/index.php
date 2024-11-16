@@ -25,7 +25,6 @@ $totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'];
 $pendingPaymentsQuery = "SELECT COUNT(*) AS pending_payments FROM Membership WHERE Status = 'Pending'";
 $pendingPaymentsResult = $conn1->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
-
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +35,8 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         /* Sidebar Customization */
         .sidebar {
@@ -97,10 +98,9 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                         <div class="card-body">
                             <div>
                                 <h2><?php echo $totalMembers; ?></h2>
-
                             </div>
                             <div>
-                                <a href="members.php" class="btn btn-info btn-sm">View</a>
+                                <a href="view_member.php" class="btn btn-info btn-sm">View</a>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                                 <h2>₱<?php echo number_format($totalPayments, 2); ?></h2>
                             </div>
                             <div>
-                                <a href="payments.php" class="btn btn-info btn-sm">View</a>
+                                <a href="payment_transaction.php" class="btn btn-info btn-sm">View</a>
                             </div>
                         </div>
                     </div>
