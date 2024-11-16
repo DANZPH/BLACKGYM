@@ -1,78 +1,38 @@
 /* Universal Styles */
 body {
     font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #343a40; /* Dark grey text */
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
-    color: #343a40;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
 }
 
-/* Header */
-header {
-    background-color: #343a40;
-    color: white;
-    padding: 15px 20px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-/* Wrapper */
-.wrapper {
-    display: flex;
-    flex-grow: 1;
-    margin-top: 65px; /* Height of the fixed header */
-}
-
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background-color: #007bff;
-    color: white;
-    height: calc(100vh - 65px); /* Full height minus header height */
-    position: fixed;
-    top: 65px;
-    left: 0;
-    overflow-y: auto;
+.container-fluid {
     padding: 20px;
 }
 
-.sidebar a {
-    color: white;
-    text-decoration: none;
-    display: block;
-    padding: 10px;
+h2 {
+    color: #007bff; /* Bootstrap primary color */
+    font-weight: bold;
 }
 
-.sidebar a:hover {
-    background-color: #0056b3;
-    text-decoration: underline;
-}
-
-/* Main Content */
-.content {
-    margin-left: 250px; /* Width of the sidebar */
-    padding: 20px;
-    flex-grow: 1;
-    overflow: auto;
-}
-
-/* Table Styles */
 .table {
     background-color: #ffffff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.table th, .table td {
+    vertical-align: middle;
+}
+
 .table th {
     background-color: #007bff;
-    color: white;
+    color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
 }
 
 .text-center {
@@ -80,19 +40,56 @@ header {
     font-style: italic;
 }
 
+/* Header and Sidebar Styling */
+header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+}
+
+.sidebar {
+    background-color: #007bff;
+    color: white;
+    height: 100%;
+    padding: 15px;
+    position: fixed;
+    width: 250px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 8px 0;
+}
+
+.sidebar a:hover {
+    background-color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Adjust main content for sidebar */
+.col-md-9 {
+    margin-left: 260px;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-    .wrapper {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        position: relative;
-        height: auto;
-    }
-
-    .content {
+    .col-md-9 {
         margin-left: 0;
+    }
+    .sidebar {
+        position: relative;
+        width: 100%;
     }
 }
