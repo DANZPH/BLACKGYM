@@ -21,6 +21,7 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f4f4f4;
