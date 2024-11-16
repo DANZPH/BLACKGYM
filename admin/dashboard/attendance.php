@@ -14,7 +14,7 @@ include '../../database/connection.php'; // Include database connection
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance</title>
+    <title>Attendance Management</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
@@ -22,19 +22,18 @@ include '../../database/connection.php'; // Include database connection
     <!-- Custom Styles -->
     <link rel="stylesheet" href="../../styles.css">
     <style>
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .card-body {
-            padding: 0;
-        }
+        /* Custom styles for the attendance buttons */
         .checkin-btn {
-            color: white;
             background-color: green;
+            color: white;
         }
         .checkout-btn {
-            color: white;
             background-color: red;
+            color: white;
+        }
+        .btn {
+            padding: 5px 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -56,7 +55,7 @@ include '../../database/connection.php'; // Include database connection
             <!-- Card Container for the Table -->
             <div class="card">
                 <div class="card-header">
-                    <h5>Member Attendance</h5>
+                    <h5>Manage Attendance</h5>
                 </div>
                 <div class="card-body">
                     <!-- Wrap table in a responsive div -->
@@ -66,25 +65,24 @@ include '../../database/connection.php'; // Include database connection
                                 <tr>
                                     <th>Member ID</th>
                                     <th>Username</th>
-                                    <th>Email</th>
                                     <th>Gender</th>
                                     <th>Age</th>
+                                    <th>Status</th>
                                     <th>Attendance Count</th>
-                                    <th>Action</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                // Fetch all members
+                                // Fetch all members and their attendance data
                                 $sql = "
                                     SELECT 
                                         Members.MemberID, 
                                         Users.Username, 
-                                        Users.Email, 
                                         Members.Gender, 
                                         Members.Age, 
-                                        Members.MembershipStatus,
-                                        (SELECT COUNT(*) FROM Attendance WHERE MemberID = Members.MemberID) AS AttendanceCount
+                                        Members.MembershipStatus, 
+                                        Members.AttendanceCount 
                                     FROM Members 
                                     INNER JOIN Users ON Members.UserID = Users.UserID
                                 ";
@@ -95,21 +93,14 @@ include '../../database/connection.php'; // Include database connection
                                         echo "<tr>
                                             <td>{$row['MemberID']}</td>
                                             <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
                                             <td>{$row['Gender']}</td>
                                             <td>{$row['Age']}</td>
+                                            <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['AttendanceCount']}</td>
-                                            <td>";
-                                            
-                                            // Action buttons for Check-in/Check-out
-                                            if ($row['MembershipStatus'] === 'Active') {
-                                                echo "<button class='btn checkin-btn' onclick='handleAttendance({$row['MemberID']}, \"checkin\")'>Check In</button>";
-                                                echo "<button class='btn checkout-btn' onclick='handleAttendance({$row['MemberID']}, \"checkout\")'>Check Out</button>";
-                                            } else {
-                                                echo "Inactive Member";
-                                            }
-
-                                            echo "</td>
+                                            <td>
+                                                <button class='btn checkin-btn' data-memberid='{$row['MemberID']}' data-action='checkin'>Check In</button>
+                                                <button class='btn checkout-btn' data-memberid='{$row['MemberID']}' data-action='checkout'>Check Out</button>
+                                            </td>
                                         </tr>";
                                     }
                                 } else {
@@ -135,25 +126,33 @@ include '../../database/connection.php'; // Include database connection
 
 <script>
     $(document).ready(function() {
+        // Initialize DataTable
         $('#attendanceTable').DataTable({
             scrollX: true // Enable horizontal scrolling for the DataTable
         });
-    });
 
-    function handleAttendance(memberId, action) {
-        $.ajax({
-            url: 'attendance_process.php',
-            type: 'POST',
-            data: {
-                memberId: memberId,
-                action: action
-            },
-            success: function(response) {
-                alert(response.message);
-                location.reload();  // Refresh the page to update attendance status
-            }
+        // Handle the Check-In/Check-Out button click
+        $('.btn').click(function() {
+            var memberId = $(this).data('memberid');
+            var action = $(this).data('action');
+            
+            $.ajax({
+                url: 'attendance_process.php',
+                type: 'POST',
+                data: {
+                    memberId: memberId,
+                    action: action
+                },
+                success: function(response) {
+                    var result = JSON.parse(response);
+                    alert(result.message); // Display the message from the backend
+
+                    // Optionally, refresh the table or reload page after action
+                    location.reload(); // Reload the page after processing the action
+                }
+            });
         });
-    }
+    });
 </script>
 
 </body>
