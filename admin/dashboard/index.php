@@ -72,7 +72,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             justify-content: space-between;
             align-items: center;
         }
-    </style>-->
+    </style>--> 
 </head>
 <body>
 
@@ -83,7 +83,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
         <!-- Include Header -->
         <?php include 'includes/header.php'; ?>
 
-        <div class="container mt-5">
+        <div class="container md-9">
             <h2>Welcome to the Admin Dashboard</h2>
             <p>Monitor and manage system activities below.</p>
 
