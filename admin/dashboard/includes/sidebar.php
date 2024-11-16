@@ -1,4 +1,4 @@
-<div id="sidebar-wrapper" class="col-lg-3">
+<div class="sidebar">
     <div class="container">
         <!-- Removed the Toggle Button for Sidebar Collapse -->
         
