@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLACKGYM</title>
-  
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -13,6 +13,9 @@
 
   <!-- SweetAlert2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.8/dist/sweetalert2.min.css" rel="stylesheet">
+
+  <!-- Font Awesome CDN (for GitHub Icon) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
   <style>
     /* Custom Styles for Dark Theme */
@@ -107,6 +110,15 @@
       margin-top: 50px;
     }
 
+    .footer a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
     /* SweetAlert2 */
     .swal2-popup {
       background-color: #333 !important;
@@ -117,22 +129,20 @@
       color: #f39c12 !important;
     }
 
-  /* Custom 20% Done Header Styles */
-.done-header {
-  border: 5px solid green; /* Sets the border color to green and a 5px width */
-  background-color: #333;  /* You can specify any background color you want */
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-  padding: 20px;
-  margin: 20px auto;
-  width: 60%;
-  border-radius: 10px;
-  letter-spacing: 1px;
-}
-
-
+    /* Custom 20% Done Header Styles */
+    .done-header {
+      border: 5px solid green;
+      background-color: #333;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 10px;
+      letter-spacing: 1px;
+    }
   </style>
 </head>
 <body>
@@ -166,17 +176,11 @@
 
   <!-- Footer -->
   <div class="footer">
-<!-- Footer -->
-<div class="footer">
-  <p>&copy; 2024 BLACKGYM. All Rights Reserved. 
-    <a href="https://github.com/DANZPH/BLACK-GYM" target="_blank" style="color: #f39c12; text-decoration: none;">
-      GitHub Repo - Collaborate with Us
-    </a>
-  </p>
-</div>
-
-    <p>&copy; 2024 BLACKGYM. All Rights Reserved. <a href="https://github.com/DANZPH/BLACK-GYM" style="color: #f39c12; text-decoration: none;">Privacy Policy</a></p>
-    
+    <p>&copy; 2024 BLACKGYM. All Rights Reserved. 
+      <a href="https://github.com/DANZPH/BLACK-GYM" target="_blank">
+        <i class="fab fa-github"></i> GitHub Repo - Collaborate with Us
+      </a>
+    </p>
   </div>
 
   <!-- SweetAlert2 JS -->
@@ -220,4 +224,3 @@
 
 </body>
 </html>
-
