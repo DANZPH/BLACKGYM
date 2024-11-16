@@ -89,7 +89,7 @@ Members.MemberID,
                                         }
 
                                         echo "<tr>
-                                            <td>{$row['MemberID']}</td>
+/*                                            <td>{$row['MemberID']}</td>*/
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['AttendanceCount']}</td>
