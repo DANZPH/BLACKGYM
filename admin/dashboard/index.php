@@ -36,7 +36,8 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+<link rel="stylesheet" href="../../css/styles.css">
+<!--    <style>
         /* Sidebar Customization */
         .sidebar {
             position: fixed;
@@ -71,7 +72,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             justify-content: space-between;
             align-items: center;
         }
-    </style>
+    </style>-->
 </head>
 <body>
 
