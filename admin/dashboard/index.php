@@ -37,7 +37,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="includes/styles.css">
-<!--    <style>
+    <style>
         /* Sidebar Customization */
         .sidebar {
             position: fixed;
@@ -72,7 +72,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             justify-content: space-between;
             align-items: center;
         }
-    </style>-->
+    </style>
 </head>
 <body>
 
