@@ -19,9 +19,10 @@ include '../../database/connection.php'; // Include database connection
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-    <!-- Custom Styles -->
-    <link rel="stylesheet" href="../../styles.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <!-- Custom Styles -->
+    <link rel="stylesheet" href="includes/styles.css">
     <style>
         body {
             background-color: #f4f4f4;
