@@ -48,7 +48,7 @@ body {
 .content-wrapper {
     margin-left: 250px; /* Matches the sidebar width */
     padding: 20px;
-    background-color: #ffffff;
+    background-color: #343a40;
     min-height: 100vh; /* Ensures full height */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
