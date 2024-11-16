@@ -30,6 +30,12 @@
     .navbar {
       background-color: #1a1a1a;
       padding: 20px 0;
+position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Keep navbar above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .navbar-brand {
