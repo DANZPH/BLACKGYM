@@ -1,4 +1,4 @@
-<?php
+l<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // If admin is not logged in, redirect to the login page
@@ -10,18 +10,14 @@ if (!isset($_SESSION['AdminID'])) {
 include '../../database/connection.php';
 
 // Fetch statistics from the database
-
-// Total Members with Active Membership Status
 $totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
 $totalMembersResult = $conn1->query($totalMembersQuery);
 $totalMembers = $totalMembersResult->fetch_assoc()['total_members'];
 
-// Total Payments
 $totalPaymentsQuery = "SELECT SUM(Amount) AS total_amount FROM Payments";
 $totalPaymentsResult = $conn1->query($totalPaymentsQuery);
 $totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'];
 
-// Total Pending Payments (Payments related to Pending Membership)
 $pendingPaymentsQuery = "SELECT COUNT(*) AS pending_payments FROM Membership WHERE Status = 'Pending'";
 $pendingPaymentsResult = $conn1->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
@@ -34,10 +30,8 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Sidebar Customization */
         .sidebar {
             position: fixed;
             top: 0;
@@ -46,15 +40,6 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             width: 250px;
             background-color: #343a40;
             padding-top: 20px;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
         }
         .content-wrapper {
             margin-left: 250px;
@@ -97,7 +82,6 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                         <div class="card-body">
                             <div>
                                 <h2><?php echo $totalMembers; ?></h2>
-
                             </div>
                             <div>
                                 <a href="members.php" class="btn btn-info btn-sm">View</a>
@@ -141,13 +125,12 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                 </div>
             </div>
 
-            <!-- Other Content Can Go Here -->
         </div>
     </div>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
