@@ -102,38 +102,37 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#attendanceTable').DataTable({
-            scrollX: true // Enable horizontal scrolling for the DataTable
-        });
+$(document).ready(function() {
+    $('#attendanceTable').DataTable({
+        scrollX: true // Enable horizontal scrolling for the DataTable
+    });
 
-        // Toggle Check In/Check Out
-        $('.attendance-toggle').click(function() {
-            var memberID = $(this).data('memberid');
-            var button = $(this);
-            
-            console.log("Clicked memberID: " + memberID);  // Debug log
-            
-            $.ajax({
-                url: 'attendance_process.php',
-                type: 'POST',
-                data: { action: 'toggleAttendance', memberID: memberID },
-                success: function(response) {
-                    console.log("Response: " + response); // Debug log
-                    if (response === 'checkedIn') {
-                        button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
-                    } else if (response === 'checkedOut') {
-                        button.removeClass('btn-danger').addClass('btn-success').text('Check In');
-                    } else {
-                        console.error('Unexpected response: ' + response);  // Debug log for unexpected response
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error: ' + error);  // Log any AJAX error
+    // Toggle Check In/Check Out
+    $('.attendance-toggle').click(function() {
+        var memberID = $(this).data('memberid');
+        var button = $(this);
+
+        alert("Clicked MemberID: " + memberID); // Debugging: show the clicked member ID
+
+        $.ajax({
+            url: 'attendance_process.php',
+            type: 'POST',
+            data: { action: 'toggleAttendance', memberID: memberID },
+            success: function(response) {
+                alert("Server Response: " + response); // Debugging: show server response
+                
+                if (response === 'checkedIn') {
+                    button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
+                } else if (response === 'checkedOut') {
+                    button.removeClass('btn-danger').addClass('btn-success').text('Check In');
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                alert("AJAX error: " + status + ": " + error); // Show any AJAX errors
+            }
         });
     });
+});
 </script>
 </body>
 </html>
