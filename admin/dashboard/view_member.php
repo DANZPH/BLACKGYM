@@ -21,15 +21,6 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- header.php -->
     <link rel="stylesheet" href="../../styles.css">
-    <style>
-        /* Add this to prevent table overflow and enable scrolling */
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .card-body {
-            padding: 0;
-        }
-    </style>
 </head>
 
 <body>
@@ -52,7 +43,7 @@ include '../../database/connection.php'; // Include database connection
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Wrap table in a responsive div -->
+                    <!-- Wrap table in a responsive div to enable scrolling -->
                     <div class="table-responsive">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
