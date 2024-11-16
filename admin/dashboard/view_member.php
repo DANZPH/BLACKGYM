@@ -20,35 +20,13 @@ include '../../database/connection.php'; // Include database connection
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../styles.css">
     <style>
         .table-responsive {
             overflow-x: auto;
         }
         .card-body {
             padding: 0;
-        }
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
-            z-index: 1000;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
         }
     </style>
 </head>
@@ -64,7 +42,7 @@ include '../../database/connection.php'; // Include database connection
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
-        <div class="col-md-9 content-wrapper">
+        <div class="col-md-9">
             <h2 class="mb-4">Member List</h2>
 
             <!-- Card Container for the Table -->
@@ -147,6 +125,5 @@ include '../../database/connection.php'; // Include database connection
         });
     });
 </script>
-
 </body>
 </html>
