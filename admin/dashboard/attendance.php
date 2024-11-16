@@ -47,6 +47,10 @@ include '../../database/connection.php';
             background-color: red;
             color: white;
         }
+        .btn-disabled {
+            background-color: gray;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +105,7 @@ include '../../database/connection.php';
                                             } else {
                                                 $status = "Checked Out";
                                                 $action = "Completed";
-                                                $btnClass = "btn-secondary";
+                                                $btnClass = "btn-disabled";
                                             }
                                         }
 
@@ -139,7 +143,7 @@ include '../../database/connection.php';
             if (action !== 'Completed') {
                 $.post('action/attendance_process.php', { memberId, action }, function (response) {
                     alert(response.message);
-                    location.reload();
+                    location.reload();  // Refresh page after action
                 }, 'json');
             }
         });
