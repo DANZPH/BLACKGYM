@@ -38,40 +38,87 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
-        /* Sidebar Customization */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .card {
-            border-radius: 10px;
-        }
-        .monitor-card {
-            background-color: #f8f9fa;
-        }
-        .monitor-card .card-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        /* Sidebar Customization *//* Sidebar Customization */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #343a40;
+    padding-top: 20px;
+    z-index: 1000;
+}
+.sidebar a {
+    color: white;
+    padding: 15px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+}
+.sidebar a:hover {
+    background-color: #575757;
+}
+.sidebar .collapse a {
+    font-size: 14px;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    margin-left: 250px;
+    padding: 30px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Responsive Design for Laptop */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 200px;
+    }
+    .content-wrapper {
+        margin-left: 200px;
+    }
+}
+
+/* Cards Styling */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Monitor Card */
+.monitor-card {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
+.monitor-card .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.monitor-card .card-header {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+/* Hover Effect for Cards */
+.monitor-card:hover {
+    transform: translateY(-5px);
+    transition: 0.3s;
+}
+.monitor-card .card-body h2 {
+    font-size: 2rem;
+}
+.monitor-card .btn {
+    font-size: 0.9rem;
+}
+
+/* Icon Styling */
+.sidebar i {
+    margin-right: 10px;
+}
+
     </style>
 </head>
 <body>
