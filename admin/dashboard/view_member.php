@@ -54,7 +54,7 @@ include '../../database/connection.php'; // Include database connection
         /* Main content should have a margin to the left to avoid overlapping the sidebar */
         .main-content {
             margin-left: 250px; /* Sidebar width */
-            padding: 20px;
+            padding: 0px;
             margin-top: 10px; /* Adjust the top margin for the fixed navbar */
 /*            height: calc(100vh - 70px); /* Adjust height for scrolling */
         }*/
