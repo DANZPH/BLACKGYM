@@ -75,3 +75,7 @@
         </ul>
     </div>
 </div>
+
+<div class="content-wrapper">
+    <!-- Content Goes Here -->
+</div>
