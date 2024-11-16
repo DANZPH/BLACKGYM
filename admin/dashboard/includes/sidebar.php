@@ -8,7 +8,7 @@
                 </a>
                 <div id="manageMembers" class="collapse">
                     <ul class="list-unstyled pl-3">
-                        <li><a href="view_members.php" class="nav-link"><i class="fa fa-eye"></i> View Members</a></li>
+                        <li><a href="view_member.php" class="nav-link"><i class="fa fa-eye"></i> View Members</a></li>
                         <li><a href="add_member.php" class="nav-link"><i class="fa fa-user-plus"></i> Add Member</a></li>
                         <li><a href="update_member.php" class="nav-link"><i class="fa fa-edit"></i> Update Members</a></li>
                     </ul>
