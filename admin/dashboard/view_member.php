@@ -103,7 +103,29 @@ include '../../database/connection.php'; // Include database connection
         .card-body {
             padding: 0;
         }
+/* Collapsed Sidebar Styles */
+.sidebar.collapsed {
+    width: 60px; /* Smaller width when collapsed */
+}
 
+.sidebar.collapsed .nav-link {
+    text-align: center; /* Center align text for icons */
+    padding-left: 15px; /* Adjust padding */
+}
+
+.sidebar.collapsed .nav-item i {
+    font-size: 20px; /* Make the icons smaller */
+}
+
+/* Hide sidebar menu items when collapsed */
+.sidebar.collapsed #sidebarMenu {
+    display: none;
+}
+
+/* Show sidebar menu items when expanded */
+.sidebar:not(.collapsed) #sidebarMenu {
+    display: block;
+}
     </style>
 </head>
 
@@ -199,6 +221,14 @@ include '../../database/connection.php'; // Include database connection
         $('#membersTable').DataTable({
             scrollX: true // Enable horizontal scrolling for the DataTable
         });
+    });
+</script>
+<script>
+    document.getElementById('sidebarToggle').addEventListener('click', function() {
+        var sidebar = document.querySelector('.sidebar');
+        var sidebarMenu = document.getElementById('sidebarMenu');
+        sidebar.classList.toggle('collapsed');
+        sidebarMenu.classList.toggle('d-none'); // Hide menu items when collapsed
     });
 </script>
 </body>
