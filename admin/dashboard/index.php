@@ -82,7 +82,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <div class="content-wrapper">
         <!-- Include Header -->
         <?php include 'includes/header.php'; ?>
-<div class="col-md-5">
+
         <div class="container mt-5">
             <h2>Welcome to the Admin Dashboard</h2>
             <p>Monitor and manage system activities below.</p>
@@ -143,7 +143,6 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             </div>
 
             <!-- Other Content Can Go Here -->
-        </div>
         </div>
     </div>
 
