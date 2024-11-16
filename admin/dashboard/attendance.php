@@ -115,7 +115,7 @@ include '../../database/connection.php'; // Include database connection
             console.log("Clicked memberID: " + memberID);  // Debug log
             
             $.ajax({
-                url: 'attendance_process.php',
+                url: 'actions/attendance_process.php',
                 type: 'POST',
                 data: { action: 'toggleAttendance', memberID: memberID },
                 success: function(response) {
