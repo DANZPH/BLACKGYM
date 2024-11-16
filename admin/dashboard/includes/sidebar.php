@@ -23,7 +23,7 @@
             </a>
             <div id="manageAttendance" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="checkin_checkout.php" class="nav-link">Check-in/Check-out</a></li>
+                    <li class="nav-item"><a href="attendance.php" class="nav-link">Check-in/Check-out</a></li>
                     <li class="nav-item"><a href="view_attendance.php" class="nav-link">View Attendance</a></li>
                 </ul>
             </div>
