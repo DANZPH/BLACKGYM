@@ -42,6 +42,7 @@ body {
     min-height: 100vh;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    padding-top: 80px; /* Adjust to prevent content from hiding behind the fixed header */
 }
 
 /* Cards */
@@ -98,7 +99,7 @@ body {
     background-color: #f2f2f2;
 }
 
-/* Header */
+/* Sticky Header */
 header {
     background-color: #343a40;
     color: white;
@@ -110,6 +111,7 @@ header {
     left: 250px;
     width: calc(100% - 250px);
     z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer */
@@ -163,3 +165,4 @@ footer {
         width: 100%;
     }
 }
+
