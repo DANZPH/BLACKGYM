@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - View Members</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
     <style>
         body {
             background-color: #f4f4f4;
@@ -54,50 +55,66 @@
         <?php include 'includes/header.php'; ?>
         
         <div class="container mt-5">
-            <h2>Welcome to Admin Dashboard</h2>
-            <p>Monitor and manage system activities below.</p>
+            <h2>Member List</h2>
+            <p>View and manage all members below.</p>
 
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4>Total Active Members</h4>
-                                <h2><?php echo $totalMembers; ?></h2>
-                            </div>
-                            <a href="members.php" class="btn btn-info btn-sm">View</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4>Total Payments</h4>
-                                <h2>₱<?php echo number_format($totalPayments, 2); ?></h2>
-                            </div>
-                            <a href="payments.php" class="btn btn-info btn-sm">View</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4>Pending Memberships</h4>
-                                <h2><?php echo $pendingPayments; ?></h2>
-                            </div>
-                            <a href="pending_memberships.php" class="btn btn-warning btn-sm">View</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- DataTable -->
+            <table id="membersTable" class="display table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Member ID</th>
+                        <th>Username</th>
+                        <th>Gender</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Assuming you have a database connection setup and query to fetch members
+                    include 'includes/db_connection.php';
 
-            <!-- More content can go here -->
+                    $sql = "SELECT * FROM Members INNER JOIN Users ON Members.UserID = Users.UserID";
+                    $result = mysqli_query($conn, $sql);
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>
+                                <td>{$row['MemberID']}</td>
+                                <td>{$row['Username']}</td>
+                                <td>{$row['Gender']}</td>
+                                <td>{$row['Age']}</td>
+                                <td>{$row['Address']}</td>
+                                <td>{$row['MembershipStatus']}</td>
+                                <td>
+                                    <a href='view_member.php?id={$row['MemberID']}' class='btn btn-info btn-sm'>View</a>
+                                    <a href='edit_member.php?id={$row['MemberID']}' class='btn btn-warning btn-sm'>Edit</a>
+                                    <a href='delete_member.php?id={$row['MemberID']}' class='btn btn-danger btn-sm'>Delete</a>
+                                </td>
+                              </tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- jQuery and DataTables JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#membersTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [5, 10, 25, 50]
+            });
+        });
+    </script>
 </body>
 </html>
