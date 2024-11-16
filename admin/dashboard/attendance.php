@@ -52,6 +52,9 @@ include '../../database/connection.php'; // Include database connection
                                 <tr>
 <!--                                    <th>Member ID
 Members.MemberID, 
+
+                                            <td>{$row['MemberID']}</td>
+                                
 </th>-->
                                     <th>Username</th>
                                     <th>Email</th>
@@ -89,8 +92,7 @@ Members.MemberID,
                                         }
 
                                         echo "<tr>
-/*                                            <td>{$row['MemberID']}</td>*/
-                                            <td>{$row['Username']}</td>
+            <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['AttendanceCount']}</td>
                                             <td>{$row['CheckIn']}</td>
