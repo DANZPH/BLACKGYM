@@ -132,29 +132,27 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#membersTable').DataTable();
-    });
-
-    function toggleAttendance(memberID) {
-        $.ajax({
-            url: '../action/attendance_process.php',
-            method: 'POST',
-            data: {
-                action: 'toggleAttendance',
-                memberID: memberID
-            },
-            success: function(response) {
-                if (response == 'checkedIn') {
-                    alert('Member checked in.');
-                    location.reload();
-                } else if (response == 'checkedOut') {
-                    alert('Member checked out.');
-                    location.reload();
-                }
+  function toggleAttendance(memberID) {
+    $.ajax({
+        url: '../action/attendance_process.php',
+        method: 'POST',
+        data: {
+            action: 'toggleAttendance',
+            memberID: memberID
+        },
+        success: function(response) {
+            if (response == 'checkedIn') {
+                alert('Member checked in.');
+                location.reload();
+            } else if (response == 'checkedOut') {
+                alert('Member checked out.');
+                location.reload();
+            } else {
+                alert('An error occurred. Please try again.');
             }
-        });
-    }
+        }
+    });
+}
 </script>
 
 </body>
