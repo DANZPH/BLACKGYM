@@ -1,7 +1,6 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
@@ -41,7 +40,6 @@ include '../../database/connection.php'; // Include database connection
                     <h5>Attendance Records</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Wrap table in a responsive div -->
                     <div class="table-responsive">
                         <table id="attendanceTable" class="table table-striped table-bordered">
                             <thead>
@@ -56,7 +54,6 @@ include '../../database/connection.php'; // Include database connection
                             </thead>
                             <tbody>
                                 <?php
-                                // Fetch all members and their attendance status
                                 $sql = "
                                     SELECT 
                                         Members.MemberID, 
@@ -115,16 +112,24 @@ include '../../database/connection.php'; // Include database connection
             var memberID = $(this).data('memberid');
             var button = $(this);
             
+            console.log("Clicked memberID: " + memberID);  // Debug log
+            
             $.ajax({
                 url: 'attendance_process.php',
                 type: 'POST',
                 data: { action: 'toggleAttendance', memberID: memberID },
                 success: function(response) {
+                    console.log("Response: " + response); // Debug log
                     if (response === 'checkedIn') {
                         button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
                     } else if (response === 'checkedOut') {
                         button.removeClass('btn-danger').addClass('btn-success').text('Check In');
+                    } else {
+                        console.error('Unexpected response: ' + response);  // Debug log for unexpected response
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error: ' + error);  // Log any AJAX error
                 }
             });
         });
