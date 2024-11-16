@@ -166,7 +166,17 @@
 
   <!-- Footer -->
   <div class="footer">
-    <p>&copy; 2024 BLACKGYM. All Rights Reserved. <a href="#" style="color: #f39c12; text-decoration: none;">Privacy Policy</a></p>
+<!-- Footer -->
+<div class="footer">
+  <p>&copy; 2024 BLACKGYM. All Rights Reserved. 
+    <a href="https://github.com/DANZPH/BLACK-GYM" target="_blank" style="color: #f39c12; text-decoration: none;">
+      GitHub Repo - Collaborate with Us
+    </a>
+  </p>
+</div>
+
+    <p>&copy; 2024 BLACKGYM. All Rights Reserved. <a href="https://github.com/DANZPH/BLACK-GYM" style="color: #f39c12; text-decoration: none;">Privacy Policy</a></p>
+    
   </div>
 
   <!-- SweetAlert2 JS -->
