@@ -31,18 +31,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Payment processed successfully, now update the Membership status to "Active"
-        $updateStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
-        $updateStmt->bind_param("d", $memberID);
+        $updateMembershipStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
+        $updateMembershipStmt->bind_param("d", $memberID);
 
-        if ($updateStmt->execute()) {
-            // Return success response
-            echo "Payment processed and membership status updated to Active!";
+        if ($updateMembershipStmt->execute()) {
+            // Also update the Member's MembershipStatus to 'Active'
+            $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
+            $updateMemberStmt->bind_param("d", $memberID);
+
+            if ($updateMemberStmt->execute()) {
+                // Return success response
+                echo "Payment processed, membership status updated to Active!";
+            } else {
+                echo "Error updating member status: " . $updateMemberStmt->error;
+            }
+
+            // Close the update statement for Membership
+            $updateMembershipStmt->close();
+            // Close the update statement for Member
+            $updateMemberStmt->close();
         } else {
-            echo "Error updating membership status: " . $updateStmt->error;
+            echo "Error updating membership status: " . $updateMembershipStmt->error;
         }
-
-        // Close the update statement
-        $updateStmt->close();
     } else {
         // Error, return an error message
         echo "Error processing payment: " . $stmt->error;
