@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Member Registration</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -12,7 +12,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">User Registration</div>
+                    <div class="card-header">Member Registration</div>
                     <div class="card-body">
                         <form id="registerForm">
                             <div class="form-group">
@@ -27,8 +27,6 @@
                                 <label for="password">Password:</label>
                                 <input type="password" id="password" name="password" class="form-control" required>
                             </div>
-
-                            <!-- Gender, Age, and Address Fields -->
                             <div class="form-group">
                                 <label for="gender">Gender:</label>
                                 <select id="gender" name="gender" class="form-control" required>
@@ -45,26 +43,6 @@
                                 <label for="address">Address:</label>
                                 <input type="text" id="address" name="address" class="form-control" required>
                             </div>
-
-                            <!-- Membership Option Fields -->
-                            <div class="form-group">
-                                <label for="membershipType">Choose Membership Type:</label>
-                                <select id="membershipType" name="membershipType" class="form-control" required>
-                                    <option value="SessionPrice">Pay Per Session</option>
-                                    <option value="Subscription">Subscription</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" id="subscriptionOptions" style="display: none;">
-                                <label for="subscriptionMonths">Choose Number of Months:</label>
-                                <input type="number" id="subscriptionMonths" name="subscriptionMonths" class="form-control" min="1" max="12">
-                            </div>
-
-                            <div class="form-group" id="sessionPriceOptions" style="display: none;">
-                                <label for="sessionPrice">Price per Session:</label>
-                                <input type="number" id="sessionPrice" name="sessionPrice" class="form-control" value="50" min="0">
-                            </div>
-
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>
@@ -83,26 +61,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function(){
-            // Toggle Subscription and SessionPrice options based on membership type
-            $('#membershipType').change(function() {
-                var membershipType = $(this).val();
-                if (membershipType === 'Subscription') {
-                    $('#subscriptionOptions').show();
-                    $('#sessionPriceOptions').hide();
-                } else {
-                    $('#sessionPriceOptions').show();
-                    $('#subscriptionOptions').hide();
-                }
-            });
-
             // Submit form via AJAX
             $('#registerForm').submit(function(e){
                 e.preventDefault();
 
-                // Generate a random OTP for the user
+                // Generate a random OTP for the member
                 var otp = Math.floor(100000 + Math.random() * 900000);
                 var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();  // OTP expires in 15 minutes
-                
+
                 $.ajax({
                     type: "POST",
                     url: "send_otp.php",
@@ -113,9 +79,6 @@
                         gender: $('#gender').val(),
                         age: $('#age').val(),
                         address: $('#address').val(),
-                        membershipType: $('#membershipType').val(),
-                        subscriptionMonths: $('#subscriptionMonths').val(),
-                        sessionPrice: $('#sessionPrice').val(),
                         otp: otp,
                         otpExpiration: otpExpiration
                     },
