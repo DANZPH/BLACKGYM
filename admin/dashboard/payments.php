@@ -143,6 +143,7 @@ include '../../database/connection.php'; // Include database connection
 
 <script>
     $(document).ready(function () {
+        // Initialize DataTable
         $('#paymentsTable').DataTable({
             scrollX: true,
             columnDefs: [
@@ -153,15 +154,18 @@ include '../../database/connection.php'; // Include database connection
             ]
         });
 
+        // On clicking the 'Pay' button, show the payment modal
         $('.pay-btn').click(function () {
             var memberID = $(this).data('memberid');
             var totalBill = $(this).data('totalbill');
             
+            // Set the member ID and total bill in the form
             $('#memberID').val(memberID);
             $('#amount').val(totalBill); // Set the amount to the total bill
-            $('#paymentModal').modal('show');
+            $('#paymentModal').modal('show'); // Show the modal
         });
 
+        // Calculate the change when the user enters an amount paid
         $('#amountPaid').on('input', function () {
             var amount = parseFloat($('#amount').val());
             var amountPaid = parseFloat($(this).val());
@@ -169,22 +173,42 @@ include '../../database/connection.php'; // Include database connection
             $('#change').val(change.toFixed(2)); // Show the change
         });
 
+        // On form submission, send the payment data to the backend
         $('#paymentForm').submit(function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent default form submission
 
-            var formData = $(this).serialize();
+            var formData = $(this).serialize(); // Get all form data
 
             $.ajax({
-                url: '../action/payment_process.php',
-                type: 'POST',
-                data: formData,
+                url: '../action/payment_process.php', // Backend PHP file
+                type: 'POST', // Use POST request
+                data: formData, // Send form data
+                dataType: 'json', // Expect a JSON response
                 success: function (response) {
-                    alert(response);
-                    $('#paymentModal').modal('hide');
-                    location.reload(); // Reload the page to show updated payments
+                    // Check the response status
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful',
+                            text: response.message
+                        }).then(() => {
+                            $('#paymentModal').modal('hide'); // Hide the modal after success
+                            location.reload(); // Reload the page to reflect changes
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message
+                        });
+                    }
                 },
                 error: function () {
-                    alert('An error occurred. Please try again.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'An error occurred. Please try again.'
+                    });
                 }
             });
         });
