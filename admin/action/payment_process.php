@@ -30,24 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
 
     if ($stmt->execute()) {
-        // Success, update the Membership Status and Status to 'Active'
-        $updateStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active', Status = 'Active' WHERE MemberID = ?");
-        $updateStmt->bind_param("i", $memberID);
-
-        if ($updateStmt->execute()) {
-            echo "Payment processed successfully and membership status updated!";
-        } else {
-            echo "Error updating membership status: " . $updateStmt->error;
-        }
-
-        // Close the update statement
-        $updateStmt->close();
+        // Success, return a success message
+        echo "Payment processed successfully!";
     } else {
         // Error, return an error message
         echo "Error processing payment: " . $stmt->error;
     }
 
-    // Close the insert statement
+    // Close the statement
     $stmt->close();
 }
 
