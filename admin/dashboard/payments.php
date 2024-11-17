@@ -146,4 +146,30 @@ $(document).ready(function () {
                         Swal.fire({
                             icon: 'success',
                             title: 'Payment Processed',
+                            text: data.message}).then(function() {
+                            location.reload(); // Reload the page to see the updates
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
                             text: data.message
+                        });
+                    }
+                    $('#paymentModal').modal('hide'); // Close the modal after payment process
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.'
+                    });
+                }
+            });
+        });
+    });
+});
+</script>
+
+</body>
+</html>
