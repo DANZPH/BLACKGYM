@@ -80,8 +80,8 @@ include '../../database/connection.php'; // Include database connection
                             </tbody>
                         </table>
                     </div>
-    <?php include '../../includes/footer.php'; ?>
                 </div>
+    <?php include '../../includes/footer.php'; ?>
             </div>
         </div>
     </div>
