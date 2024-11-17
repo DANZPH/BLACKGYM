@@ -46,14 +46,17 @@ include '../../database/connection.php'; // Include database connection
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
-                                    <th>Subscription Status</th> <!-- Added column for membership status -->
+                                    <th>Subscription</th> <!-- New column for Subscription -->
+                                    <th>Session Price</th> <!-- New column for Session Price -->
+                                    <th>Total Bill</th> <!-- New column for Total Bill -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                // SQL query updated to include Membership table
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, Membership.Status AS MembershipStatus
+                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
+                                        Membership.Subscription, Membership.SessionPrice, 
+                                        (Membership.Subscription + Membership.SessionPrice) AS TotalBill
                                         FROM Members 
                                         INNER JOIN Users ON Members.UserID = Users.UserID
                                         LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
@@ -66,12 +69,14 @@ include '../../database/connection.php'; // Include database connection
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['MembershipStatus']}</td> <!-- Displaying membership status -->
+                                            <td>" . number_format($row['Subscription'], 2) . "</td> <!-- Displaying Subscription -->
+                                            <td>" . number_format($row['SessionPrice'], 2) . "</td> <!-- Displaying Session Price -->
+                                            <td>" . number_format($row['TotalBill'], 2) . "</td> <!-- Displaying Total Bill -->
                                             <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='6' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
