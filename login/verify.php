@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Database credentials
         $host = "sql104.infinityfree.com"; // Change this to your database host
-        $dbname = "if0_36048499_db_user"; // Change this to your database name
+        $dbname = "if0_36048499_gymr"; // Change this to your database name
         $username = "if0_36048499"; // Change this to your database username
         $password = "LokK4Hhvygq"; // Change this to your database password
 
