@@ -20,12 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
-        // Output SweetAlert for error
+        // Error: Amount paid is less than required
         echo "<script>
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Amount paid cannot be less than the amount!',
+                    text: 'Amount paid cannot be less than the required amount!',
+                }).then(function() {
+                    window.location = 'your_redirect_page.php'; // Replace with the correct page to redirect after error
                 });
               </script>";
         exit();
@@ -47,25 +49,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateMemberStmt->bind_param("d", $memberID);
 
             if ($updateMemberStmt->execute()) {
-                // Success message - Update this part to show SweetAlert on success
+                // Success message - Show SweetAlert
                 echo "<script>
                         Swal.fire({
                             icon: 'success',
                             title: 'Payment Processed',
                             text: 'Payment was successfully processed, and membership status updated to Active!',
                         }).then(function() {
-                            window.location = 'your_redirect_page.php'; // Replace with your desired page
+                            window.location = 'your_redirect_page.php'; // Replace with the correct page
                         });
                       </script>";
+                exit();
             } else {
-                // Error - Update this part to show SweetAlert on failure
+                // Error: Failed to update member status
                 echo "<script>
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Error updating member status!',
+                        }).then(function() {
+                            window.location = 'your_redirect_page.php'; // Redirect on error
                         });
                       </script>";
+                exit();
             }
 
             // Close the update statement for Membership
@@ -73,24 +79,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
-            // Error - Update this part to show SweetAlert on failure
+            // Error: Failed to update membership status
             echo "<script>
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Error updating membership status!',
+                    }).then(function() {
+                        window.location = 'your_redirect_page.php'; // Redirect on error
                     });
                   </script>";
+            exit();
         }
     } else {
-        // Error - Update this part to show SweetAlert on failure
+        // Error: Failed to insert payment data
         echo "<script>
                 Swal.fire({
                     icon: 'error',
                     title: 'Payment Error',
                     text: 'Error processing payment!',
+                }).then(function() {
+                    window.location = 'your_redirect_page.php'; // Redirect on failure
                 });
               </script>";
+        exit();
     }
 
     // Close the insert statement
