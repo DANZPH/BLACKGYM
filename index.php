@@ -179,15 +179,9 @@ position: fixed;
       </div>
     </div>
   </div>
-
+    <?php include 'footer.php'; ?>
   <!-- Footer -->
-  <div class="footer">
-    <p>&copy; 2024 BLACKGYM. All Rights Reserved. 
-      <a href="https://github.com/DANZPH/BLACK-GYM" target="_blank">
-        <i class="fab fa-github"></i> GitHub Repo - Collaborate with Me
-      </a>
-    </p>
-  </div>
+
 
   <!-- SweetAlert2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.8/dist/sweetalert2.min.js"></script>
