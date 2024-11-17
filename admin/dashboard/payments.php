@@ -50,7 +50,7 @@ include '../../database/connection.php'; // Include database connection
                                     <th>Session Price</th> <!-- New column for Session Price -->
                                     <th>Total Bill</th> <!-- New column for Total Bill -->
                                     <th>Status</th> <!-- New column for Status -->
-                                    <th>Action</th>
+                                    <th>Option</th> <!-- Dropdown column for actions -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,7 +79,15 @@ include '../../database/connection.php'; // Include database connection
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td> <!-- Displaying Session Price -->
                                             <td>" . number_format($row['TotalBill'], 2) . "</td> <!-- Displaying Total Bill -->
                                             <td>{$row['Status']}</td> <!-- Displaying Status -->
-                                            <td><button class='btn btn-primary openModalBtn' data-memberid='{$row['MemberID']}'>Options</button></td>
+                                            <td>
+                                                <select class='custom-select option-select' data-memberid='{$row['MemberID']}'>
+                                                    <option value=''>Select Option</option>
+                                                    <option value='pay'>PAY</option>
+                                                    <option value='cancel'>CANCEL</option>
+                                                    <option value='pause'>PAUSE</option>
+                                                    <option value='refund'>REFUND</option>
+                                                </select>
+                                            </td>
                                         </tr>";
                                     }
                                 } else {
@@ -95,31 +103,9 @@ include '../../database/connection.php'; // Include database connection
     </div>
 </div>
 
-<!-- Modal for payment options -->
-<div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="optionsModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="optionsModalLabel">Payment Options</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Please choose an option for the member.</p>
-                <button class="btn btn-success" id="payBtn">Pay</button>
-                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
-                <button class="btn btn-warning" id="pauseBtn">Pause</button>
-                <button class="btn btn-danger" id="refundBtn">Refund</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -133,85 +119,45 @@ include '../../database/connection.php'; // Include database connection
             ]
         });
 
-        var selectedMemberID = null;
+        $('.option-select').change(function () {
+            var memberID = $(this).data('memberid');
+            var option = $(this).val(); // Get the selected option value
 
-        // Open modal and set the selected member ID
-        $('.openModalBtn').click(function () {
-            selectedMemberID = $(this).data('memberid');
-            $('#optionsModal').modal('show');
-        });
+            if (option) {
+                var actionMessage = '';
+                switch (option) {
+                    case 'pay':
+                        actionMessage = 'Are you sure you want to process payment for this member?';
+                        break;
+                    case 'cancel':
+                        actionMessage = 'Are you sure you want to cancel this member?';
+                        break;
+                    case 'pause':
+                        actionMessage = 'Are you sure you want to pause this member\'s membership?';
+                        break;
+                    case 'refund':
+                        actionMessage = 'Are you sure you want to issue a refund for this member?';
+                        break;
+                    default:
+                        actionMessage = '';
+                        break;
+                }
 
-        // Handle actions in the modal
-        $('#payBtn').click(function () {
-            if (confirm('Are you sure you want to process payment for this member?')) {
-                $.ajax({
-                    url: '../action/payment_process.php',
-                    type: 'POST',
-                    data: { memberID: selectedMemberID, action: 'pay' },
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
+                if (confirm(actionMessage)) {
+                    $.ajax({
+                        url: '../action/member_action.php',
+                        type: 'POST',
+                        data: { memberID: memberID, action: option },
+                        success: function (response) {
+                            alert(response);
+                            location.reload();
+                        },
+                        error: function () {
+                            alert('An error occurred. Please try again.');
+                        }
+                    });
+                }
             }
-            $('#optionsModal').modal('hide');
-        });
-
-        $('#cancelBtn').click(function () {
-            if (confirm('Are you sure you want to cancel this member\'s subscription?')) {
-                $.ajax({
-                    url: '../action/payment_process.php',
-                    type: 'POST',
-                    data: { memberID: selectedMemberID, action: 'cancel' },
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            }
-            $('#optionsModal').modal('hide');
-        });
-
-        $('#pauseBtn').click(function () {
-            if (confirm('Are you sure you want to pause this member\'s subscription?')) {
-                $.ajax({
-                    url: '../action/payment_process.php',
-                    type: 'POST',
-                    data: { memberID: selectedMemberID, action: 'pause' },
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            }
-            $('#optionsModal').modal('hide');
-        });
-
-        $('#refundBtn').click(function () {
-            if (confirm('Are you sure you want to refund this member\'s payment?')) {
-                $.ajax({
-                    url: '../action/payment_process.php',
-                    type: 'POST',
-                    data: { memberID: selectedMemberID, action: 'refund' },
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            }
-            $('#optionsModal').modal('hide');
         });
     });
 </script>
