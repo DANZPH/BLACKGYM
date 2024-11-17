@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
+        // Output SweetAlert for error
         echo "<script>
                 Swal.fire({
                     icon: 'error',
@@ -46,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateMemberStmt->bind_param("d", $memberID);
 
             if ($updateMemberStmt->execute()) {
-                // Success message
+                // Success message - Update this part to show SweetAlert on success
                 echo "<script>
                         Swal.fire({
                             icon: 'success',
@@ -57,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         });
                       </script>";
             } else {
+                // Error - Update this part to show SweetAlert on failure
                 echo "<script>
                         Swal.fire({
                             icon: 'error',
@@ -71,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
+            // Error - Update this part to show SweetAlert on failure
             echo "<script>
                     Swal.fire({
                         icon: 'error',
@@ -80,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   </script>";
         }
     } else {
-        // Error, return an error message
+        // Error - Update this part to show SweetAlert on failure
         echo "<script>
                 Swal.fire({
                     icon: 'error',
