@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Member Registration</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -12,7 +12,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">User Registration</div>
+                    <div class="card-header">Member Registration</div>
                     <div class="card-body">
                         <form id="registerForm">
                             <div class="form-group">
@@ -102,10 +102,10 @@
                 // Generate a random OTP for the user
                 var otp = Math.floor(100000 + Math.random() * 900000);
                 var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();  // OTP expires in 15 minutes
-                
+
                 $.ajax({
                     type: "POST",
-                    url: "send_otp.php",
+                    url: "send_otp.php",  // Update this to the correct PHP script for processing registration
                     data: {
                         username: $('#username').val(),
                         email: $('#email').val(),
