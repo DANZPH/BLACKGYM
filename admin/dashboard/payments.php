@@ -46,19 +46,15 @@ include '../../database/connection.php'; // Include database connection
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
-                                    <th>Membership Start Date</th>
-                                    <th>Membership End Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
-                                        Membership.StartDate, Membership.EndDate 
+                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus
                                         FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID
-                                        LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
-                                $result = $conn->query($sql);
+                                        INNER JOIN Users ON Members.UserID = Users.UserID";
+                                $result = $conn1->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -67,13 +63,11 @@ include '../../database/connection.php'; // Include database connection
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['StartDate']}</td>
-                                            <td>{$row['EndDate']}</td>
                                             <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='7' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='5' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
