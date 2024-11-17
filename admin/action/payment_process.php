@@ -8,23 +8,19 @@ if (!isset($_SESSION['AdminID'])) {
 
 include '../../database/connection.php'; // Include database connection
 
-$response = []; // Initialize response array
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the data from the form
     $memberID = $_POST['memberID'];
     $paymentType = $_POST['paymentType'];
     $amount = $_POST['amount'];
     $amountPaid = $_POST['amountPaid'];
-
+    
     // Calculate the change (if any)
     $changeAmount = $amountPaid - $amount;
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
-        $response['status'] = 'error';
-        $response['message'] = 'Amount paid cannot be less than the amount!';
-        echo json_encode($response);  // Return JSON response
+        echo "Error: Amount paid cannot be less than the amount.";
         exit();
     }
 
@@ -44,13 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateMemberStmt->bind_param("d", $memberID);
 
             if ($updateMemberStmt->execute()) {
-                // Success response
-                $response['status'] = 'success';
-                $response['message'] = 'Payment was successfully processed, and membership status updated to Active!';
+                // Return success response
+                echo "Payment processed, membership status updated to Active!";
             } else {
-                // Error updating member status
-                $response['status'] = 'error';
-                $response['message'] = 'Error updating member status!';
+                echo "Error updating member status: " . $updateMemberStmt->error;
             }
 
             // Close the update statement for Membership
@@ -58,23 +51,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
-            // Error updating membership status
-            $response['status'] = 'error';
-            $response['message'] = 'Error updating membership status!';
+            echo "Error updating membership status: " . $updateMembershipStmt->error;
         }
     } else {
-        // Error processing payment
-        $response['status'] = 'error';
-        $response['message'] = 'Error processing payment!';
+        // Error, return an error message
+        echo "Error processing payment: " . $stmt->error;
     }
 
     // Close the insert statement
     $stmt->close();
 }
 
-// Close the connection
 $conn1->close();
-
-// Return the response as JSON
-echo json_encode($response);
 ?>
