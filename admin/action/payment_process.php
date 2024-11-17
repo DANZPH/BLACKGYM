@@ -8,28 +8,23 @@ if (!isset($_SESSION['AdminID'])) {
 
 include '../../database/connection.php'; // Include database connection
 
+$response = []; // Initialize response array
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get the data from the form
     $memberID = $_POST['memberID'];
     $paymentType = $_POST['paymentType'];
     $amount = $_POST['amount'];
     $amountPaid = $_POST['amountPaid'];
-    
+
     // Calculate the change (if any)
     $changeAmount = $amountPaid - $amount;
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
-        // Error: Amount paid is less than required
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Amount paid cannot be less than the required amount!',
-                }).then(function() {
-                    window.location = 'your_redirect_page.php'; // Replace with the correct page to redirect after error
-                });
-              </script>";
+        $response['status'] = 'error';
+        $response['message'] = 'Amount paid cannot be less than the amount!';
+        echo json_encode($response);  // Return JSON response
         exit();
     }
 
@@ -49,29 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateMemberStmt->bind_param("d", $memberID);
 
             if ($updateMemberStmt->execute()) {
-                // Success message - Show SweetAlert
-                echo "<script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Payment Processed',
-                            text: 'Payment was successfully processed, and membership status updated to Active!',
-                        }).then(function() {
-                            window.location = 'your_redirect_page.php'; // Replace with the correct page
-                        });
-                      </script>";
-                exit();
+                // Success response
+                $response['status'] = 'success';
+                $response['message'] = 'Payment was successfully processed, and membership status updated to Active!';
             } else {
-                // Error: Failed to update member status
-                echo "<script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error updating member status!',
-                        }).then(function() {
-                            window.location = 'your_redirect_page.php'; // Redirect on error
-                        });
-                      </script>";
-                exit();
+                // Error updating member status
+                $response['status'] = 'error';
+                $response['message'] = 'Error updating member status!';
             }
 
             // Close the update statement for Membership
@@ -79,35 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
-            // Error: Failed to update membership status
-            echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error updating membership status!',
-                    }).then(function() {
-                        window.location = 'your_redirect_page.php'; // Redirect on error
-                    });
-                  </script>";
-            exit();
+            // Error updating membership status
+            $response['status'] = 'error';
+            $response['message'] = 'Error updating membership status!';
         }
     } else {
-        // Error: Failed to insert payment data
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Payment Error',
-                    text: 'Error processing payment!',
-                }).then(function() {
-                    window.location = 'your_redirect_page.php'; // Redirect on failure
-                });
-              </script>";
-        exit();
+        // Error processing payment
+        $response['status'] = 'error';
+        $response['message'] = 'Error processing payment!';
     }
 
     // Close the insert statement
     $stmt->close();
 }
 
+// Close the connection
 $conn1->close();
+
+// Return the response as JSON
+echo json_encode($response);
 ?>
