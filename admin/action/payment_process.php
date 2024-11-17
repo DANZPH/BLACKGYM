@@ -12,17 +12,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $amount = 100.00; // Example payment amount
     $paymentMethod = 'Cash'; // Example payment method
 
-    $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
-    $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("ids", $memberID, $amount, $paymentMethod);
+    // Start the transaction
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
-        echo "Payment processed successfully for Member ID: $memberID.";
-    } else {
-        echo "Error processing payment. Please try again.";
+    try {
+        // Insert payment record
+        $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ids", $memberID, $amount, $paymentMethod);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Error inserting payment.");
+        }
+
+        // Update membership status
+        $sqlUpdate = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
+        $stmtUpdate = $conn->prepare($sqlUpdate);
+        $stmtUpdate->bind_param("i", $memberID);
+
+        if (!$stmtUpdate->execute()) {
+            throw new Exception("Error updating membership status.");
+        }
+
+        // Commit the transaction
+        $conn->commit();
+        echo "Payment processed and membership activated successfully for Member ID: $memberID.";
+
+    } catch (Exception $e) {
+        // Rollback the transaction if there was an error
+        $conn->rollback();
+        echo "Error: " . $e->getMessage();
     }
 
     $stmt->close();
-    $conn1->close();
+    $stmtUpdate->close();
+    $conn->close();
 }
 ?>
