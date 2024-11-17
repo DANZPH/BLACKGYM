@@ -86,7 +86,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             <!-- More content can go here -->
         </div>
     </div>
-    <?php include '../includes/footer.php'; ?>
+    <?php include '../../../includes/footer.php'; ?>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
