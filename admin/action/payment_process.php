@@ -1,51 +1,26 @@
 <?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    header('Location: ../../admin/login.php');
-    exit();
-}
+include '../../database/connection.php'; // Include database connection
 
-include '../../database/connection.php'; // Database connection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $memberID = $_POST['memberID'];
+    $paymentMethod = $_POST['paymentMethod'];
+    $amount = $_POST['amount'];
+    $memberMoney = $_POST['memberMoney'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $memberID = intval($_POST['memberID']);
-    $amount = 100.00; // Example payment amount
-    $paymentMethod = 'Cash'; // Example payment method
+    // Insert into the Payments table
+    $sql = "INSERT INTO Payments (MemberID, PaymentMethod, Amount, PaymentDate) 
+            VALUES (?, ?, ?, NOW())";
 
-    // Start the transaction
-    $conn->begin_transaction();
-
-    try {
-        // Insert payment record
-        $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ids", $memberID, $amount, $paymentMethod);
-
-        if (!$stmt->execute()) {
-            throw new Exception("Error inserting payment.");
+    if ($stmt = $conn1->prepare($sql)) {
+        $stmt->bind_param("isds", $memberID, $paymentMethod, $amount, $memberMoney);
+        if ($stmt->execute()) {
+            echo "success";
+        } else {
+            echo "error";
         }
-
-        // Update membership status
-        $sqlUpdate = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
-        $stmtUpdate = $conn->prepare($sqlUpdate);
-        $stmtUpdate->bind_param("i", $memberID);
-
-        if (!$stmtUpdate->execute()) {
-            throw new Exception("Error updating membership status.");
-        }
-
-        // Commit the transaction
-        $conn->commit();
-        echo "Payment processed and membership activated successfully for Member ID: $memberID.";
-
-    } catch (Exception $e) {
-        // Rollback the transaction if there was an error
-        $conn->rollback();
-        echo "Error: " . $e->getMessage();
+        $stmt->close();
+    } else {
+        echo "error";
     }
-
-    $stmt->close();
-    $stmtUpdate->close();
-    $conn->close();
 }
 ?>
