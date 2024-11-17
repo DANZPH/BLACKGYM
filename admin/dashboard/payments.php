@@ -1,114 +1,68 @@
 <?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
-    header('Location: ../../admin/login.php');
-    exit();
-}
+// pay_cancel.php
+include 'db_connection.php'; // Include database connection file
 
-include '../../database/connection.php'; // Include database connection
+// Fetch all pending payments with corresponding membership details for display
+$query = "
+    SELECT p.PaymentID, p.MemberID, p.Amount, p.PaymentDate, m.MembershipStatus, mem.Subscription, mem.Status as MembershipStatus, mem.StartDate, mem.EndDate
+    FROM Payments p
+    JOIN Members m ON p.MemberID = m.MemberID
+    JOIN Membership mem ON m.MemberID = mem.MemberID
+    WHERE m.MembershipStatus = 'Inactive'";
+
+$result = $conn->query($query);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payments</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="includes/styles.css">
+    <title>Process Payment</title>
 </head>
-
 <body>
-
-<?php include 'includes/header.php'; ?>
-
-<div class="container-fluid mt-3">
-    <div class="row">
-        <?php include 'includes/sidebar.php'; ?>
-
-        <div class="col-md-9 content-wrapper">
-            <h2 class="mb-4">Member Payments</h2>
-            <div class="card">
-                <div class="card-header">
-                    <h5>Members Payment Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="paymentsTable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Member ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Membership Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus
-                                        FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID";
-                                $result = $conn1->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='5' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#paymentsTable').DataTable({
-            scrollX: true
-        });
-
-        $('.pay-btn').click(function () {
-            var memberID = $(this).data('memberid');
-
-            if (confirm('Are you sure you want to process payment for this member?')) {
-                $.ajax({
-                    url: '../action/payment_process.php',
-                    type: 'POST',
-                    data: { memberID: memberID },
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
+    <h1>Process Payment</h1>
+    <form action="pay_cancel.process.php" method="post">
+        <label for="paymentID">Payment ID:</label>
+        <select name="paymentID" id="paymentID" required>
+            <?php
+            while ($row = $result->fetch_assoc()) {
+                echo "<option value='{$row['PaymentID']}'>Payment ID: {$row['PaymentID']} | MemberID: {$row['MemberID']} | Amount: {$row['Amount']} | Membership Status: {$row['MembershipStatus']}</option>";
             }
-        });
-    });
-</script>
+            ?>
+        </select>
+        <br><br>
+        
+        <h3>Membership Details:</h3>
+        <label for="subscription">Subscription Amount:</label>
+        <input type="text" id="subscription" name="subscription" disabled>
+        <label for="status">Membership Status:</label>
+        <input type="text" id="status" name="status" disabled>
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate" name="startDate" disabled>
+        <label for="endDate">End Date:</label>
+        <input type="text" id="endDate" name="endDate" disabled>
+        <br><br>
 
+        <button type="submit" name="action" value="pay">Pay</button>
+        <button type="submit" name="action" value="cancel">Cancel</button>
+    </form>
+
+    <script>
+        // Use JavaScript to populate the membership details when a payment is selected
+        const paymentSelect = document.getElementById('paymentID');
+        
+        paymentSelect.addEventListener('change', function() {
+            const selectedOption = paymentSelect.options[paymentSelect.selectedIndex];
+            const subscription = selectedOption.getAttribute('data-subscription');
+            const status = selectedOption.getAttribute('data-status');
+            const startDate = selectedOption.getAttribute('data-startdate');
+            const endDate = selectedOption.getAttribute('data-enddate');
+            
+            document.getElementById('subscription').value = subscription;
+            document.getElementById('status').value = status;
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = endDate;
+        });
+    </script>
 </body>
 </html>
