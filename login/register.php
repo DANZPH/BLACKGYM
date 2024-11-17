@@ -1,5 +1,3 @@
-Update this register.php for members
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
