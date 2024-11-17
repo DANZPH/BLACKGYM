@@ -21,11 +21,6 @@ include '../../database/connection.php'; // Include database connection
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="includes/styles.css">
-    <!-- Include SweetAlert2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.min.css" rel="stylesheet">
-
-<!-- Include SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -145,9 +140,9 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        // Initialize DataTable and hide MemberID column
         $('#paymentsTable').DataTable({
             scrollX: true,
             columnDefs: [
@@ -158,18 +153,15 @@ include '../../database/connection.php'; // Include database connection
             ]
         });
 
-        // Show the payment modal when the "Pay" button is clicked
         $('.pay-btn').click(function () {
             var memberID = $(this).data('memberid');
             var totalBill = $(this).data('totalbill');
             
-            // Set values for the modal
             $('#memberID').val(memberID);
             $('#amount').val(totalBill); // Set the amount to the total bill
             $('#paymentModal').modal('show');
         });
 
-        // Calculate the change when amountPaid is entered
         $('#amountPaid').on('input', function () {
             var amount = parseFloat($('#amount').val());
             var amountPaid = parseFloat($(this).val());
@@ -177,41 +169,22 @@ include '../../database/connection.php'; // Include database connection
             $('#change').val(change.toFixed(2)); // Show the change
         });
 
-        // Handle the payment form submission
         $('#paymentForm').submit(function (e) {
             e.preventDefault();
 
             var formData = $(this).serialize();
 
             $.ajax({
-                url: '../action/payment_process.php', // Your payment processing PHP script
+                url: '../action/payment_process.php',
                 type: 'POST',
                 data: formData,
-                dataType: 'json', // Expect JSON response
                 success: function (response) {
-                    if (response.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Payment Processed',
-                            text: response.message,
-                        }).then(function() {
-                            $('#paymentModal').modal('hide'); // Close the modal
-                            location.reload(); // Reload the page to show updated payments
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Payment Error',
-                            text: response.message,
-                        });
-                    }
+                    alert(response);
+                    $('#paymentModal').modal('hide');
+                    location.reload(); // Reload the page to show updated payments
                 },
                 error: function () {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'An error occurred while processing the payment. Please try again.',
-                    });
+                    alert('An error occurred. Please try again.');
                 }
             });
         });
