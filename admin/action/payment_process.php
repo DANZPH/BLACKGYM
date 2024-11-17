@@ -20,7 +20,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
-        echo "Error: Amount paid cannot be less than the amount.";
+        echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Amount paid cannot be less than the amount!',
+                });
+              </script>";
         exit();
     }
 
@@ -40,10 +46,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $updateMemberStmt->bind_param("d", $memberID);
 
             if ($updateMemberStmt->execute()) {
-                // Return success response
-                echo "Payment processed, membership status updated to Active!";
+                // Success message
+                echo "<script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Processed',
+                            text: 'Payment was successfully processed, and membership status updated to Active!',
+                        }).then(function() {
+                            window.location = 'your_redirect_page.php'; // Replace with your desired page
+                        });
+                      </script>";
             } else {
-                echo "Error updating member status: " . $updateMemberStmt->error;
+                echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error updating member status!',
+                        });
+                      </script>";
             }
 
             // Close the update statement for Membership
@@ -51,11 +71,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
-            echo "Error updating membership status: " . $updateMembershipStmt->error;
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error updating membership status!',
+                    });
+                  </script>";
         }
     } else {
         // Error, return an error message
-        echo "Error processing payment: " . $stmt->error;
+        echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Payment Error',
+                    text: 'Error processing payment!',
+                });
+              </script>";
     }
 
     // Close the insert statement
