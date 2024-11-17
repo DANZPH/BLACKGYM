@@ -44,6 +44,13 @@
                                 <input type="text" id="address" name="address" class="form-control" required>
                             </div>
                             <div class="form-group">
+                                <label for="subscription">Subscription Type:</label>
+                                <select id="subscription" name="subscription" class="form-control" required>
+                                    <option value="session">Session</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>
                         </form>
@@ -79,6 +86,7 @@
                         gender: $('#gender').val(),
                         age: $('#age').val(),
                         address: $('#address').val(),
+                        subscription: $('#subscription').val(),
                         otp: otp,
                         otpExpiration: otpExpiration
                     },
