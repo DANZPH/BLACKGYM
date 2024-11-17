@@ -15,16 +15,17 @@ include '../../database/connection.php'; // Include database connection
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payments</title>
-    <!-- Include SweetAlert2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.min.css" rel="stylesheet">
-
-
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="includes/styles.css">
+    <!-- Include SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.min.css" rel="stylesheet">
+
+<!-- Include SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -144,29 +145,48 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.all.min.js"></script>
-
 <script>
     $(document).ready(function () {
-        $('#payModalForm').submit(function (e) {
-            e.preventDefault(); // Prevent default form submission
+        // Initialize DataTable and hide MemberID column
+        $('#paymentsTable').DataTable({
+            scrollX: true,
+            columnDefs: [
+                {
+                    targets: [0], // Target the first column (MemberID) to hide it
+                    visible: false, // Hide the MemberID column
+                }
+            ]
+        });
 
-            // Get form data
-            var memberID = $('#memberID').val();
-            var paymentType = $('#paymentType').val();
-            var amount = $('#amount').val();
-            var amountPaid = $('#amountPaid').val();
+        // Show the payment modal when the "Pay" button is clicked
+        $('.pay-btn').click(function () {
+            var memberID = $(this).data('memberid');
+            var totalBill = $(this).data('totalbill');
+            
+            // Set values for the modal
+            $('#memberID').val(memberID);
+            $('#amount').val(totalBill); // Set the amount to the total bill
+            $('#paymentModal').modal('show');
+        });
 
-            // Send the data to payment_process.php
+        // Calculate the change when amountPaid is entered
+        $('#amountPaid').on('input', function () {
+            var amount = parseFloat($('#amount').val());
+            var amountPaid = parseFloat($(this).val());
+            var change = amountPaid - amount;
+            $('#change').val(change.toFixed(2)); // Show the change
+        });
+
+        // Handle the payment form submission
+        $('#paymentForm').submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
             $.ajax({
-                url: 'payment_process.php',
+                url: '../action/payment_process.php', // Your payment processing PHP script
                 type: 'POST',
-                data: {
-                    memberID: memberID,
-                    paymentType: paymentType,
-                    amount: amount,
-                    amountPaid: amountPaid
-                },
+                data: formData,
                 dataType: 'json', // Expect JSON response
                 success: function (response) {
                     if (response.status === 'success') {
@@ -175,8 +195,8 @@ include '../../database/connection.php'; // Include database connection
                             title: 'Payment Processed',
                             text: response.message,
                         }).then(function() {
-                            // Redirect or close the modal
-                            location.reload(); // Reload the page or redirect to another page
+                            $('#paymentModal').modal('hide'); // Close the modal
+                            location.reload(); // Reload the page to show updated payments
                         });
                     } else {
                         Swal.fire({
@@ -197,7 +217,6 @@ include '../../database/connection.php'; // Include database connection
         });
     });
 </script>
-
 
 </body>
 </html>
