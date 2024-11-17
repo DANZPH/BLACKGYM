@@ -81,10 +81,10 @@ include '../../database/connection.php'; // Include database connection
                         </table>
                     </div>
                 </div>
-    <?php include '../../includes/footer.php'; ?>
             </div>
         </div>
     </div>
+    <?php include '../../includes/footer.php'; ?>
 </div>
 
 <!-- Modal for Payment -->
