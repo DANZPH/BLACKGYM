@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $userID = $stmt->insert_id;  // Get the inserted user ID
             $stmt->close();
 
-            // Insert the user into the Members table with default status 'Inactive' and related UserID
+            // Insert the user into the Members table with default status 'Inactive'
             $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, ?)");
             $membershipStatus = 'Inactive';  // Default membership status is 'Inactive'
             $stmt->bind_param("isiss", $userID, $gender, $age, $address, $membershipStatus);
