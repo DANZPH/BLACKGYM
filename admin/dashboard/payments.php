@@ -42,13 +42,14 @@ include '../../database/connection.php'; // Include database connection
                         <table id="paymentsTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Member ID</th>
+                                    <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
                                     <th>Subscription</th> <!-- New column for Subscription -->
                                     <th>Session Price</th> <!-- New column for Session Price -->
                                     <th>Total Bill</th> <!-- New column for Total Bill -->
+                                    <th>Status</th> <!-- New column for Status -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -56,7 +57,12 @@ include '../../database/connection.php'; // Include database connection
                                 <?php
                                 $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
                                         Membership.Subscription, Membership.SessionPrice, 
-                                        (Membership.Subscription + Membership.SessionPrice) AS TotalBill
+                                        (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
+                                        CASE 
+                                            WHEN Membership.Status = 'Active' THEN 'Active'
+                                            WHEN Membership.Status = 'Pending' THEN 'Pending'
+                                            WHEN Membership.Status = 'Expired' THEN 'Expired'
+                                        END AS Status
                                         FROM Members 
                                         INNER JOIN Users ON Members.UserID = Users.UserID
                                         LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
@@ -65,18 +71,19 @@ include '../../database/connection.php'; // Include database connection
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
-                                            <td>{$row['MemberID']}</td>
+                                            <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>" . number_format($row['Subscription'], 2) . "</td> <!-- Displaying Subscription -->
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td> <!-- Displaying Session Price -->
                                             <td>" . number_format($row['TotalBill'], 2) . "</td> <!-- Displaying Total Bill -->
+                                            <td>{$row['Status']}</td> <!-- Displaying Status -->
                                             <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -95,7 +102,13 @@ include '../../database/connection.php'; // Include database connection
 <script>
     $(document).ready(function () {
         $('#paymentsTable').DataTable({
-            scrollX: true
+            scrollX: true,
+            columnDefs: [
+                {
+                    targets: [0], // Target the first column (MemberID) to hide it
+                    visible: false, // Hide the MemberID column
+                }
+            ]
         });
 
         $('.pay-btn').click(function () {
