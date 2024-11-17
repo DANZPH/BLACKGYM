@@ -142,53 +142,52 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('#paymentsTable').DataTable({
-            scrollX: true,
-            columnDefs: [
-                {
-                    targets: [0], // Target the first column (MemberID) to hide it
-                    visible: false, // Hide the MemberID column
+ $(document).ready(function () {
+    $('.pay-btn').click(function () {
+        var memberID = $(this).data('memberid');
+        var paymentType = $('#paymentType').val(); // Assuming you have a form to get this info
+        var amount = $('#amount').val(); // Assuming the input for amount is present
+        var amountPaid = $('#amountPaid').val(); // Assuming the input for amountPaid is present
+
+        $.ajax({
+            url: '../action/payment_process.php',
+            type: 'POST',
+            data: {
+                memberID: memberID,
+                paymentType: paymentType,
+                amount: amount,
+                amountPaid: amountPaid
+            },
+            success: function (response) {
+                var data = JSON.parse(response);
+                if (data.status === 'success') {
+                    // Show SweetAlert Success
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Payment Processed',
+                        text: data.message
+                    }).then(() => {
+                        location.reload(); // Reload to update the table
+                    });
+                } else {
+                    // Show SweetAlert Error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message
+                    });
                 }
-            ]
-        });
-
-        $('.pay-btn').click(function () {
-            var memberID = $(this).data('memberid');
-            var totalBill = $(this).data('totalbill');
-            
-            $('#memberID').val(memberID);
-            $('#amount').val(totalBill); // Set the amount to the total bill
-            $('#paymentModal').modal('show');
-        });
-
-        $('#amountPaid').on('input', function () {
-            var amount = parseFloat($('#amount').val());
-            var amountPaid = parseFloat($(this).val());
-            var change = amountPaid - amount;
-            $('#change').val(change.toFixed(2)); // Show the change
-        });
-
-        $('#paymentForm').submit(function (e) {
-            e.preventDefault();
-
-            var formData = $(this).serialize();
-
-            $.ajax({
-                url: '../action/payment_process.php',
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    alert(response);
-                    $('#paymentModal').modal('hide');
-                    location.reload(); // Reload the page to show updated payments
-                },
-                error: function () {
-                    alert('An error occurred. Please try again.');
-                }
-            });
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'An error occurred',
+                    text: 'Please try again later.'
+                });
+            }
         });
     });
+});
 </script>
 
 </body>
