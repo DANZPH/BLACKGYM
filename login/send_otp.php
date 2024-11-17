@@ -98,7 +98,7 @@ function sendOTP($email, $otp) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'kentdancel20@gmail.com'; // Your Gmail
+        $mail->Username = ''; // Your Gmail
         $mail->Password = 'nrgtyaqgymoadryg'; // Your Gmail app password
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
