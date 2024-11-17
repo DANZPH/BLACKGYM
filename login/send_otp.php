@@ -3,13 +3,21 @@
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-include '../database/connection.php';
+include '../database/connection.php'; // Include the connection file
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["email"], $_POST["username"], $_POST["password"], $_POST["gender"], $_POST["age"], $_POST["address"], $_POST["subscription"])) {
+    if (
+        isset($_POST["email"]) &&
+        isset($_POST["username"]) &&
+        isset($_POST["password"]) &&
+        isset($_POST["gender"]) &&
+        isset($_POST["age"]) &&
+        isset($_POST["address"]) &&
+        isset($_POST["subscription"])
+    ) {
         $email = $_POST["email"];
         $username = $_POST["username"];
         $password = $_POST["password"];
@@ -32,32 +40,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insert user into Users table
+            // Insert into Users table
             $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
             $verified = 0;
             $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
             $stmt->execute();
-            $userID = $stmt->insert_id;
+            $userID = $stmt->insert_id;  // Get UserID
             $stmt->close();
 
             // Insert into Members table
-            $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, 'Inactive')");
-            $stmt->bind_param("isis", $userID, $gender, $age, $address);
+            $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, ?)");
+            $membershipStatus = 'Inactive'; // Default membership status
+            $stmt->bind_param("isiss", $userID, $gender, $age, $address, $membershipStatus);
             $stmt->execute();
-            $memberID = $stmt->insert_id;
+            $memberID = $stmt->insert_id;  // Get MemberID
             $stmt->close();
 
             // Insert into Membership table
-            $startDate = date('Y-m-d');
-            $endDate = $subscription === 'monthly' ? date('Y-m-d', strtotime('+1 month')) : null;
-            $stmt = $conn1->prepare("INSERT INTO Membership (Subscription, Status, StartDate, EndDate) VALUES (?, 'Active', ?, ?)");
-            $stmt->bind_param("sss", $subscription, $startDate, $endDate);
+            $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate) VALUES (?, ?, ?, NOW())");
+            $status = 'Pending'; // Default membership status
+            $stmt->bind_param("iss", $memberID, $subscription, $status);
+            $stmt->execute();
+            $membershipID = $stmt->insert_id;  // Get MembershipID
+            $stmt->close();
+
+            // Update MembershipID in Members table
+            $stmt = $conn1->prepare("UPDATE Members SET MembershipID = ? WHERE MemberID = ?");
+            $stmt->bind_param("ii", $membershipID, $memberID);
             $stmt->execute();
             $stmt->close();
 
             // Send OTP
             $result = sendOTP($email, $otp);
-            echo $result === true ? "OTP sent to your email." : "Error sending OTP: " . $result;
+
+            if ($result === true) {
+                echo "OTP sent to your email.";
+            } else {
+                echo "Error sending OTP: " . $result;
+            }
         }
     } else {
         echo "Error: All fields are required.";
@@ -74,12 +94,12 @@ function sendOTP($email, $otp) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'kentdancel20@gmail.com';
-        $mail->Password = 'nrgtyaqgymoadryg';
+        $mail->Username = 'kentdancel20@gmail.com'; // Your Gmail
+        $mail->Password = 'nrgtyaqgymoadryg'; // Your Gmail app password
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('kentdancel20@gmail.com');
+        $mail->setFrom('kentdancel20@gmail.com'); // Your Gmail
         $mail->addAddress($email);
 
         $mail->isHTML(true);
@@ -92,4 +112,5 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
+
 ?>
