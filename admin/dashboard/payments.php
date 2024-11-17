@@ -21,7 +21,7 @@ $result = $conn->query($query);
 </head>
 <body>
     <h1>Process Payment</h1>
-    <form action="pay_cancel.process.php" method="post">
+    <form action="payment_process.php" method="post">
         <label for="paymentID">Payment ID:</label>
         <select name="paymentID" id="paymentID" required>
             <?php
