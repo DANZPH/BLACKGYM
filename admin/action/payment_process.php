@@ -1,20 +1,28 @@
 <?php
-include '../../database/connection.php';
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    header('Location: ../../admin/login.php');
+    exit();
+}
+
+include '../../database/connection.php'; // Database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $memberID = $_POST['memberID'];
-    $amount = $_POST['amount'];
-    $paymentMethod = $_POST['paymentMethod'];
-    $notes = $_POST['notes'];
+    $memberID = intval($_POST['memberID']);
+    $amount = 100.00; // Example payment amount
+    $paymentMethod = 'Cash'; // Example payment method
 
-    $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod, Notes) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
     $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("idss", $memberID, $amount, $paymentMethod, $notes);
+    $stmt->bind_param("ids", $memberID, $amount, $paymentMethod);
 
     if ($stmt->execute()) {
-        echo "Payment added successfully.";
+        echo "Payment processed successfully for Member ID: $memberID.";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error processing payment. Please try again.";
     }
+
+    $stmt->close();
+    $conn1->close();
 }
 ?>
