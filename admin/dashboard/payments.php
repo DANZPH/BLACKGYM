@@ -1,4 +1,4 @@
-l<?php
+<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // Redirect to login page if not logged in as admin
@@ -79,7 +79,8 @@ include '../../database/connection.php'; // Include database connection
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td>
                                             <td>" . number_format($row['TotalBill'], 2) . "</td>
                                             <td>{$row['Status']}</td>
-                                            <td><button class='btn btn-info option-btn' data-memberid='{$row['MemberID']}'>Option</button></td>
+                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}' 
+                                                data-totalbill='{$row['TotalBill']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
@@ -95,21 +96,41 @@ include '../../database/connection.php'; // Include database connection
     </div>
 </div>
 
-<!-- Modal for Payment Options -->
-<div class="modal fade" id="paymentOptionsModal" tabindex="-1" aria-labelledby="paymentOptionsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<!-- Modal for Payment -->
+<div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="paymentOptionsModalLabel">Select an Action</h5>
+        <h5 class="modal-title" id="paymentModalLabel">Process Payment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <button class="btn btn-success option-action" id="payBtn">PAY</button>
-        <button class="btn btn-warning option-action" id="cancelBtn">CANCEL</button>
-        <button class="btn btn-primary option-action" id="pauseBtn">PAUSE</button>
-        <button class="btn btn-danger option-action" id="refundBtn">REFUND</button>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="paymentType">Payment Type</label>
+            <select class="form-control" id="paymentType" name="paymentType">
+              <option value="Cash">Cash</option>
+              <option value="Credit">Credit</option>
+              <option value="Debit">Debit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" readonly>
+          </div>
+          <div class="form-group">
+            <label for="amountPaid">Amount Paid</label>
+            <input type="number" class="form-control" id="amountPaid" name="amountPaid" required>
+          </div>
+          <div class="form-group">
+            <label for="change">Change</label>
+            <input type="number" class="form-control" id="change" name="change" readonly>
+          </div>
+          <input type="hidden" id="memberID" name="memberID">
+          <button type="submit" class="btn btn-primary">Submit Payment</button>
+        </form>
       </div>
     </div>
   </div>
@@ -126,42 +147,46 @@ include '../../database/connection.php'; // Include database connection
             scrollX: true,
             columnDefs: [
                 {
-                    targets: [0], // Hide MemberID column
-                    visible: false,
+                    targets: [0], // Target the first column (MemberID) to hide it
+                    visible: false, // Hide the MemberID column
                 }
             ]
         });
 
-        // Open modal when 'Option' button is clicked
-        $('.option-btn').click(function () {
+        $('.pay-btn').click(function () {
             var memberID = $(this).data('memberid');
-            $('#paymentOptionsModal').data('memberid', memberID).modal('show');
+            var totalBill = $(this).data('totalbill');
+            
+            $('#memberID').val(memberID);
+            $('#amount').val(totalBill); // Set the amount to the total bill
+            $('#paymentModal').modal('show');
         });
 
-        // Handle button actions in the modal
-        $('.option-action').click(function () {
-            var action = $(this).attr('id'); // Get the action (pay, cancel, pause, refund)
-            var memberID = $('#paymentOptionsModal').data('memberid');
-            var message = '';
+        $('#amountPaid').on('input', function () {
+            var amount = parseFloat($('#amount').val());
+            var amountPaid = parseFloat($(this).val());
+            var change = amountPaid - amount;
+            $('#change').val(change.toFixed(2)); // Show the change
+        });
 
-            switch (action) {
-                case 'payBtn':
-                    message = 'Payment processed for Member ID ' + memberID;
-                    break;
-                case 'cancelBtn':
-                    message = 'Payment canceled for Member ID ' + memberID;
-                    break;
-                case 'pauseBtn':
-                    message = 'Membership paused for Member ID ' + memberID;
-                    break;
-                case 'refundBtn':
-                    message = 'Refund issued for Member ID ' + memberID;
-                    break;
-            }
+        $('#paymentForm').submit(function (e) {
+            e.preventDefault();
 
-            // Simulate an action (e.g., make an AJAX request to process the action)
-            alert(message);
-            $('#paymentOptionsModal').modal('hide');
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '../action/payment_process.php',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    alert(response);
+                    $('#paymentModal').modal('hide');
+                    location.reload(); // Reload the page to show updated payments
+                },
+                error: function () {
+                    alert('An error occurred. Please try again.');
+                }
+            });
         });
     });
 </script>
