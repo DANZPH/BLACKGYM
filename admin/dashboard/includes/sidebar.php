@@ -34,7 +34,7 @@
             </a>
             <div id="managePayments" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="pay_cancel.php" class="nav-link">Pay/Cancel</a></li>
+                    <li class="nav-item"><a href="payments.php" class="nav-link">Pay/Cancel</a></li>
                 </ul>
             </div>
         </li>
