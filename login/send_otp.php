@@ -3,20 +3,20 @@
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-include '../database/connection.php'; // Include the connection file without internal SQL connection
+include '../database/connection.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if necessary data is set
-    if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"]) && isset($_POST["gender"]) && isset($_POST["age"]) && isset($_POST["address"])) {
+    if (isset($_POST["email"], $_POST["username"], $_POST["password"], $_POST["gender"], $_POST["age"], $_POST["address"], $_POST["subscription"])) {
         $email = $_POST["email"];
         $username = $_POST["username"];
         $password = $_POST["password"];
         $gender = $_POST["gender"];
         $age = $_POST["age"];
         $address = $_POST["address"];
+        $subscription = $_POST["subscription"];
 
         // Check if email is already registered
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
@@ -26,38 +26,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
 
         if ($result->num_rows > 0) {
-            // Email already registered
             echo "Email already registered.";
         } else {
-            // Email not registered, proceed with registration and OTP sending
             $otp = generateOTP();
-            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes
-
-            // Hash the password
+            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insert email, username, password, OTP, and OTP expiration into the Users table
+            // Insert user into Users table
             $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
-            $verified = 0; // Set the user as not verified
+            $verified = 0;
             $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
             $stmt->execute();
-            $userID = $stmt->insert_id;  // Get the inserted user ID
+            $userID = $stmt->insert_id;
             $stmt->close();
 
-            // Insert the member details into the Members table
+            // Insert into Members table
             $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, 'Inactive')");
             $stmt->bind_param("isis", $userID, $gender, $age, $address);
             $stmt->execute();
+            $memberID = $stmt->insert_id;
             $stmt->close();
 
-            // Send OTP via email
-            $result = sendOTP($email, $otp);
+            // Insert into Membership table
+            $startDate = date('Y-m-d');
+            $endDate = $subscription === 'monthly' ? date('Y-m-d', strtotime('+1 month')) : null;
+            $stmt = $conn1->prepare("INSERT INTO Membership (Subscription, Status, StartDate, EndDate) VALUES (?, 'Active', ?, ?)");
+            $stmt->bind_param("sss", $subscription, $startDate, $endDate);
+            $stmt->execute();
+            $stmt->close();
 
-            if ($result === true) {
-                echo "OTP sent to your email.";
-            } else {
-                echo "Error sending OTP: " . $result;
-            }
+            // Send OTP
+            $result = sendOTP($email, $otp);
+            echo $result === true ? "OTP sent to your email." : "Error sending OTP: " . $result;
         }
     } else {
         echo "Error: All fields are required.";
@@ -65,7 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function generateOTP() {
-    // Generate a 6-digit random OTP
     return sprintf('%06d', mt_rand(0, 999999));
 }
 
@@ -75,12 +74,12 @@ function sendOTP($email, $otp) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'your_email@gmail.com'; // Your Gmail
-        $mail->Password = 'your_app_password'; // Your Gmail app password
+        $mail->Username = 'kentdancel20@gmail.com';
+        $mail->Password = 'nrgtyaqgymoadryg';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('your_email@gmail.com'); // Your Gmail
+        $mail->setFrom('kentdancel20@gmail.com');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
@@ -93,5 +92,4 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
-
 ?>
