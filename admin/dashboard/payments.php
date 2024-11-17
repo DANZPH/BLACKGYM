@@ -18,8 +18,7 @@ include '../../database/connection.php'; // Include database connection
     <!-- Include SweetAlert2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.min.css" rel="stylesheet">
 
-<!-- Include SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.all.min.js"></script>
+
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
@@ -145,50 +144,54 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.4/dist/sweetalert2.all.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        $('#paymentsTable').DataTable({
-            scrollX: true,
-            columnDefs: [
-                {
-                    targets: [0], // Target the first column (MemberID) to hide it
-                    visible: false, // Hide the MemberID column
-                }
-            ]
-        });
+        $('#payModalForm').submit(function (e) {
+            e.preventDefault(); // Prevent default form submission
 
-        $('.pay-btn').click(function () {
-            var memberID = $(this).data('memberid');
-            var totalBill = $(this).data('totalbill');
-            
-            $('#memberID').val(memberID);
-            $('#amount').val(totalBill); // Set the amount to the total bill
-            $('#paymentModal').modal('show');
-        });
+            // Get form data
+            var memberID = $('#memberID').val();
+            var paymentType = $('#paymentType').val();
+            var amount = $('#amount').val();
+            var amountPaid = $('#amountPaid').val();
 
-        $('#amountPaid').on('input', function () {
-            var amount = parseFloat($('#amount').val());
-            var amountPaid = parseFloat($(this).val());
-            var change = amountPaid - amount;
-            $('#change').val(change.toFixed(2)); // Show the change
-        });
-
-        $('#paymentForm').submit(function (e) {
-            e.preventDefault();
-
-            var formData = $(this).serialize();
-
+            // Send the data to payment_process.php
             $.ajax({
-                url: '../action/payment_process.php',
+                url: 'payment_process.php',
                 type: 'POST',
-                data: formData,
+                data: {
+                    memberID: memberID,
+                    paymentType: paymentType,
+                    amount: amount,
+                    amountPaid: amountPaid
+                },
+                dataType: 'json', // Expect JSON response
                 success: function (response) {
-                    alert(response);
-                    $('#paymentModal').modal('hide');
-                    location.reload(); // Reload the page to show updated payments
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Processed',
+                            text: response.message,
+                        }).then(function() {
+                            // Redirect or close the modal
+                            location.reload(); // Reload the page or redirect to another page
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Error',
+                            text: response.message,
+                        });
+                    }
                 },
                 error: function () {
-                    alert('An error occurred. Please try again.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'An error occurred while processing the payment. Please try again.',
+                    });
                 }
             });
         });
