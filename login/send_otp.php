@@ -9,7 +9,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if email, username, and password are set
     if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"])) {
         $email = $_POST["email"];
         $username = $_POST["username"];
@@ -29,43 +28,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
 
         if ($result->num_rows > 0) {
-            // Email already registered
             echo "Email already registered.";
         } else {
-            // Email not registered, proceed with registration and OTP sending
             $otp = generateOTP();
-            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes
-
-            // Hash the password
+            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insert email, username, hashed password, OTP, and OTP expiration into the Users table
             $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
-            $verified = 0; // Set the user as not verified
+            $verified = 0;
             $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
             $stmt->execute();
-            $userID = $stmt->insert_id;  // Get the inserted user ID
+            $userID = $stmt->insert_id;
             $stmt->close();
 
-            // Insert the user into the Members table with default status 'Inactive'
             $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, ?)");
-            $membershipStatus = 'Inactive';  // Default membership status is 'Inactive'
+            $membershipStatus = 'Inactive';
             $stmt->bind_param("isiss", $userID, $gender, $age, $address, $membershipStatus);
             $stmt->execute();
-            $memberID = $stmt->insert_id;  // Get the inserted member ID
+            $memberID = $stmt->insert_id;
             $stmt->close();
 
-            // Insert the user into the Membership table based on their membership choice
             if ($membershipType === 'Subscription') {
                 if ($subscriptionMonths > 0) {
-                    // Calculate start and end dates
                     $startDate = date('Y-m-d H:i:s');
-                    $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
 
-                    // Insert Subscription details into Membership table
+                    // Corrected method to calculate the `EndDate`
+                    $endDate = (new DateTime($startDate))
+                        ->modify("+$subscriptionMonths months")
+                        ->format('Y-m-d H:i:s');
+
                     $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
-                    $status = 'Pending';  // Default status is 'Pending'
-                    $subscriptionAmount = 600.00 * $subscriptionMonths; // Example: 600 per month, calculate total
+                    $status = 'Pending';
+                    $subscriptionAmount = 600.00 * $subscriptionMonths;
                     $stmt->bind_param("idsss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
                     $stmt->execute();
                     $stmt->close();
@@ -74,15 +68,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit;
                 }
             } else if ($membershipType === 'SessionPrice') {
-                // For Pay Per Session, insert session price into the Membership table
                 $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, SessionPrice, Status) VALUES (?, ?, ?)");
-                $status = 'Active';  // Default status is 'Active' for Pay Per Session
+                $status = 'Active';
                 $stmt->bind_param("ids", $memberID, $sessionPrice, $status);
                 $stmt->execute();
                 $stmt->close();
             }
 
-            // Send OTP via email
             $result = sendOTP($email, $otp);
 
             if ($result === true) {
@@ -97,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 function generateOTP() {
-    // Generate a 6-digit random OTP
     return sprintf('%06d', mt_rand(0, 999999));
 }
 
@@ -112,7 +103,7 @@ function sendOTP($email, $otp) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('kentdancel20@gmail.com'); // Your Gmail
+        $mail->setFrom('kentdancel20@gmail.com');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
