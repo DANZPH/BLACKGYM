@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the amount paid is sufficient
     if ($amountPaid < $amount) {
-        echo json_encode(["status" => "error", "message" => "Error: Amount paid cannot be less than the amount."]);
+        echo "Error: Amount paid cannot be less than the amount.";
         exit();
     }
 
@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($updateMemberStmt->execute()) {
                 // Return success response
-                echo json_encode(["status" => "success", "message" => "Payment processed, membership status updated to Active!"]);
+                echo "Payment processed, membership status updated to Active!";
             } else {
-                echo json_encode(["status" => "error", "message" => "Error updating member status: " . $updateMemberStmt->error]);
+                echo "Error updating member status: " . $updateMemberStmt->error;
             }
 
             // Close the update statement for Membership
@@ -51,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Close the update statement for Member
             $updateMemberStmt->close();
         } else {
-            echo json_encode(["status" => "error", "message" => "Error updating membership status: " . $updateMembershipStmt->error]);
+            echo "Error updating membership status: " . $updateMembershipStmt->error;
         }
     } else {
         // Error, return an error message
-        echo json_encode(["status" => "error", "message" => "Error processing payment: " . $stmt->error]);
+        echo "Error processing payment: " . $stmt->error;
     }
 
     // Close the insert statement
