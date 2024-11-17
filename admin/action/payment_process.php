@@ -12,40 +12,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $amount = 100.00; // Example payment amount
     $paymentMethod = 'Cash'; // Example payment method
 
-    // Start the transaction
+    // Start transaction
     $conn->begin_transaction();
 
     try {
         // Insert payment record
-        $sql = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ids", $memberID, $amount, $paymentMethod);
-
-        if (!$stmt->execute()) {
-            throw new Exception("Error inserting payment.");
-        }
-
-        // Update membership status
-        $sqlUpdate = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
-        $stmtUpdate = $conn->prepare($sqlUpdate);
-        $stmtUpdate->bind_param("i", $memberID);
-
-        if (!$stmtUpdate->execute()) {
-            throw new Exception("Error updating membership status.");
-        }
+        $sql_payment = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
+        $stmt_payment = $conn->prepare($sql_payment);
+        $stmt_payment->bind_param("ids", $memberID, $amount, $paymentMethod);
+        $stmt_payment->execute();
+        
+        // Update membership status to 'Active'
+        $sql_membership = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
+        $stmt_membership = $conn->prepare($sql_membership);
+        $stmt_membership->bind_param("i", $memberID);
+        $stmt_membership->execute();
 
         // Commit the transaction
         $conn->commit();
-        echo "Payment processed and membership activated successfully for Member ID: $memberID.";
 
+        echo "Payment processed successfully for Member ID: $memberID and membership status updated to Active.";
     } catch (Exception $e) {
-        // Rollback the transaction if there was an error
+        // Rollback the transaction if anything goes wrong
         $conn->rollback();
-        echo "Error: " . $e->getMessage();
+        echo "Error processing payment: " . $e->getMessage();
     }
 
-    $stmt->close();
-    $stmtUpdate->close();
+    // Clean up
+    $stmt_payment->close();
+    $stmt_membership->close();
     $conn->close();
 }
 ?>
