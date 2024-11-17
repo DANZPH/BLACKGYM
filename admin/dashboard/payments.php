@@ -84,8 +84,10 @@ include '../../database/connection.php'; // Include database connection
             </div>
         </div>
     </div>
+        <?php include '../../includes/footer.php'; ?>
 </div>
-    <?php include '../../includes/footer.php'; ?><!-- Modal for Payment -->
+
+<!-- Modal for Payment -->
 <div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
