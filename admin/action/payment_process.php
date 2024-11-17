@@ -9,20 +9,6 @@ if (!isset($_SESSION['AdminID'])) {
 include '../../database/connection.php'; // Include database connection
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // Assuming $memberID is already set
-$memberID = $_POST['memberID'];
-
-// Update the status in Members table
-$stmt1 = $conn1->prepare("UPDATE Members SET Status = 'active' WHERE MemberID = ?");
-$stmt1->bind_param("i", $memberID);
-
-// Update the MembershipStatus in Membership table
-$stmt2 = $conn1->prepare("UPDATE Membership SET MembershipStatus = 'active' WHERE MemberID = ?");
-$stmt2->bind_param("i", $memberID);
-
-// Execute both updates
-$stmt1->execute();
-$stmt2->execute();
     // Get the data from the form
     $memberID = $_POST['memberID'];
     $paymentType = $_POST['paymentType'];
