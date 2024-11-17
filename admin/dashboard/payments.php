@@ -79,6 +79,7 @@ include '../../database/connection.php'; // Include database connection
                                 ?>
                             </tbody>
                         </table>
+                            <?php include '../../includes/footer.php'; ?>
                     </div>
                 </div>
             </div>
@@ -122,7 +123,6 @@ include '../../database/connection.php'; // Include database connection
           <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
       </div>
-    <?php include '../../includes/footer.php'; ?>
     </div>
   </div>
 </div>
