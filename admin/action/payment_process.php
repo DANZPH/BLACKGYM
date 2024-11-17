@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Payment processed successfully, now update the Membership status to "Active"
-        $updateStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
+        $updateStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
         $updateStmt->bind_param("d", $memberID);
 
         if ($updateStmt->execute()) {
