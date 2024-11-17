@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $age = $_POST["age"];
         $address = $_POST["address"];
         $membershipType = $_POST["membershipType"];
-        $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? intval($_POST["subscriptionMonths"]) : 0;
-        $sessionPrice = isset($_POST["sessionPrice"]) ? floatval($_POST["sessionPrice"]) : null;
+        $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? $_POST["subscriptionMonths"] : null;
+        $sessionPrice = isset($_POST["sessionPrice"]) ? $_POST["sessionPrice"] : null;
 
         // Check if email is already registered
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
@@ -57,22 +57,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Insert the user into the Membership table based on their membership choice
             if ($membershipType === 'Subscription') {
-                if ($subscriptionMonths > 0) {
-                    // Calculate start and end dates
-                    $startDate = date('Y-m-d H:i:s'); // Current date and time
-                    $endDate = (new DateTime($startDate))->modify("+$subscriptionMonths months")->format('Y-m-d H:i:s');
-
-                    // Insert Subscription details into Membership table
-                    $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
-                    $status = 'Pending';  // Default status is 'Pending'
-                    $subscriptionAmount = 600.00 * $subscriptionMonths; // Example: 600 per month, calculate total
-                    $stmt->bind_param("idsss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
-                    $stmt->execute();
-                    $stmt->close();
+                // For Subscription, calculate the end date based on months
+                $startDate = date('Y-m-d H:i:s');
+                
+                // Ensure subscriptionMonths is numeric and valid
+                if (is_numeric($subscriptionMonths) && $subscriptionMonths > 0) {
+                    $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
                 } else {
-                    echo "Invalid number of months. Please enter a valid subscription duration.";
-                    exit;
+                    $endDate = $startDate; // If invalid input, just use the start date
                 }
+
+                // Insert Subscription details into Membership table
+                $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
+                $status = 'Pending';  // Default status is 'Pending'
+                $subscriptionAmount = 600.00 * $subscriptionMonths; // Example: 600 per month, calculate total
+                $stmt->bind_param("idsss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
+                $stmt->execute();
+                $stmt->close();
             } else if ($membershipType === 'SessionPrice') {
                 // For Pay Per Session, insert session price into the Membership table
                 $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, SessionPrice, Status) VALUES (?, ?, ?)");
@@ -107,7 +108,7 @@ function sendOTP($email, $otp) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = '@gmail.com'; // Your Gmail
+        $mail->Username = 'kentdancel20@gmail.com'; // Your Gmail
         $mail->Password = 'nrgtyaqgymoadryg'; // Your Gmail app password
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
@@ -125,5 +126,4 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
-
 ?>
