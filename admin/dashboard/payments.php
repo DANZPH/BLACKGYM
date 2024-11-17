@@ -122,7 +122,7 @@ include '../../database/connection.php'; // Include database connection
           <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
       </div>
-    <?php include '../includes/footer.php'; ?>
+    <?php include '../../includes/footer.php'; ?>
     </div>
   </div>
 </div>
