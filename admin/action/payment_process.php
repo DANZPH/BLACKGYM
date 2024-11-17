@@ -8,59 +8,63 @@ if (!isset($_SESSION['AdminID'])) {
 
 include '../../database/connection.php'; // Include database connection
 
+// Check if form is submitted via POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the data from the form
     $memberID = $_POST['memberID'];
     $paymentType = $_POST['paymentType'];
     $amount = $_POST['amount'];
     $amountPaid = $_POST['amountPaid'];
-    
-    // Calculate the change (if any)
-    $changeAmount = $amountPaid - $amount;
+    $changeAmount = $amountPaid - $amount; // Calculate the change
 
-    // Check if the amount paid is sufficient
-    if ($amountPaid < $amount) {
-        echo "Error: Amount paid cannot be less than the amount.";
-        exit();
-    }
+    // Update Membership Status to Active
+    $updateMembershipStatus = "UPDATE Membership SET Status = 'Active' WHERE MemberID = $memberID";
+    if ($conn1->query($updateMembershipStatus) === TRUE) {
+        // Proceed with inserting the payment
+        $insertPayment = "INSERT INTO Payments (MemberID, PaymentMethod, Amount, AmountPaid, PaymentDate) 
+                          VALUES ('$memberID', '$paymentType', '$amount', '$amountPaid', NOW())";
 
-    // Insert the payment details into the Payments table
-    $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
-                             VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
-
-    if ($stmt->execute()) {
-        // Payment processed successfully, now update the Membership status to "Active"
-        $updateMembershipStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
-        $updateMembershipStmt->bind_param("d", $memberID);
-
-        if ($updateMembershipStmt->execute()) {
-            // Also update the Member's MembershipStatus to 'Active'
-            $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
-            $updateMemberStmt->bind_param("d", $memberID);
-
-            if ($updateMemberStmt->execute()) {
-                // Return success response
-                echo "Payment processed, membership status updated to Active!";
-            } else {
-                echo "Error updating member status: " . $updateMemberStmt->error;
-            }
-
-            // Close the update statement for Membership
-            $updateMembershipStmt->close();
-            // Close the update statement for Member
-            $updateMemberStmt->close();
+        if ($conn1->query($insertPayment) === TRUE) {
+            // Payment inserted successfully, show success message
+            echo "
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <script>
+                Swal.fire({
+                    title: 'Payment Successful!',
+                    text: 'Payment of $' + '$amount' + ' has been processed.',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then(function() {
+                    window.location.href = 'payments.php'; // Redirect to payments page
+                });
+            </script>
+            ";
         } else {
-            echo "Error updating membership status: " . $updateMembershipStmt->error;
+            // If payment insertion fails, show error message
+            echo "
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'There was an issue processing the payment. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            </script>
+            ";
         }
     } else {
-        // Error, return an error message
-        echo "Error processing payment: " . $stmt->error;
+        // If membership status update fails, show error message
+        echo "
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        <script>
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an issue updating the membership status. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        </script>
+        ";
     }
-
-    // Close the insert statement
-    $stmt->close();
 }
-
-$conn1->close();
 ?>
