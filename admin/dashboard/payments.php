@@ -210,4 +210,14 @@ include '../../database/connection.php'; // Include database connection
                         $('#paymentModal').modal('hide');
                         location.reload();
                     },
-                    error: function ()
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</body>
+</html>()
