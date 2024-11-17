@@ -122,9 +122,9 @@ include '../../database/connection.php'; // Include database connection
           <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
       </div>
+    <?php include '../includes/footer.php'; ?>
     </div>
   </div>
-      <?php include '../includes/footer.php'; ?>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
