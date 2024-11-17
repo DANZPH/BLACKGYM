@@ -2,8 +2,8 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email and OTP are provided
     if (isset($_POST["email"]) && isset($_POST["otp"])) {
-        $email = trim($_POST["email"]); // Remove any leading/trailing spaces
-        $otp = trim($_POST["otp"]); // Remove any leading/trailing spaces
+        $email = $_POST["email"];
+        $otp = $_POST["otp"];
 
         // Database credentials
         $host = "sql104.infinityfree.com"; // Change this to your database host
@@ -28,11 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result->num_rows == 1) {
             $user = $result->fetch_assoc();
             $otpExpiration = $user['OTPExpiration'];  // Get the OTP expiration time
-
-            // Debugging: Check the stored OTP and expiration time
-            echo "Stored OTP: " . $user['OTP'] . "<br>";
-            echo "OTP Expiration: " . $otpExpiration . "<br>";
-            echo "Current Time: " . date("Y-m-d H:i:s", time()) . "<br>";
 
             // Check if OTP has expired
             if (strtotime($otpExpiration) < time()) {
