@@ -1,46 +1,31 @@
 <?php
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    header('Location: ../../admin/login.php');
-    exit();
-}
+include '../../database/connection.php'; // Include database connection
 
-include '../../database/connection.php'; // Database connection
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Retrieve form data
+    $memberID = $_POST['memberID'];
+    $paymentType = $_POST['paymentType'];
+    $amount = $_POST['amount'];
+    $amountPaid = $_POST['amountPaid'];
+    $change = $_POST['change'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $memberID = intval($_POST['memberID']);
-    $amount = 100.00; // Example payment amount
-    $paymentMethod = 'Cash'; // Example payment method
+    // Insert payment into Payments table
+    $sql = "INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount, PaymentDate) 
+            VALUES (?, ?, ?, ?, ?, NOW())";
+    $stmt = $conn1->prepare($sql);
+    $stmt->bind_param("isdd", $memberID, $paymentType, $amount, $amountPaid, $change);
 
-    // Start transaction
-    $conn->begin_transaction();
+    if ($stmt->execute()) {
+        // Update membership status if necessary (optional)
+        // Example: Change status to 'Paid' or similar
+        $updateStatusSQL = "UPDATE Members SET MembershipStatus = 'Paid' WHERE MemberID = ?";
+        $stmtUpdate = $conn1->prepare($updateStatusSQL);
+        $stmtUpdate->bind_param("i", $memberID);
+        $stmtUpdate->execute();
 
-    try {
-        // Insert payment record
-        $sql_payment = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
-        $stmt_payment = $conn->prepare($sql_payment);
-        $stmt_payment->bind_param("ids", $memberID, $amount, $paymentMethod);
-        $stmt_payment->execute();
-        
-        // Update membership status to 'Active'
-        $sql_membership = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
-        $stmt_membership = $conn->prepare($sql_membership);
-        $stmt_membership->bind_param("i", $memberID);
-        $stmt_membership->execute();
-
-        // Commit the transaction
-        $conn->commit();
-
-        echo "Payment processed successfully for Member ID: $memberID and membership status updated to Active.";
-    } catch (Exception $e) {
-        // Rollback the transaction if anything goes wrong
-        $conn->rollback();
-        echo "Error processing payment: " . $e->getMessage();
+        echo "Payment processed successfully!";
+    } else {
+        echo "Error processing payment. Please try again.";
     }
-
-    // Clean up
-    $stmt_payment->close();
-    $stmt_membership->close();
-    $conn->close();
 }
 ?>
