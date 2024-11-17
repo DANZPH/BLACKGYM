@@ -3,7 +3,7 @@
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
-include '../database/connection.php'; // Include the connection file without internal SQL connection
+include '../database/connection.php'; // Include the connection file
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -117,7 +117,7 @@ function sendOTP($email, $otp) {
         $mail->send();
         return true;
     } catch (Exception $e) {
-        return $mail->ErrorInfo;
+        return "Mailer Error: " . $mail->ErrorInfo;
     }
 }
 
