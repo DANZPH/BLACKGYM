@@ -1,4 +1,4 @@
-l<?php
+<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // Redirect to login page if not logged in as admin
@@ -79,7 +79,7 @@ include '../../database/connection.php'; // Include database connection
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td>
                                             <td>" . number_format($row['TotalBill'], 2) . "</td>
                                             <td>{$row['Status']}</td>
-                                            <td><button class='btn btn-info option-btn' data-memberid='{$row['MemberID']}'>Option</button></td>
+                                            <td><button class='btn btn-info option-btn' data-memberid='{$row['MemberID']}' data-totalbill='{$row['TotalBill']}'>Option</button></td>
                                         </tr>";
                                     }
                                 } else {
@@ -115,6 +115,37 @@ include '../../database/connection.php'; // Include database connection
   </div>
 </div>
 
+<!-- Modal for Payment Details (Top-up) -->
+<div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-labelledby="paymentDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="paymentDetailsModalLabel">Payment Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="paymentMethod">Payment Method</label>
+            <input type="text" class="form-control" id="paymentMethod" placeholder="Enter payment method">
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" placeholder="Total Bill" readonly>
+          </div>
+          <div class="form-group">
+            <label for="memberMoney">Amount Paid</label>
+            <input type="number" class="form-control" id="memberMoney" placeholder="Enter amount paid">
+          </div>
+          <button type="submit" class="btn btn-success">Submit Payment</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
@@ -135,6 +166,7 @@ include '../../database/connection.php'; // Include database connection
         // Open modal when 'Option' button is clicked
         $('.option-btn').click(function () {
             var memberID = $(this).data('memberid');
+            var totalBill = $(this).data('totalbill');
             $('#paymentOptionsModal').data('memberid', memberID).modal('show');
         });
 
@@ -142,26 +174,54 @@ include '../../database/connection.php'; // Include database connection
         $('.option-action').click(function () {
             var action = $(this).attr('id'); // Get the action (pay, cancel, pause, refund)
             var memberID = $('#paymentOptionsModal').data('memberid');
-            var message = '';
 
-            switch (action) {
-                case 'payBtn':
-                    message = 'Payment processed for Member ID ' + memberID;
-                    break;
-                case 'cancelBtn':
-                    message = 'Payment canceled for Member ID ' + memberID;
-                    break;
-                case 'pauseBtn':
-                    message = 'Membership paused for Member ID ' + memberID;
-                    break;
-                case 'refundBtn':
-                    message = 'Refund issued for Member ID ' + memberID;
-                    break;
+            if (action === 'payBtn') {
+                // Open Payment Details Modal
+                var totalBill = $(this).data('totalbill');
+                $('#paymentDetailsModal').modal('show');
+                $('#amount').val(totalBill); // Set total bill amount
+            }
+        });
+
+        // Submit payment details
+        $('#paymentForm').submit(function (e) {
+            e.preventDefault();
+
+            var paymentMethod = // Submit payment details
+        $('#paymentForm').submit(function (e) {
+            e.preventDefault();
+
+            var paymentMethod = $('#paymentMethod').val();
+            var amount = $('#amount').val();  // The total bill amount, automatically set
+            var memberMoney = $('#memberMoney').val();  // The amount the member pays
+            var memberID = $('#paymentOptionsModal').data('memberid');  // The selected member ID
+
+            // Validation for payment method and amount paid
+            if (paymentMethod === "" || memberMoney === "") {
+                alert("Please fill in all the fields.");
+                return;
             }
 
-            // Simulate an action (e.g., make an AJAX request to process the action)
-            alert(message);
-            $('#paymentOptionsModal').modal('hide');
+            // Insert into Payments table using AJAX
+            $.ajax({
+                url: 'process_payment.php',  // Server-side script to process the payment
+                method: 'POST',
+                data: {
+                    memberID: memberID,
+                    paymentMethod: paymentMethod,
+                    amount: amount,
+                    memberMoney: memberMoney
+                },
+                success: function (response) {
+                    if (response === "success") {
+                        alert("Payment has been successfully recorded!");
+                        $('#paymentDetailsModal').modal('hide');  // Close the modal after success
+                        location.reload();  // Reload the page to reflect the changes
+                    } else {
+                        alert("There was an issue processing the payment.");
+                    }
+                }
+            });
         });
     });
 </script>
