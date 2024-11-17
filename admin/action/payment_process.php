@@ -1,4 +1,4 @@
-<?php
+l<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // Redirect to login page if not logged in as admin
@@ -30,10 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
 
     if ($stmt->execute()) {
-        // Success, return a success message
-        echo "Payment processed successfully!";
+        // After inserting the payment, update the membership status and status to "Active"
+        $updateStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active', Status = 'Active' WHERE MemberID = ?");
+        $updateStmt->bind_param("i", $memberID);
+
+        if ($updateStmt->execute()) {
+            // Success, return a success message
+            echo "Payment processed successfully and membership status updated to Active!";
+        } else {
+            echo "Error updating membership status: " . $updateStmt->error;
+        }
+
+        $updateStmt->close();
     } else {
-        // Error, return an error message
+        // Error inserting payment, return an error message
         echo "Error processing payment: " . $stmt->error;
     }
 
