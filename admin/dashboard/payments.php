@@ -46,14 +46,17 @@ include '../../database/connection.php'; // Include database connection
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
+                                    <th>Subscription Status</th> <!-- Added column for membership status -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus
+                                // SQL query updated to include Membership table
+                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, Membership.Status AS MembershipStatus
                                         FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID";
+                                        INNER JOIN Users ON Members.UserID = Users.UserID
+                                        LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
                                 $result = $conn1->query($sql);
 
                                 if ($result->num_rows > 0) {
@@ -63,11 +66,12 @@ include '../../database/connection.php'; // Include database connection
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
+                                            <td>{$row['MembershipStatus']}</td> <!-- Displaying membership status -->
                                             <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='5' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='6' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
