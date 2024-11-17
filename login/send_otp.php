@@ -1,159 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Registration</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Member Registration</div>
-                    <div class="card-body">
-                        <form id="registerForm">
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                            </div>
+<?php
 
-                            <!-- Gender, Age, and Address Fields -->
-                            <div class="form-group">
-                                <label for="gender">Gender:</label>
-                                <select id="gender" name="gender" class="form-control" required>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="age">Age:</label>
-                                <input type="number" id="age" name="age" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Address:</label>
-                                <input type="text" id="address" name="address" class="form-control" required>
-                            </div>
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+include '../database/connection.php'; // Include the connection file without internal SQL connection
 
-                            <!-- Membership Option Fields -->
-                            <div class="form-group">
-                                <label for="membershipType">Choose Membership Type:</label>
-                                <select id="membershipType" name="membershipType" class="form-control" required>
-                                    <option value="SessionPrice">Pay Per Session</option>
-                                    <option value="Subscription">Subscription</option>
-                                </select>
-                            </div>
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-                            <div class="form-group" id="subscriptionOptions" style="display: none;">
-                                <label for="subscriptionMonths">Choose Number of Months:</label>
-                                <input type="number" id="subscriptionMonths" name="subscriptionMonths" class="form-control" min="1" max="12">
-                            </div>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if email, username, and password are set
+    if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"])) {
+        $email = $_POST["email"];
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $gender = $_POST["gender"];
+        $age = $_POST["age"];
+        $address = $_POST["address"];
+        $membershipType = $_POST["membershipType"];
+        $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? $_POST["subscriptionMonths"] : null;
+        $sessionPrice = isset($_POST["sessionPrice"]) ? $_POST["sessionPrice"] : null;
 
-                            <div class="form-group" id="sessionPriceOptions" style="display: none;">
-                                <label for="sessionPrice">Price per Session:</label>
-                                <input type="number" id="sessionPrice" name="sessionPrice" class="form-control" value="50" min="0">
-                            </div>
+        // Check if email is already registered
+        $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
 
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        if ($result->num_rows > 0) {
+            // Email already registered
+            echo "Email already registered.";
+        } else {
+            // Email not registered, proceed with registration and OTP sending
+            $otp = generateOTP();
+            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes
 
-    <!-- Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(document).ready(function(){
-            // Toggle Subscription and SessionPrice options based on membership type
-            $('#membershipType').change(function() {
-                var membershipType = $(this).val();
-                if (membershipType === 'Subscription') {
-                    $('#subscriptionOptions').show();
-                    $('#sessionPriceOptions').hide();
-                } else {
-                    $('#sessionPriceOptions').show();
-                    $('#subscriptionOptions').hide();
-                }
-            });
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-            // Submit form via AJAX
-            $('#registerForm').submit(function(e){
-                e.preventDefault();
+            // Insert email, username, hashed password, OTP, and OTP expiration into the Users table
+            $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
+            $verified = 0; // Set the user as not verified
+            $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
+            $stmt->execute();
+            $userID = $stmt->insert_id;  // Get the inserted user ID
+            $stmt->close();
 
-                // Generate a random OTP for the user
-                var otp = Math.floor(100000 + Math.random() * 900000);
-                var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();  // OTP expires in 15 minutes
+            // Insert the user into the Members table with default status 'Inactive'
+            $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, ?)");
+            $membershipStatus = 'Inactive';  // Default membership status is 'Inactive'
+            $stmt->bind_param("isiss", $userID, $gender, $age, $address, $membershipStatus);
+            $stmt->execute();
+            $memberID = $stmt->insert_id;  // Get the inserted member ID
+            $stmt->close();
 
-                $.ajax({
-                    type: "POST",
-                    url: "register_member.php",  // Update this to the correct PHP script for processing registration
-                    data: {
-                        username: $('#username').val(),
-                        email: $('#email').val(),
-                        password: $('#password').val(),
-                        gender: $('#gender').val(),
-                        age: $('#age').val(),
-                        address: $('#address').val(),
-                        membershipType: $('#membershipType').val(),
-                        subscriptionMonths: $('#subscriptionMonths').val(),
-                        sessionPrice: $('#sessionPrice').val(),
-                        otp: otp,
-                        otpExpiration: otpExpiration
-                    },
-                    success: function(response){
-                        if (response.trim() === "Email already registered.") {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Email already registered.',
-                                confirmButtonColor: '#d33',
-                                confirmButtonText: 'OK'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Registration Successful!',
-                                text: 'Verification OTP sent to your email.',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = 'otp.php?email=' + $('#email').val();
-                                }
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Unable to send OTP. Please try again later.',
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+            // Insert the user into the Membership table based on their membership choice
+            if ($membershipType === 'Subscription') {
+                // For Subscription, calculate the end date based on months
+                $startDate = date('Y-m-d H:i:s');
+                $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
+                
+                // Insert Subscription details into Membership table
+                $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
+                $status = 'Pending';  // Default status is 'Pending'
+                $subscriptionAmount = 600.00 * $subscriptionMonths; // Example: 600 per month, calculate total
+                $stmt->bind_param("idsss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
+                $stmt->execute();
+                $stmt->close();
+            } else if ($membershipType === 'SessionPrice') {
+                // For Pay Per Session, insert session price into the Membership table
+                $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, SessionPrice, Status) VALUES (?, ?, ?)");
+                $status = 'Active';  // Default status is 'Active' for Pay Per Session
+                $stmt->bind_param("ids", $memberID, $sessionPrice, $status);
+                $stmt->execute();
+                $stmt->close();
+            }
+
+            // Send OTP via email
+            $result = sendOTP($email, $otp);
+
+            if ($result === true) {
+                echo "OTP sent to your email.";
+            } else {
+                echo "Error sending OTP: " . $result;
+            }
+        }
+    } else {
+        echo "Error: Email, username, and password are required.";
+    }
+}
+
+function generateOTP() {
+    // Generate a 6-digit random OTP
+    return sprintf('%06d', mt_rand(0, 999999));
+}
+
+function sendOTP($email, $otp) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'kentdancel20@gmail.com'; // Your Gmail
+        $mail->Password = 'nrgtyaqgymoadryg'; // Your Gmail app password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
+
+        $mail->setFrom('kentdancel20@gmail.com'); // Your Gmail
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Verification Code';
+        $mail->Body = 'Your verification code is: ' . $otp;
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return $mail->ErrorInfo;
+    }
+}
+
+?>
