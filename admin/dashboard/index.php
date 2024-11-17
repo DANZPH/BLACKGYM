@@ -38,7 +38,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
         <?php include 'includes/header.php'; ?>
         
         <div class="container mt-5">
-            <h2>Welcome to Admin Dashboard</h2>
+            <h2>Welcome to Admin Dashboard.</h2>
             <p>Monitor and manage system activities below.</p>
 
             <div class="row mt-4">
