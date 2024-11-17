@@ -15,8 +15,6 @@ include '../../database/connection.php'; // Include database connection
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payments</title>
-    <!-- SweetAlert2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.9/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
@@ -24,6 +22,7 @@ include '../../database/connection.php'; // Include database connection
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="includes/styles.css">
 </head>
+
 <body>
 
 <?php include 'includes/header.php'; ?>
@@ -43,30 +42,49 @@ include '../../database/connection.php'; // Include database connection
                         <table id="paymentsTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
+                                    <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
+                                    <th>Subscription</th>
+                                    <th>Session Price</th>
+                                    <th>Total Bill</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus
+                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
+                                        Membership.Subscription, Membership.SessionPrice, 
+                                        (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
+                                        CASE 
+                                            WHEN Membership.Status = 'Active' THEN 'Active'
+                                            WHEN Membership.Status = 'Pending' THEN 'Pending'
+                                            WHEN Membership.Status = 'Expired' THEN 'Expired'
+                                        END AS Status
                                         FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID";
+                                        INNER JOIN Users ON Members.UserID = Users.UserID
+                                        LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
                                 $result = $conn1->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
+                                            <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
-                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
+                                            <td>" . number_format($row['Subscription'], 2) . "</td>
+                                            <td>" . number_format($row['SessionPrice'], 2) . "</td>
+                                            <td>" . number_format($row['TotalBill'], 2) . "</td>
+                                            <td>{$row['Status']}</td>
+                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}' 
+                                                data-totalbill='{$row['TotalBill']}'>Pay</button></td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='4' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -78,8 +96,8 @@ include '../../database/connection.php'; // Include database connection
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+<!-- Modal for Payment -->
+<div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -90,85 +108,87 @@ include '../../database/connection.php'; // Include database connection
       </div>
       <div class="modal-body">
         <form id="paymentForm">
-            <div class="form-group">
-                <label for="paymentType">Payment Type</label>
-                <input type="text" class="form-control" id="paymentType" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Amount</label>
-                <input type="number" class="form-control" id="amount" required>
-            </div>
-            <div class="form-group">
-                <label for="amountPaid">Amount Paid</label>
-                <input type="number" class="form-control" id="amountPaid" required>
-            </div>
+          <div class="form-group">
+            <label for="paymentType">Payment Type</label>
+            <select class="form-control" id="paymentType" name="paymentType">
+              <option value="Cash">Cash</option>
+              <option value="Credit">Credit</option>
+              <option value="Debit">Debit</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" class="form-control" id="amount" name="amount" readonly>
+          </div>
+          <div class="form-group">
+            <label for="amountPaid">Amount Paid</label>
+            <input type="number" class="form-control" id="amountPaid" name="amountPaid" required>
+          </div>
+          <div class="form-group">
+            <label for="change">Change</label>
+            <input type="number" class="form-control" id="change" name="change" readonly>
+          </div>
+          <input type="hidden" id="memberID" name="memberID">
+          <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="processPayment">Pay</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.9/dist/sweetalert2.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    $('#paymentsTable').DataTable();
+    $(document).ready(function () {
+        $('#paymentsTable').DataTable({
+            scrollX: true,
+            columnDefs: [
+                {
+                    targets: [0], // Target the first column (MemberID) to hide it
+                    visible: false, // Hide the MemberID column
+                }
+            ]
+        });
 
-    $('.pay-btn').click(function () {
-        var memberID = $(this).data('memberid');
-        $('#paymentModal').modal('show');
+        $('.pay-btn').click(function () {
+            var memberID = $(this).data('memberid');
+            var totalBill = $(this).data('totalbill');
+            
+            $('#memberID').val(memberID);
+            $('#amount').val(totalBill); // Set the amount to the total bill
+            $('#paymentModal').modal('show');
+        });
 
-        $('#processPayment').click(function() {
-            var paymentType = $('#paymentType').val();
-            var amount = $('#amount').val();
-            var amountPaid = $('#amountPaid').val();
+        $('#amountPaid').on('input', function () {
+            var amount = parseFloat($('#amount').val());
+            var amountPaid = parseFloat($(this).val());
+            var change = amountPaid - amount;
+            $('#change').val(change.toFixed(2)); // Show the change
+        });
+
+        $('#paymentForm').submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
 
             $.ajax({
                 url: '../action/payment_process.php',
                 type: 'POST',
-                data: {
-                    memberID: memberID,
-                    paymentType: paymentType,
-                    amount: amount,
-                    amountPaid: amountPaid
+                data: formData,
+                success: function (response) {
+                    alert(response);
+                    $('#paymentModal').modal('hide');
+                    location.reload(); // Reload the page to show updated payments
                 },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    if (data.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Payment Processed',
-                            text: data.message}).then(function() {
-                            location.reload(); // Reload the page to see the updates
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: data.message
-                        });
-                    }
-                    $('#paymentModal').modal('hide'); // Close the modal after payment process
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred. Please try again.'
-                    });
+                error: function () {
+                    alert('An error occurred. Please try again.');
                 }
             });
         });
     });
-});
 </script>
 
 </body>
