@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,9 +89,13 @@
                 if (membershipType === 'Subscription') {
                     $('#subscriptionOptions').show();
                     $('#sessionPriceOptions').hide();
+                    $('#subscriptionMonths').prop('required', true);
+                    $('#sessionPrice').prop('required', false);
                 } else {
                     $('#sessionPriceOptions').show();
                     $('#subscriptionOptions').hide();
+                    $('#sessionPrice').prop('required', true);
+                    $('#subscriptionMonths').prop('required', false);
                 }
             });
 
@@ -115,8 +118,8 @@
                         age: $('#age').val(),
                         address: $('#address').val(),
                         membershipType: $('#membershipType').val(),
-                        subscriptionMonths: $('#subscriptionMonths').val(),
-                        sessionPrice: $('#sessionPrice').val(),
+                        subscriptionMonths: $('#subscriptionMonths').val() || 0,
+                        sessionPrice: $('#sessionPrice').val() || 0,
                         otp: otp,
                         otpExpiration: otpExpiration
                     },
