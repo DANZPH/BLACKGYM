@@ -51,10 +51,13 @@ include '../../database/connection.php'; // Include database connection
                             </thead>
                             <tbody>
                                 <?php
+                                // Fetch the Membership details along with Users info
                                 $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus
                                         FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID";
-                                $result = $conn1->query($sql);
+                                        INNER JOIN Users ON Members.UserID = Users.UserID
+                                        INNER JOIN Membership ON Members.MemberID = Membership.MemberID
+                                        WHERE Membership.Status = 'Pending'";
+                                $result = $conn->query($sql);
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -67,7 +70,7 @@ include '../../database/connection.php'; // Include database connection
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='5' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='5' class='text-center'>No pending payments found</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -99,7 +102,7 @@ include '../../database/connection.php'; // Include database connection
                     data: { memberID: memberID },
                     success: function (response) {
                         alert(response);
-                        location.reload();
+                        location.reload(); // Reload the table after payment
                     },
                     error: function () {
                         alert('An error occurred. Please try again.');
