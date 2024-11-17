@@ -59,30 +59,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($membershipType === 'Subscription') {
                 // For Subscription, calculate the end date based on months
                 $startDate = date('Y-m-d H:i:s');
+                $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
                 
-                // Ensure subscriptionMonths is numeric and valid
-                if (is_numeric($subscriptionMonths) && $subscriptionMonths > 0) {
-                    // Calculate the EndDate by adding months
-                    $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
-                } else {
-                    $endDate = $startDate; // If invalid input, just use the start date
-                }
-
                 // Insert Subscription details into Membership table
                 $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
                 $status = 'Pending';  // Default status is 'Pending'
                 $subscriptionAmount = 600.00 * $subscriptionMonths; // Example: 600 per month, calculate total
-                $stmt->bind_param("idssss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
+                $stmt->bind_param("idsss", $memberID, $subscriptionAmount, $status, $startDate, $endDate);
                 $stmt->execute();
                 $stmt->close();
             } else if ($membershipType === 'SessionPrice') {
                 // For Pay Per Session, insert session price into the Membership table
-                $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, SessionPrice, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
+                $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, SessionPrice, Status) VALUES (?, ?, ?)");
                 $status = 'Active';  // Default status is 'Active' for Pay Per Session
-                $startDate = date('Y-m-d H:i:s');  // Current timestamp for session price users
-                $endDate = $startDate;  // No specific EndDate for session-based users, so use StartDate
-
-                $stmt->bind_param("idsii", $memberID, $sessionPrice, $status, $startDate, $endDate);
+                $stmt->bind_param("ids", $memberID, $sessionPrice, $status);
                 $stmt->execute();
                 $stmt->close();
             }
@@ -130,4 +120,5 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
+
 ?>
