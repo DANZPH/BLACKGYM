@@ -24,17 +24,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Insert the payment details into the Payments table
-    $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
-                             VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
+    // Start a transaction to ensure both updates are successful before committing
+    $conn1->begin_transaction();
 
-    if ($stmt->execute()) {
-        // Success, return a success message
-        echo "Payment processed successfully!";
-    } else {
-        // Error, return an error message
-        echo "Error processing payment: " . $stmt->error;
+    try {
+        // Insert the payment details into the Payments table
+        $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
+                                 VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error inserting payment: " . $stmt->error);
+        }
+
+        // Update the status in the Members table to 'active'
+        $stmt = $conn1->prepare("UPDATE Members SET Status = 'active' WHERE MemberID = ?");
+        $stmt->bind_param("d", $memberID);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error updating Member status: " . $stmt->error);
+        }
+
+        // Update the MembershipStatus in the Membership table to 'active'
+        $stmt = $conn1->prepare("UPDATE Membership SET MembershipStatus = 'active' WHERE MemberID = ?");
+        $stmt->bind_param("d", $memberID);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error updating Membership status: " . $stmt->error);
+        }
+
+        // Commit the transaction if all updates are successful
+        $conn1->commit();
+        echo "Payment processed successfully and statuses updated!";
+
+    } catch (Exception $e) {
+        // If any error occurs, roll back the transaction
+        $conn1->rollback();
+        echo "Error: " . $e->getMessage();
     }
 
     // Close the statement
