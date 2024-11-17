@@ -79,7 +79,7 @@ include '../../database/connection.php'; // Include database connection
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td> <!-- Displaying Session Price -->
                                             <td>" . number_format($row['TotalBill'], 2) . "</td> <!-- Displaying Total Bill -->
                                             <td>{$row['Status']}</td> <!-- Displaying Status -->
-                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'>Pay</button></td>
+                                            <td><button class='btn btn-primary openModalBtn' data-memberid='{$row['MemberID']}'>Options</button></td>
                                         </tr>";
                                     }
                                 } else {
@@ -95,9 +95,31 @@ include '../../database/connection.php'; // Include database connection
     </div>
 </div>
 
+<!-- Modal for payment options -->
+<div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="optionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="optionsModalLabel">Payment Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Please choose an option for the member.</p>
+                <button class="btn btn-success" id="payBtn">Pay</button>
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn btn-warning" id="pauseBtn">Pause</button>
+                <button class="btn btn-danger" id="refundBtn">Refund</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -111,14 +133,21 @@ include '../../database/connection.php'; // Include database connection
             ]
         });
 
-        $('.pay-btn').click(function () {
-            var memberID = $(this).data('memberid');
+        var selectedMemberID = null;
 
+        // Open modal and set the selected member ID
+        $('.openModalBtn').click(function () {
+            selectedMemberID = $(this).data('memberid');
+            $('#optionsModal').modal('show');
+        });
+
+        // Handle actions in the modal
+        $('#payBtn').click(function () {
             if (confirm('Are you sure you want to process payment for this member?')) {
                 $.ajax({
                     url: '../action/payment_process.php',
                     type: 'POST',
-                    data: { memberID: memberID },
+                    data: { memberID: selectedMemberID, action: 'pay' },
                     success: function (response) {
                         alert(response);
                         location.reload();
@@ -128,6 +157,61 @@ include '../../database/connection.php'; // Include database connection
                     }
                 });
             }
+            $('#optionsModal').modal('hide');
+        });
+
+        $('#cancelBtn').click(function () {
+            if (confirm('Are you sure you want to cancel this member\'s subscription?')) {
+                $.ajax({
+                    url: '../action/payment_process.php',
+                    type: 'POST',
+                    data: { memberID: selectedMemberID, action: 'cancel' },
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+            $('#optionsModal').modal('hide');
+        });
+
+        $('#pauseBtn').click(function () {
+            if (confirm('Are you sure you want to pause this member\'s subscription?')) {
+                $.ajax({
+                    url: '../action/payment_process.php',
+                    type: 'POST',
+                    data: { memberID: selectedMemberID, action: 'pause' },
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+            $('#optionsModal').modal('hide');
+        });
+
+        $('#refundBtn').click(function () {
+            if (confirm('Are you sure you want to refund this member\'s payment?')) {
+                $.ajax({
+                    url: '../action/payment_process.php',
+                    type: 'POST',
+                    data: { memberID: selectedMemberID, action: 'refund' },
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+            $('#optionsModal').modal('hide');
         });
     });
 </script>
