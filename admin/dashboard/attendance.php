@@ -55,7 +55,7 @@ include '../../database/connection.php';
                                         Attendance.CheckIn, 
                                         Attendance.CheckOut 
                                     FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID 
+                                    LEFT JOIN Users ON Members.UserID = Users.UserID 
                                     LEFT JOIN Attendance ON Members.MemberID = Attendance.MemberID 
                                     ORDER BY Attendance.CheckIn DESC
                                 ";
@@ -63,11 +63,23 @@ include '../../database/connection.php';
 
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
+                                        // Determine if the member is checked in or out
                                         $buttonText = 'Check In';
                                         $buttonClass = 'btn-success';
-                                        if ($row['CheckOut'] === '0000-00-00 00:00:00' || $row['CheckOut'] === null) {
+                                        if ($row['CheckOut'] !== '0000-00-00 00:00:00' && $row['CheckOut'] !== null) {
+                                            // Member is checked out, allow for Check In
+                                            $buttonText = 'Check In';
+                                            $buttonClass = 'btn-success';
+                                        } elseif ($row['CheckOut'] === '0000-00-00 00:00:00' || $row['CheckOut'] === null) {
+                                            // Member is checked in, allow for Check Out
                                             $buttonText = 'Check Out';
                                             $buttonClass = 'btn-danger';
+                                        }
+
+                                        // If no attendance record exists, treat as Check In
+                                        if ($row['MemberID'] && !$row['CheckIn'] && !$row['CheckOut']) {
+                                            $buttonText = 'Check In';
+                                            $buttonClass = 'btn-success'; // Green "Check In" button
                                         }
 
                                         echo "<tr>
