@@ -1,15 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // If admin is not logged in, redirect to the login page
     header('Location: login.php');
     exit();
 }
-
-// Include database connection
 include '../../database/connection.php';
-
-// Fetch statistics from the database
 
 // Total Members with Active Membership Status
 $totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
