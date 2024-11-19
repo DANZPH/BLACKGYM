@@ -89,18 +89,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
         </div>
     </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleButton = document.getElementById('sidebarToggle');
-        const sidebar = document.querySelector('.sidebar');
-        const contentWrapper = document.querySelector('.content-wrapper');
 
-        toggleButton.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            contentWrapper.classList.toggle('collapsed');
-        });
-    });
-</script>
 
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
