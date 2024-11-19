@@ -88,5 +88,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
             <?php include '../../includes/footer.php'; ?>
         </div>
     </div>
-</body>
+
+    <!-- JavaScript -->
+ <script src="../../js/script.js"></script></body>
 </html>
