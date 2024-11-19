@@ -4,20 +4,6 @@ html, body {
     display: flex;
     flex-direction: column;
 }
-
-.content-wrapper {
-    flex: 1;  
-}
-
-.footer {
-    background-color: #343a40;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
         .sidebar {
             position: fixed;
             top: 0;
@@ -78,4 +64,17 @@ html, body {
     overflow-x: auto;
 }
 
+/*footer*/
+.content-wrapper {
+    flex: 1;  
+}
 
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
