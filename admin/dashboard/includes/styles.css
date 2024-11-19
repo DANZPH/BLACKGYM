@@ -2,46 +2,6 @@
             background-color: #f4f4f4;
             padding-top: 30px;
         }
-        
-.sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    background-color: #343a40;
-    color: #fff;
-    padding-top: 20px;
-    transition: width 0.3s ease;
-}
-
-.sidebar.collapsed {
-    width: 70px;
-}
-
-.sidebar a {
-    color: #fff;
-    padding: 15px;
-    text-decoration: none;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: all 0.3s ease;
-}
-
-.sidebar.collapsed a {
-    text-align: center;
-    padding: 15px 0;
-}
-
-.content-wrapper {
-    margin-left: 250px;
-    transition: margin-left 0.3s ease;
-}
-
-.content-wrapper.collapsed {
-    margin-left: 70px;
-}
         .sidebar {
             position: fixed;
             top: 0;
