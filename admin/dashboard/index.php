@@ -37,33 +37,44 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
 
             <!-- Dashboard Cards -->
             <div class="row mt-4">
+                <!-- Active Members Card -->
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4 class="card-title">Total Active Members</h4>
+                                <h4 class="card-title">
+                                    <i class="fas fa-users text-primary"></i> Active Members
+                                </h4>
                                 <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
                             </div>
                             <a href="members.php" class="btn btn-outline-info btn-sm">View</a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Total Payments Card -->
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4 class="card-title">Total Payments</h4>
+                                <h4 class="card-title">
+                                    <i class="fas fa-credit-card text-success"></i> Earning
+                                </h4>
                                 <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                             </div>
                             <a href="payments.php" class="btn btn-outline-success btn-sm">View</a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Pending Memberships Card -->
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4 class="card-title">Pending Memberships</h4>
+                                <h4 class="card-title">
+                                    <i class="fas fa-clock text-warning"></i> Pending
+                                </h4>
                                 <h2 class="card-text text-warning"><?php echo $pendingPayments; ?></h2>
                             </div>
                             <a href="pending_memberships.php" class="btn btn-outline-warning btn-sm">View</a>
