@@ -1,14 +1,14 @@
     .footer {
       text-align: center;
       padding: 20px 0;
-      background-color: #00000000;
+      background-color: #b7ffe900;
       color: #bbb;
       font-size: 1rem;
       margin-top: 50px;
     }
 
     .footer a {
-      color: #ffffff;
+      color: #f39c12;
       text-decoration: none;
     }
 
