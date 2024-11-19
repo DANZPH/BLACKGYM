@@ -57,12 +57,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Adjust the content so it doesn't overlap with the fixed navbar */
-body {
-    padding-top: 70px; /* Adjust based on the height of your navbar */
 }
-
-/* Optional: Adjust the table responsiveness for horizontal scrolling */
 .table-responsive {
     overflow-x: auto;
 }
