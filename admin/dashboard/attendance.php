@@ -6,16 +6,13 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
-include '../../database/connection.php'; // Include database connection
+include '../../database/connection.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <?php include '../../includes/head.php';?>
-
 <body>
-
-<!-- Include Header -->
 <?php include 'includes/header.php'; ?>
 
 <div class="container-fluid mt-3">
@@ -38,12 +35,6 @@ include '../../database/connection.php'; // Include database connection
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-<!--                                    <th>Member ID
-Members.MemberID, 
-
-                                            <td>{$row['MemberID']}</td>
-                                
-</th>-->
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Attendance Count</th>
@@ -54,10 +45,10 @@ Members.MemberID,
                             </thead>
                             <tbody>
                                 <?php
-                                // Fetch members with attendance details
+                                // Fetch members with attendance details, now including MemberID
                                 $sql = "
                                     SELECT 
-                                        
+                                        Members.MemberID,        -- Added MemberID to the SELECT statement
                                         Users.Username, 
                                         Users.Email, 
                                         Attendance.AttendanceCount, 
@@ -86,6 +77,7 @@ Members.MemberID,
                                             <td>{$row['CheckIn']}</td>
                                             <td>{$row['CheckOut']}</td>
                                             <td>
+                                                <!-- Now we include MemberID in the data-attribute -->
                                                 <button class='btn $buttonClass toggleAttendance' data-memberid='{$row['MemberID']}'>$buttonText</button>
                                             </td>
                                         </tr>";
@@ -99,6 +91,7 @@ Members.MemberID,
                     </div>
                 </div>
             </div>
+
     <?php include '../../includes/footer.php'; ?>
         </div>
     </div>
@@ -135,8 +128,12 @@ Members.MemberID,
                         button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
                     } else if (response === 'checkedOut') {
                         button.removeClass('btn-danger').addClass('btn-success').text('Check In');
+                    } else if (response === 'error') {
+                        alert('An error occurred while processing attendance.');
+                    } else if (response === 'noRecord') {
+                        alert('No attendance record found for this member.');
                     } else {
-                        alert('An error occurred.');
+                        alert('Unexpected response: ' + response);
                     }
                 },
                 error: function () {
