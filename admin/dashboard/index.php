@@ -88,8 +88,10 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
 
         </div>
 
+    </div><div>
+                <?php include '../../includes/footer.php'; ?>
     </div>
-                    <?php include '../../includes/footer.php'; ?>
+          
 
 
     <!-- JavaScript -->
