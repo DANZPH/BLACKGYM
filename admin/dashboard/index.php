@@ -24,57 +24,61 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<?php include '../../includes/head.php';?>
+<?php include '../../includes/head.php'; ?>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
     <div class="content-wrapper">
         <?php include 'includes/header.php'; ?>
-        
-        <div class="container mt-5">
-            <h2>Welcome to Admin Dashboard.</h2>
-            <p>Monitor and manage system activities below.</p>
 
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Welcome to Admin Dashboard</h2>
+            <p class="text-center">Monitor and manage system activities below.</p>
+
+            <!-- Dashboard Cards -->
             <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4>Total Active Members</h4>
-                                <h2><?php echo $totalMembers; ?></h2>
+                                <h4 class="card-title">Total Active Members</h4>
+                                <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
                             </div>
-                            <a href="members.php" class="btn btn-info btn-sm">View</a>
+                            <a href="members.php" class="btn btn-outline-info btn-sm">View</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4>Total Payments</h4>
-                                <h2>₱<?php echo number_format($totalPayments, 2); ?></h2>
+                                <h4 class="card-title">Total Payments</h4>
+                                <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                             </div>
-                            <a href="payments.php" class="btn btn-info btn-sm">View</a>
+                            <a href="payments.php" class="btn btn-outline-success btn-sm">View</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card monitor-card shadow-sm">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h4>Pending Memberships</h4>
-                                <h2><?php echo $pendingPayments; ?></h2>
+                                <h4 class="card-title">Pending Memberships</h4>
+                                <h2 class="card-text text-warning"><?php echo $pendingPayments; ?></h2>
                             </div>
-                            <a href="pending_memberships.php" class="btn btn-warning btn-sm">View</a>
+                            <a href="pending_memberships.php" class="btn btn-outline-warning btn-sm">View</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- More content can go here -->
-                <?php include '../../includes/footer.php'; ?>
+
+            <?php include '../../includes/footer.php'; ?>
         </div>
     </div>
+
+    <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
