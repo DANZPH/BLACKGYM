@@ -2,6 +2,7 @@
             background-color: #f4f4f4;
             padding-top: 30px;
         }
+        
 .sidebar {
     position: fixed;
     top: 0;
@@ -41,6 +42,23 @@
 .content-wrapper.collapsed {
     margin-left: 70px;
 }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #343a40;
+            color: #fff;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #fff;
+            padding: 15px;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
         .navbar {
             padding: 0.75rem 1rem;
         }
