@@ -1,12 +1,13 @@
     .footer {
-      position: absolute; /* Positioned relative to the closest positioned ancestor */
-    bottom: 0; 
       text-align: center;
       padding: 20px 0;
       background-color: #b7ffe900;
       color: #000000;
       font-size: 1rem;
       margin-top: 50px;
+      position: absolute;
+      bottom: 0; 
+      width: 100%;
     }
 
     .footer a {
@@ -17,3 +18,4 @@
     .footer a:hover {
       text-decoration: underline;
     }
+
