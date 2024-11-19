@@ -61,3 +61,15 @@
 .table-responsive {
     overflow-x: auto;
 }
+
+
+
+.footer {
+    position: absolute; /* Positioned relative to the closest positioned ancestor */
+    bottom: 0; /* Aligns the footer to the bottom of the page */
+    width: 100%; /* Ensures the footer spans the full width of the page */
+    background-color: #343a40; /* Example background color */
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
