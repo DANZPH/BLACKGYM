@@ -32,7 +32,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
         <?php include 'includes/header.php'; ?>
 
         <div class="container mt-5">
-            <h2 class="text-center mb-4">Welcome to Admin Dashboard</h2>
+            <h1 class="text-center mb-4">BLACKGYM DASHBOARD</h1>
             <p class="text-center">Monitor and manage system activities below.</p>
 
             <!-- Dashboard Cards -->
