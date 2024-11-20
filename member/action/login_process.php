@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['MemberID'] = $admin['MemberID'];
                     $_SESSION['username'] = $user['Username'];
                     
-                    // Redirect to admin dashboard
+                    // Redirect to member dashboard
                     header('Location: ../dashboard/index.php');
                     exit();
                 } else {
