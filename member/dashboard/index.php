@@ -1,7 +1,6 @@
 <!-- index.php -->
 <?php
 session_start();
-session_start();
 if (!isset($_SESSION['MemberID'])) {
     header('Location: login.php');
     exit();
