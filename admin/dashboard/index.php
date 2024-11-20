@@ -17,7 +17,7 @@ $totalPaymentsResult = $conn1->query($totalPaymentsQuery);
 $totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'];
 
 // Total Pending Payments (Payments related to Pending Membership)
-$pendingPaymentsQuery = "SELECT COUNT(*) AS pending_payments FROM Membership WHERE Status = 'Pending'";
+$pendingPaymentsQuery = "SELECT COUNT(*) AS Status FROM Membership WHERE Status = 'Pending'";
 $pendingPaymentsResult = $conn1->query($pendingPaymentsQuery);
 $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
 
