@@ -1,17 +1,10 @@
 <?php
-// action/login_process.php
-
-session_start(); // Start the session to track the user
-
-// Include connection file
+session_start(); 
 include '../../database/connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the email and password from the form
     $email = $_POST["email"];
     $password = $_POST["password"];
-
-    // Check if the user exists in the database
     $stmt = $conn1->prepare("SELECT UserID, Username, Password, Verified FROM Users WHERE Email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
