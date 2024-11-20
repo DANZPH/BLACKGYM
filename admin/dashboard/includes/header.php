@@ -9,6 +9,6 @@
                 <a class="nav-link" href="../action/logout.php">Logout</a>
             </li>
         </ul>
+          <p class="nightowl-daylight"></p>
     </div>
-  <p class="nightowl-daylight"></p>
 </nav>
