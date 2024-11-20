@@ -1,3 +1,25 @@
+:root {
+    --primary-color: #007bff;
+    --primary-dark: #0056b3;
+    --primary-light: #66b2ff;
+
+    --secondary-color: #6c757d;
+    --secondary-dark: #495057;
+    --secondary-light: #adb5bd;
+
+    --background-color: #f8f9fa;
+    --text-color: #212529;
+    --muted-color: #868e96;
+
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
 html, body {
     padding-top: 30px;
     height: 100%;
