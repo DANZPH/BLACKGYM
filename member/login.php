@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL); ini_set('display_errors', 1); // login.php
+
+// login.php
 session_start();
 include '../../database/connection.php';
 
