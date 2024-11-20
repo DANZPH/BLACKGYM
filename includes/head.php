@@ -10,4 +10,12 @@
     type="module"
     src="https://cdn.jsdelivr.net/npm/@bufferhead/nightowl@0.0.14/dist/nightowl.js"
 ></script>
+<script type="module">
+    import { createNightowl } from '@bufferhead/nightowl'
+
+    createNightowl({
+        defaultMode: 'dark',
+        toggleButtonMode: 'newState'
+    })
+</script>
 </head>
