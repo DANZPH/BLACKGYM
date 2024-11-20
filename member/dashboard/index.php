@@ -1,12 +1,11 @@
 <!-- index.php -->
 <?php
 session_start();
-if (!isset($_SESSION['userID'])) {
-    // If user is not logged in, redirect to the login page
+session_start();
+if (!isset($_SESSION['MemberID'])) {
     header('Location: login.php');
     exit();
 }
-?>
 
 <!DOCTYPE html>
 <html lang="en">
