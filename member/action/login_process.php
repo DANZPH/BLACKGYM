@@ -24,15 +24,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if password is correct
         if (password_verify($password, $user['Password'])) {
             // Check if the user is verified
-            if ($user['Verified'] == 1) {
-                // Correct password, user verified, set session variables
-                $_SESSION['userID'] = $user['UserID'];
-                $_SESSION['username'] = $user['Username'];
-                
-                // Redirect to member dashboard or main page
-                header('Location: ../../member/dashboard/index.php');
-                exit();
-            } else {
+if ($user['Verified'] == 1) {
+                // Check if the user is an Admin
+                $admin_check = $conn1->prepare("SELECT MemberID FROM Admins WHERE UserID = ?");
+                $admin_check->bind_param("i", $user['UserID']);
+                $admin_check->execute();
+                $admin_result = $admin_check->get_result();
+
+                if ($admin_result->num_rows > 0) {
+                    // User is an Admin, set session variables
+                    $admin = $admin_result->fetch_assoc();
+                    $_SESSION['MemberID'] = $admin['MemberID'];
+                    $_SESSION['username'] = $user['Username'];
+                    
+                    // Redirect to admin dashboard
+                    header('Location: ../dashboard/index.php');
+                    exit();
+                } else {
+                    // User is not an Admin
+                    $_SESSION['error'] = "Access denied. Admins only.";
+                    header('Location: ../../member/login.php');
+                    exit();
+                }
+            }else {
                 // User is not verified
                 $_SESSION['error'] = "Your account is not verified. Please check your email for the verification link.";
                 header('Location: ../../member/login.php');
