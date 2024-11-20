@@ -57,7 +57,7 @@
                                 confirmButtonText: 'OK'
                             }).then((result) => {
                                 if (result.isConfirmed) {
-                                    window.location.href = '../member/index.php'; // Redirect to index.php or any other page
+                                    window.location.href = '../member/login.php'; // Redirect to index.php or any other page
                                 }
                             });
                         } else {
