@@ -3,7 +3,7 @@
 session_start();
 include '../../database/connection.php';
 
-if (isset($_SESSION['AdminID'])) {
+if (isset($_SESSION['MemberID'])) {
     header('Location: dashboard/index.php');
     exit();
 }
