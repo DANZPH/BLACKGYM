@@ -11,7 +11,7 @@ if (isset($_SESSION['AdminID'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-<?php include '../../includes/head.php'; ?>
+<?php include 'dashboard/includes/head.php'; ?>
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
