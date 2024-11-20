@@ -58,7 +58,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
                                 <h4 class="card-title">
-                                    <i class="fas fa-credit-card text-success"></i> Earning
+                                    <i class="fas fa-credit-card text-success"></i> Earnings
                                 </h4>
                                 <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                             </div>
