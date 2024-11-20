@@ -9,7 +9,8 @@
     padding: 10px 0; /* Adjust the padding as necessary */
 }
 
-/* Ensure the content doesn't overlap the sticky navbar */
+/* Ensure the content doesn't overlap the sticky navbar 
 body {
     padding-top: 60px; /* Adjust this value based on the height of your navbar */
 }
+*/
