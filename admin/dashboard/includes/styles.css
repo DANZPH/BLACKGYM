@@ -52,6 +52,9 @@ html, body {
         }
 
 /* Sticky Navbar */
+.navbar {
+  background: black;
+}
 .sticky-navbar {
     position: fixed;
     top: 0;
