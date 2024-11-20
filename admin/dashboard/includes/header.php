@@ -10,7 +10,5 @@
             </li>
         </ul>
     </div>
-    <div>
   <p class="nightowl-daylight"></p>
-</div>
 </nav>
