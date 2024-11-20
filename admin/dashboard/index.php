@@ -90,5 +90,20 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['pending_payments'];
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    
+    <script
+    type="module"
+    src="https://cdn.jsdelivr.net/npm/@bufferhead/nightowl@0.0.14/dist/nightowl.js"
+></script>
+<script type="module">
+    import { createNightowl } from '@bufferhead/nightowl'
+
+    createNightowl({
+        defaultMode: 'dark',
+        toggleButtonMode: 'newState'
+    })
+</script>
 </body>
 </html>
