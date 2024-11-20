@@ -1,57 +1,72 @@
 html, body {
-             
     padding-top: 30px;
     height: 100%;
     margin: 0;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(to bottom, #f7f7f7, #eaeaea); /* Subtle gradient for the body background */
 }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            background-color: #343a40;
-            color: #fff;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: #fff;
-            padding: 15px;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        .navbar {
-            padding: 0.75rem 1rem;
-        }
-        .content-wrapper {
-            margin-left: 250px;
-            padding: 20px;
-            flex-grow: 1; /* Ensures it expands to fit available space */
-        }
-        .card {
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-        .monitor-card {
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .navbar-nav .nav-link {
-            color: #fff;
-        }
-        /* Fix for the DataTable clipping */
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .dataTables_wrapper {
-            padding: 20px;
-        }
 
-/* Sticky Navbar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background: linear-gradient(to bottom, #343a40, #23272b); /* Gradient for sidebar */
+    color: #fff;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: #fff;
+    padding: 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar a:hover {
+    background: linear-gradient(to right, #575757, #424242); /* Subtle hover effect */
+}
+
+.navbar {
+    padding: 0.75rem 1rem;
+    background: linear-gradient(to right, #23272b, #343a40); /* Gradient for navbar */
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.content-wrapper {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1; /* Ensures it expands to fit available space */
+    background: linear-gradient(to bottom, #ffffff, #f9f9f9); /* Subtle gradient for content background */
+}
+
+.card {
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to bottom, #ffffff, #f8f8f8); /* Gradient for cards */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.monitor-card {
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav .nav-link {
+    color: #fff;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dataTables_wrapper {
+    padding: 20px;
+}
+
 .sticky-navbar {
     position: fixed;
     top: 0;
@@ -59,20 +74,11 @@ html, body {
     width: 100%;
     z-index: 9999; /* Keep navbar above other content */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-}
-.table-responsive {
-    overflow-x: auto;
-}
-
-/*footer*/
-.content-wrapper {
-    flex: 1;  
+    background: linear-gradient(to right, #343a40, #23272b); /* Gradient for sticky navbar */
 }
 
 .footer {
-    background-color: #343a40;
+    background: linear-gradient(to right, #23272b, #343a40); /* Gradient for footer */
     color: #fff;
     text-align: center;
     padding: 10px 0;
