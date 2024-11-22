@@ -18,7 +18,7 @@ if (isset($_SESSION['MemberID'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">Member Login</div>
+                    <div class="card-header h2">Member Login</div>
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
                             <div class="form-group">
