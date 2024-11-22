@@ -65,7 +65,7 @@
       overflow-x: auto;
     }
 
-/*    
+    
     .footer {
       background-color: #343a40;
       color: #fff;
@@ -74,9 +74,9 @@
       position: relative;
       bottom: 0;
       width: 100%;
-    }*/
+    }
     
-.footer {
+/*.footer {
   font-size: 5.0rem;
   background-color: #343a40;
   color: #fff;
@@ -84,4 +84,4 @@
   padding: 1px 0;
   margin-top: auto;
   width: 100%;
-}
+}*/
