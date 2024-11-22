@@ -29,7 +29,7 @@ include '../../database/connection.php'; // Include database connection
             <h2 class="mb-4">Member List</h2>
 
             <!-- Card Container for the Table -->
-            <div class="card data-bs-theme="dark"">
+            <div class="card table-dark">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
