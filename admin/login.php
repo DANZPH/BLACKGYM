@@ -11,11 +11,10 @@ if (isset($_SESSION['AdminID'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-      <title>Admin Login</title>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Admin Login</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
