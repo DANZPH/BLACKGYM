@@ -21,17 +21,17 @@ if (isset($_SESSION['AdminID'])) {
     <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Make card transparent but still show the grid lines */
+        /* Make card with full opacity but show grid lines */
         .card {
-            background-color: transparent; /* Remove background */
-            border: 2px solid rgba(0, 0, 0, 0.1); /* Light border around the card */
-            box-shadow: none; /* Remove card shadow */
+            background-color: #fff; /* Full white background */
+            border: 2px solid #ddd; /* Light gray border around the card (grid lines) */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
         }
 
-        /* Grid lines for form inputs */
+        /* Form input fields with full opacity and grid lines */
         .form-control {
-            background-color: transparent; /* Transparent background */
-            border: 2px solid #ddd; /* Grid-like border */
+            background-color: #fff; /* Full white background */
+            border: 2px solid #ddd; /* Light gray border for grid effect */
             border-radius: 4px; /* Slightly rounded corners */
         }
 
@@ -42,22 +42,22 @@ if (isset($_SESSION['AdminID'])) {
 
         /* Optional: Style the card header */
         .card-header {
-            background-color: transparent;
-            border-bottom: 2px solid #ddd; /* Border at the bottom */
+            background-color: #fff; /* White background */
+            border-bottom: 2px solid #ddd; /* Light gray border at the bottom */
             font-weight: bold;
             color: #333;
         }
 
-        /* Optional: Style the button with grid-like border */
+        /* Optional: Style the button with full opacity and grid lines */
         .btn-primary {
-            background-color: transparent; /* Transparent button background */
+            background-color: #007bff; /* Solid blue background */
             border: 2px solid #007bff; /* Blue border */
-            color: #007bff; /* Text color */
+            color: white; /* White text */
         }
 
         .btn-primary:hover {
-            background-color: #007bff; /* Blue background on hover */
-            color: white; /* White text on hover */
+            background-color: #0056b3; /* Darker blue background on hover */
+            border-color: #0056b3; /* Darker blue border on hover */
         }
     </style>
 </head>
