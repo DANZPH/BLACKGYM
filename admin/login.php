@@ -18,8 +18,45 @@ if (isset($_SESSION['AdminID'])) {
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="dashboard/includes/styles.css">
+    <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* Transparent background for the card */
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* White background with transparency */
+            border: none; /* Remove the border if needed */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
+        }
+
+        /* Make form inputs transparent */
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.7); /* Transparent background for form inputs */
+            border-color: rgba(0, 0, 0, 0.1); /* Light border color */
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly less transparent on focus */
+            border-color: #007bff; /* Bootstrap blue color on focus */
+        }
+
+        /* Optional: Style the card header */
+        .card-header {
+            background-color: rgba(0, 0, 0, 0.1); /* Light transparent background */
+            color: #333;
+            font-weight: bold;
+        }
+        
+        /* Optional: Style the button */
+        .btn-primary {
+            background-color: rgba(0, 123, 255, 0.8); /* Transparent button background */
+            border-color: rgba(0, 123, 255, 0.8); /* Button border with transparency */
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(0, 123, 255, 1); /* Solid color on hover */
+            border-color: rgba(0, 123, 255, 1); /* Solid border on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
