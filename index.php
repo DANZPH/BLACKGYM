@@ -16,10 +16,16 @@
 
   <!-- Font Awesome CDN (for GitHub Icon) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
+
   <style>
     /* Custom Styles for Dark Theme */
-
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding-top: 30px;
+    }
 
     .navbar {
       background-color: #1a1a1a;
