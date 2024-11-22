@@ -8,7 +8,7 @@
   <style>
     body {
       background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-      height: 100%;
+      height: 100vh; /* Full viewport height */
       margin: 0;
       display: flex;
       flex-direction: column;
@@ -30,6 +30,13 @@
       background-color: #1abc9c;
       color: #ffffff;
     }
+    .main-content {
+      flex-grow: 1; /* Occupy remaining space */
+      display: flex; /* Flexbox for centering */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      text-align: center;
+    }
     footer {
       background-color: #2c3e50;
       color: white;
@@ -38,12 +45,6 @@
       position: fixed;
       width: 100%;
       bottom: 0;
-    }
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
   </style>
 </head>
@@ -72,7 +73,7 @@
   </nav>
 
   <!-- Main Content -->
-  <div class="main-content container text-center">
+  <div class="main-content container">
     <div>
       <h1 class="text-white mb-4">Welcome to BLACKGYM</h1>
       <div class="d-flex justify-content-center">
