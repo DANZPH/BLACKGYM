@@ -15,7 +15,7 @@
       font-family: 'Roboto', sans-serif;
     }
     .navbar {
-      background-color: #2c3e50;
+      background-color: #343a40;
     }
     .navbar-brand, .nav-link {
       color: #ffffff !important;
