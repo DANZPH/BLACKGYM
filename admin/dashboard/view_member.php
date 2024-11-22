@@ -29,14 +29,14 @@ include '../../database/connection.php'; // Include database connection
             <h2 class="mb-4">Member List</h2>
 
             <!-- Card Container for the Table -->
-            <div class="card table-dark table-striped table-bordered">
+            <div class="card ">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body ">
                     <!-- Wrap table in a responsive div -->
-                    <div class="table-responsive ">
-                        <table id="membersTable" class="table table-dark table-striped table-bordered ">
+                    <div class="table-responsive table-dark table-striped table-bordered">
+                        <table id="membersTable" class="table table-striped table-bordered ">
                             <thead>
                                 <tr>
                                     <th>Member ID</th>
