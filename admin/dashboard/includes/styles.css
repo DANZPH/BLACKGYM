@@ -33,6 +33,9 @@ html, body {
             padding: 20px;
             flex-grow: 1; /* Ensures it expands to fit available space */
         }
+        .card-header {
+          color: #000000;
+        }
         .card {
             border-radius: 8px;
             margin-bottom: 1.5rem;
