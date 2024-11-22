@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLACKGYM Landing Page</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
   <style>
-  
-body {
-  background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-  height: 100vh; /* Full height */
-  margin: 0; /* Remove default margin */
-  display: flex; /* Enable flexbox layout */
-  flex-direction: column; /* Stack content vertically */
-  justify-content: center; /* Center content vertically */
-  align-items: center; /* Center content horizontally */
-  font-family: 'Roboto', sans-serif;
-  color: white;
-  text-align: center; /* Ensure text is centered */
-}
+    body {
+      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      text-align: center;
+    }
 
     h1 {
       font-size: 3rem;
@@ -51,6 +49,15 @@ body {
     .btn:hover {
       background-color: #2c3e50;
     }
+
+    .footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 5px 0;
+      margin-top: auto;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -61,6 +68,8 @@ body {
     <button class="btn" onclick="location.href='member-login.html'">Member</button>
     <button class="btn" onclick="location.href='staff-login.html'">Staff</button>
   </div>
-                      <?php include 'includes/footer.php'; ?>
+  <footer class="footer">
+    &copy; 2024 BLACKGYM. All rights reserved.
+  </footer>
 </body>
 </html>
