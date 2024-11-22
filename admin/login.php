@@ -28,7 +28,7 @@ if (isset($_SESSION['AdminID'])) {
                 <div style="border-radius: 8px;
       margin-bottom: 5rem;
       background: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);" class="card">
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);" class="card">
                     <div class="card-header h2">Admin Login</div>
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
