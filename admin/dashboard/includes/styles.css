@@ -65,11 +65,22 @@
       overflow-x: auto;
     }
 
-    /* Footer */.footer {
+/*    
+    .footer {
+      background-color: #343a40;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }*/
+    
+.footer {
   background-color: #343a40;
   color: #fff;
   text-align: center;
-  padding: 10px 0;
-  margin-top: auto; /* Push the footer to the bottom */
+  padding: 5px 0;
+  margin-top: auto;
   width: 100%;
 }
