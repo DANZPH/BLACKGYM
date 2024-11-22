@@ -34,7 +34,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['Status'];
 
         <div class="container mt-5">
             <h1 class="text-center mb-4 text-white">BLACKGYM DASHBOARD</h1>
-            <p class="text-center text-white-50">Monitor and manage system activities below.</p>
+            <p class="text-center text-white">Monitor and manage system activities below.</p>
 
             <!-- Dashboard Cards -->
             <div class="row mt-4">
