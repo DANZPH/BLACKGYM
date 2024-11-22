@@ -19,13 +19,12 @@
 
   <style>
     /* Custom Styles for Dark Theme */
-    body {background: linear-gradient(90deg, #bdc3c7,  #2c3e50);         
-    padding-top: 30px;
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-      
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding-top: 30px;
     }
 
     .navbar {
