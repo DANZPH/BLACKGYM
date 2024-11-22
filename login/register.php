@@ -7,6 +7,7 @@
     <title>User Registration</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../admin/dashboard/includes/styles.css">
 </head>
 <body>
     <div class="container mt-5">
