@@ -1,7 +1,7 @@
 html, body {
   
   color: #fff;
-    background: linear-gradient(180deg, #bdc3c7,  #2c3e50);         
+    background: linear-gradient(90deg, #bdc3c7,  #2c3e50);         
     padding-top: 30px;
     height: 100%;
     margin: 0;
@@ -87,24 +87,3 @@ html, body {
 }
 
 
-/*table*/
-/* Make the table background transparent */
-.table {
-    background-color: rgba(255, 255, 255, 0.5); /* 0.5 is the transparency level */
-    border: none; /* Remove the border */
-}
-
-/* Optional: Make table header transparent */
-.table thead {
-    background-color: rgba(255, 255, 255, 0.6); /* Header with some transparency */
-}
-
-/* Optional: Table rows with transparency */
-.table tbody tr {
-    background-color: rgba(255, 255, 255, 0.2); /* Slight transparency for rows */
-}
-
-/* Optional: Make table cells transparent */
-.table td, .table th {
-    background-color: rgba(255, 255, 255, 0.3); /* Transparency on individual cells */
-}
