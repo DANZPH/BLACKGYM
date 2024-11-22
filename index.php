@@ -3,107 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BLACKGYM - Landing Page</title>
+  <title>BLACKGYM Landing Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* Reset CSS */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* Body styling */
+    html, body {
+      height: 100%; /* Ensure body and HTML fill the screen */
+    }
+
     body {
-      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-      height: 100%;
-      margin: 0;
       display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
       flex-direction: column;
       font-family: 'Roboto', sans-serif;
-      color: #ffffff;
-    }
-
-    header {
-      background-color: rgba(44, 62, 80, 0.9);
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-    }
-
-    header h1 {
-      font-size: 2rem;
-      letter-spacing: 1px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      padding: 10px 0;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #ffffff;
-      margin: 0 15px;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-    }
-
-    nav a:hover {
-      color: #bdc3c7;
-    }
-
-    .container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .buttons {
+      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
+      color: white;
       text-align: center;
     }
 
-    .buttons button {
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .btn {
       background-color: #34495e;
-      border: none;
+      color: white;
       padding: 15px 30px;
-      margin: 10px;
-      color: #ffffff;
+      border: none;
+      border-radius: 5px;
       font-size: 1rem;
       cursor: pointer;
-      border-radius: 5px;
       transition: background-color 0.3s ease;
+      text-transform: uppercase;
     }
 
-    .buttons button:hover {
+    .btn:hover {
       background-color: #2c3e50;
     }
 
-    footer {
-      background-color: rgba(44, 62, 80, 0.9);
-      padding: 10px;
+    .footer {
+      background-color: #343a40;
+      color: white;
       text-align: center;
-      font-size: 0.9rem;
+      padding: 5px 0;
+      margin-top: auto;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to BLACKGYM</h1>
-    <nav>
-      <a href="#admin">Admin</a>
-      <a href="#member">Member</a>
-      <a href="#staff">Staff</a>
-    </nav>
-  </header>
-  <div class="container">
-    <div class="buttons">
-      <button onclick="location.href='#admin'">Admin</button>
-      <button onclick="location.href='#member'">Member</button>
-      <button onclick="location.href='#staff'">Staff</button>
-    </div>
+  <h1>Welcome to BLACKGYM</h1>
+  <p>Select your role to proceed:</p>
+  <div class="button-container">
+    <button class="btn" onclick="location.href='admin-login.html'">Admin</button>
+    <button class="btn" onclick="location.href='member-login.html'">Member</button>
+    <button class="btn" onclick="location.href='staff-login.html'">Staff</button>
   </div>
-  <footer>
-    © 2024 BLACKGYM. All Rights Reserved.
+  <footer class="footer">
+    &copy; 2024 BLACKGYM. All rights reserved.
   </footer>
 </body>
 </html>
