@@ -16,8 +16,134 @@
 
   <!-- Font Awesome CDN (for GitHub Icon) -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
+  <style>
+    /* Custom Styles for Dark Theme */
 
-    <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
+
+    .navbar {
+      background-color: #1a1a1a;
+      padding: 20px 0;
+position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999; /* Keep navbar above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 2rem;
+      color: #fff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .navbar-brand:hover {
+      color: #f39c12;
+    }
+
+    /* Landing Section */
+    .landing-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #111, #333);
+      padding: 0 20px;
+      border-bottom: 5px solid #f39c12;
+    }
+
+    .landing-content {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .landing-content h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 1.5px;
+    }
+
+    .landing-content p {
+      font-size: 1.1rem;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .btn-dark-custom {
+      background-color: #444;
+      color: #fff;
+      border-color: #444;
+      font-size: 1.1rem;
+      padding: 12px 30px;
+      margin: 10px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .btn-dark-custom:hover {
+      background-color: #f39c12;
+      border-color: #f39c12;
+      color: #fff;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: #222;
+      color: #bbb;
+      font-size: 1rem;
+      margin-top: 50px;
+    }
+
+    .footer a {
+      color: #f39c12;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* SweetAlert2 */
+    .swal2-popup {
+      background-color: #333 !important;
+      color: #fff !important;
+    }
+
+    .swal2-title {
+      color: #f39c12 !important;
+    }
+
+    /* Custom 20% Done Header Styles */
+    .done-header {
+      border: 5px solid green;
+      background-color: #333;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 10px;
+      letter-spacing: 1px;
+    }
+  </style>
 </head>
 <body>
 
