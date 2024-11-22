@@ -14,7 +14,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header g2">User Registration</div>
+                    <div class="card-header h2">User Registration</div>
                     <div class="card-body">
                         <form id="registerForm">
                             <div class="form-group">
