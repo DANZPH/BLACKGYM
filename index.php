@@ -31,7 +31,7 @@
       display: inline-block;
     }
     .btn-custom:hover {
-      background-color: #1abc9c;
+      background-color: #343a40;
       color: #ffffff;
     }
     .main-content {
