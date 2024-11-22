@@ -58,5 +58,6 @@
     <button class="btn" onclick="location.href='member-login.html'">Member</button>
     <button class="btn" onclick="location.href='staff-login.html'">Staff</button>
   </div>
+                      <?php include '../../includes/footer.php'; ?>
 </body>
 </html>
