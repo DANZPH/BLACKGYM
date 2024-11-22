@@ -23,7 +23,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['Status'];
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <?php include '../../includes/head.php'; ?>
 <body>
     <?php include 'includes/sidebar.php'; ?>
