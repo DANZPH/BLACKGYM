@@ -11,33 +11,7 @@ include '../../database/connection.php'; // Include database connection
 
 <!DOCTYPE html>
 <html lang="en">
-<style>
-    /* Transparent background for the entire table */
-    #membersTable {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    /* Transparent background for table header */
-    #membersTable thead {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    /* Transparent background for table rows */
-    #membersTable tbody tr {
-        background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    /* Optional: Hover effect to slightly increase opacity */
-    #membersTable tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-    }
-
-    /* Optional: Border and other styles */
-    #membersTable, #membersTable th, #membersTable td {
-        border-color: rgba(255, 255, 255, 0.3); /* Light border */
-    }
-</style>
-
+  
 <?php include '../../includes/head.php';?>
 
 <body>
