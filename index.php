@@ -6,15 +6,25 @@
   <title>BLACKGYM Landing Page</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-      height: 100vh;
+    /* Reset CSS */
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body styling */
+    html, body {
+      height: 100%; /* Ensure body and HTML fill the screen */
+    }
+
+    body {
       display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
       font-family: 'Roboto', sans-serif;
+      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
       color: white;
       text-align: center;
     }
