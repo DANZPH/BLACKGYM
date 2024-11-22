@@ -24,8 +24,8 @@ if (isset($_SESSION['AdminID'])) {
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card table-dark">
+            <div class="col-md-6 table-dark">
+                <div class="card">
                     <div class="card-header">Admin Login</div>
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
