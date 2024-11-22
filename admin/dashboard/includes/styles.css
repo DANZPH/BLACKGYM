@@ -1,4 +1,5 @@
 html, body {
+  color: #fff;
     background: linear-gradient(45deg, #bdc3c7,  #2c3e50);         
     padding-top: 30px;
     height: 100%;
