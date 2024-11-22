@@ -4,6 +4,6 @@
     <title>Admin Dashboard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<!--    <link rel="stylesheet" href="styles.css">-->
-        <link rel="stylesheet" href="../../admin/Dashboard/includes/styles.css">
+    <link rel="stylesheet" href="styles.css">
+<!--        <link rel="stylesheet" href="../../css/footer.css">-->
 </head>
