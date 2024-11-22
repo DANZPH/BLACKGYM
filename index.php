@@ -48,16 +48,6 @@
     .btn:hover {
       background-color: #2c3e50;
     }
-    
-        .footer {
-      background-color: #343a40;
-      color: #fff;
-      text-align: center;
-      padding: 10px 0;
-      position: relative;
-      bottom: 0;
-      width: 100%;
-    }
   </style>
 </head>
 <body>
