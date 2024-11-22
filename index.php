@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLACKGYM Landing Page</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
   <style>
+  
     body {
       background: linear-gradient(90deg, #bdc3c7, #2c3e50);
       height: 100vh;
