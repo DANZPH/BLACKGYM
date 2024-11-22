@@ -25,6 +25,10 @@
       background-color: #34495e;
       color: #ffffff;
       border: none;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: inline-block;
     }
     .btn-custom:hover {
       background-color: #1abc9c;
@@ -77,17 +81,15 @@
     <div>
       <h1 class="text-white mb-4">Welcome to BLACKGYM</h1>
       <div class="d-flex justify-content-center">
-        <button id="admin" class="btn btn-custom">Admin</button>
-        <button id="member" class="btn btn-custom">Member</button>
-        <button id="staff" class="btn btn-custom">Staff</button>
+        <a href="admin/login.php" class="btn btn-custom">Admin Login</a>
+        <a href="member/login.php" class="btn btn-custom">Member Login</a>
+        <a href="staff/login.php" class="btn btn-custom">Staff Login</a>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer>
-    <p>&copy; 2024 BLACKGYM. All rights reserved.</p>
-  </footer>
+                    <?php include 'includes/footer.php'; ?>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
