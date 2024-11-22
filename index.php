@@ -22,7 +22,7 @@
     }
     .btn-custom {
       margin: 10px;
-      background-color: #34495e;
+      background-color: #343a40;
       color: #ffffff;
       border: none;
       text-decoration: none;
@@ -42,7 +42,7 @@
       text-align: center;
     }
     footer {
-      background-color: #2c3e50;
+      background-color: #343a40;
       color: white;
       text-align: center;
       padding: 15px;
