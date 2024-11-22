@@ -8,17 +8,18 @@
     <link rel="stylesheet" href="admin/dashboard/includes/styles.css">
   <style>
   
-    body {
-      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Roboto', sans-serif;
-      color: white;
-    }
+body {
+  background: linear-gradient(90deg, #bdc3c7, #2c3e50);
+  height: 100vh; /* Full height */
+  margin: 0; /* Remove default margin */
+  display: flex; /* Enable flexbox layout */
+  flex-direction: column; /* Stack content vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  text-align: center; /* Ensure text is centered */
+}
 
     h1 {
       font-size: 3rem;
