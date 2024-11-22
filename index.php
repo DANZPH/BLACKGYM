@@ -106,25 +106,6 @@ position: fixed;
       align-items: center;
     }
 
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 20px 0;
-      background-color: #222;
-      color: #bbb;
-      font-size: 1rem;
-      margin-top: 50px;
-    }
-
-    .footer a {
-      color: #f39c12;
-      text-decoration: none;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
-
     /* SweetAlert2 */
     .swal2-popup {
       background-color: #333 !important;
