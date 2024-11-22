@@ -33,7 +33,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['Status'];
         <?php include 'includes/header.php'; ?>
 
         <div class="container mt-5">
-            <h1 class="text-center mb-4">BLACKGYM DASHBOARD</h1>
+            <h1 class="text-center mb-4 text-white-50">BLACKGYM DASHBOARD</h1>
             <p class="text-center">Monitor and manage system activities below.</p>
 
             <!-- Dashboard Cards -->
