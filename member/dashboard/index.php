@@ -7,41 +7,57 @@ if (!isset($_SESSION['MemberID'])) {
 
 include '../../database/connection.php'; // Include database connection
 
-// Retrieve member's EndDate from the Membership table
+// Get the current MemberID
 $memberID = $_SESSION['MemberID'];
-$sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
-$stmt = $conn1->prepare($sql);
+
+// Fetch the membership details including the EndDate
+$query = "SELECT Status, EndDate FROM Membership WHERE MemberID = ?";
+$stmt = $conn1->prepare($query);
 $stmt->bind_param("d", $memberID);
 $stmt->execute();
-$result = $stmt->get_result();
+$stmt->store_result();
+$stmt->bind_result($status, $endDate);
 
-// Check if membership is found
-if ($result->num_rows > 0) {
-    $membership = $result->fetch_assoc();
-    $endDate = $membership['EndDate'];
-    $status = $membership['Status'];
+// Check if a row is returned
+if ($stmt->fetch()) {
+    $membershipStatus = $status;
+    $membershipEndDate = $endDate;
+    
+    // Calculate the time remaining until expiration
+    $currentTime = new DateTime(); // Current time
+    $endDateTime = new DateTime($membershipEndDate); // End date from the database
+    $interval = $currentTime->diff($endDateTime); // Get the difference
 
-    // Calculate the time left until expiration
-    $currentDate = new DateTime();  // Current date and time
-    $endDateTime = new DateTime($endDate);  // Membership end date and time
-    $interval = $currentDate->diff($endDateTime);  // Difference between current time and membership end time
+    // Format the remaining time in a readable format (e.g., 1 day, 3 hours)
+    $remainingTime = '';
+    if ($interval->days > 0) {
+        $remainingTime .= $interval->days . ' days ';
+    }
+    if ($interval->h > 0) {
+        $remainingTime .= $interval->h . ' hours ';
+    }
+    if ($interval->i > 0) {
+        $remainingTime .= $interval->i . ' minutes';
+    }
 
-    // Prepare a human-readable time left message
-    $timeLeft = "";
-    if ($status == "Active") {
-        $timeLeft = $interval->format("%d days, %h hours, %i minutes, %s seconds");
-    } else {
-        $timeLeft = "Your membership has expired.";
+    // If the membership has expired
+    if ($currentTime >= $endDateTime) {
+        $membershipStatus = 'Expired';
+        $remainingTime = 'Expired';
     }
 
 } else {
-    $status = "Unknown";
-    $timeLeft = "No membership found.";
+    $membershipStatus = 'No membership found';
+    $remainingTime = '';
 }
 
+// Close the statement
 $stmt->close();
+
+// Close the connection
 $conn1->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,18 +83,20 @@ $conn1->close();
                 <h2>Welcome to Your Dashboard</h2>
                 <p>Here you can view and manage your membership, payments, and attendance.</p>
 
-                <!-- Membership Status Card -->
+                <!-- Membership Status -->
                 <div class="card">
                     <div class="card-header">
                         Membership Status
                     </div>
                     <div class="card-body">
-                        <?php if ($status == "Active"): ?>
-                            <h5 class="card-title">Active Membership</h5>
-                            <p class="card-text">Your membership is active and valid for the next: <strong><?php echo $timeLeft; ?></strong>.</p>
+                        <h5 class="card-title"><?php echo $membershipStatus; ?></h5>
+                        <?php if ($membershipStatus == 'Active'): ?>
+                            <p class="card-text">Your membership is active and valid until: <?php echo $membershipEndDate; ?></p>
+                            <p class="card-text">Time remaining until expiration: <?php echo $remainingTime; ?></p>
+                        <?php elseif ($membershipStatus == 'Expired'): ?>
+                            <p class="card-text">Your membership has expired.</p>
                         <?php else: ?>
-                            <h5 class="card-title">Membership Status: <?php echo $status; ?></h5>
-                            <p class="card-text"><?php echo $timeLeft; ?></p>
+                            <p class="card-text">No active membership found.</p>
                         <?php endif; ?>
                     </div>
                 </div>
