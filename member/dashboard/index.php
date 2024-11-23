@@ -80,7 +80,9 @@ if ($endDate) {
 
             <!-- Main Content -->
             <div class="col-md-9">
-                <h2>Dashboard</h2>
+                <h2>HELLO, 
+                <?php echo $_SESSION['username']; ?>
+                </h2>
                 <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
 
                 <!-- Membership Status Section -->
