@@ -59,7 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Calculate the number of months based on the Subscription value (Subscription ÷ 600)
         $numMonths = $subscription / 600;
 
+        // Ensure that numMonths is an integer value (rounding if necessary)
+        $numMonths = floor($numMonths);
+
         // Calculate the new EndDate by adding the number of months to the current date
+        // Correcting the logic to handle proper month addition.
         $endDate = date('Y-m-d H:i:s', strtotime("+$numMonths months"));
 
         // Update the Membership table to set the calculated EndDate
