@@ -1,9 +1,7 @@
 <!-- sidebar.php -->
 <div class="col-md-3 bg-light">
     <!-- Toggle button for small screens -->
-    <button class="btn btn-primary d-md-none" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
-        <span class="navbar-toggler-icon"></span> Menu
-    </button>
+
     
     <!-- Collapsible sidebar menu -->
     <div class="collapse d-md-block" id="sidebar">
