@@ -98,7 +98,7 @@ html, body {
 }
 
 /* Footer */
-.footer {
+/*.footer {
   background-color: #343a40;
   color: #fff;
   text-align: center;
@@ -106,7 +106,7 @@ html, body {
   position: relative;
   bottom: 0;
   width: 100%;
-}
+}*/
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
