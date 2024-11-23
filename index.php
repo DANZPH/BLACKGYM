@@ -83,7 +83,7 @@
       <div class="d-flex justify-content-center">
         <a href="admin/login.php" class="btn btn-custom">Admin Login</a>
         <a href="member/login.php" class="btn btn-custom">Member Login</a>
-        <a href="staff/login.php" class="btn btn-custom">Staff Login</a>
+        <a href="admin/login.php" class="btn btn-custom">Staff Login</a>
       </div>
     </div>
   </div>
