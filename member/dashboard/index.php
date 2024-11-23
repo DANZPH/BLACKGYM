@@ -28,6 +28,8 @@ if ($endDate) {
 
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,28 +63,6 @@ if ($endDate) {
         .remaining-time span {
             font-weight: bold;
             color: #007bff;
-        }
-        
-        /* Media Query for Mobile */
-        @media (max-width: 768px) {
-            .membership-card {
-                padding: 15px;
-            }
-            .remaining-time {
-                font-size: 1em;
-            }
-            .container {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .col-md-9 {
-                margin-top: 20px;
-                padding-left: 0;
-                padding-right: 0;
-            }
-            h2 {
-                font-size: 1.5em;
-            }
         }
     </style>
 </head>
@@ -121,7 +101,7 @@ if ($endDate) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <p>Your membership is still pending. Please PAY and wait for approval.</p>
+                    <p>Your membership is still pending. Please PAY amd wait for approval.</p>
                 <?php endif; ?>
             </div>
         </div>
