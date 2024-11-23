@@ -65,13 +65,11 @@ if ($endDate) {
     </style>
 </head>
 <body>
-
-    <!-- Include Header -->
     <?php include 'includes/header.php'; ?>
 
     <div class="container mt-5">
         <div class="row">
-            <!-- Include Sidebar -->
+
             <?php include 'includes/sidebar.php'; ?>
 
             <!-- Main Content -->
