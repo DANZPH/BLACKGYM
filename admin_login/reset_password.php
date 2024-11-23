@@ -11,18 +11,17 @@ require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
 
-require '../database/connection.php';  // Include the database connection
-
+/*require '../database/connection.php'; 
+*/
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email is set
     if (isset($_POST["email"])) {
         $email = $_POST["email"];
 
-        // Database connection (adjust according to your setup)
-        $host = "sql104.infinityfree.com"; // Change this to your database host
-        $dbname = "if0_36048499_db_user"; // Change this to your database name
-        $usernameDB = "if0_36048499"; // Change this to your database username
-        $passwordDB = "LokK4Hhvygq"; // Change this to your database password
+        $host = "sql104.infinityfree.com";
+        $dbname = "if0_36048499_db_user";
+        $usernameDB = "if0_36048499"; 
+        $passwordDB = "LokK4Hhvygq";
 
         $conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
 
