@@ -87,18 +87,7 @@ $pendingPayments = $pendingPaymentsResult->fetch_assoc()['Status'];
     </div>
                     <?php include '../../includes/footer.php'; ?>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const sidebar = document.getElementById("sidebar");
-  const sidebarToggle = document.getElementById("sidebarToggle");
-  const contentWrapper = document.querySelector(".content-wrapper");
 
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("hidden");
-    contentWrapper.classList.toggle("full");
-  });
-});
-</script>
     <!-- JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
