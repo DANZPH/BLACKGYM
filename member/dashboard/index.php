@@ -105,7 +105,7 @@ if ($endDate) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <p>Your membership is still pending. Please wait for approval.</p>
+                    <p>Your membership is still pending. Please PAY amd wait for approval.</p>
                 <?php endif; ?>
 
                 <!-- Add more content as needed -->
