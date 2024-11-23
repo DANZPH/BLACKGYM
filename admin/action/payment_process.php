@@ -1,3 +1,4 @@
+<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // Redirect to login page if not logged in as admin
@@ -85,3 +86,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $conn1->close();
+?>
