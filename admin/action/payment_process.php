@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Calculate the number of months for the subscription (Subscription ÷ 600)
-        $subscription = $amount;
+        $subscription;
         $numMonths = $subscription / 600;
 
         // Calculate the new EndDate by adding the number of months to the current date
