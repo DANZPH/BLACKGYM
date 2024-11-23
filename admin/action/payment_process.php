@@ -1,4 +1,3 @@
-<?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     // Redirect to login page if not logged in as admin
@@ -53,10 +52,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error updating membership status in Membership: " . $updateMembershipStmt->error);
         }
 
+        // Calculate the number of months for the subscription (Subscription ÷ 600)
+        $subscription = $amount;
+        $numMonths = $subscription / 600;
+
+        // Calculate the new EndDate by adding the number of months to the current date
+        $endDate = date('Y-m-d H:i:s', strtotime("+$numMonths months"));
+
+        // Update the Membership table to set the calculated EndDate
+        $updateEndDateStmt = $conn1->prepare("UPDATE Membership SET EndDate = ? WHERE MemberID = ?");
+        $updateEndDateStmt->bind_param("sd", $endDate, $memberID);
+
+        if (!$updateEndDateStmt->execute()) {
+            throw new Exception("Error updating EndDate in Membership: " . $updateEndDateStmt->error);
+        }
+
         // Commit transaction if all updates are successful
         $conn1->commit();
 
-        echo "Payment processed, and statuses updated to Active!";
+        echo "Payment processed, statuses updated to Active, and EndDate set!";
     } catch (Exception $e) {
         // Rollback transaction on any error
         $conn1->rollback();
@@ -67,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
     $updateMemberStmt->close();
     $updateMembershipStmt->close();
+    $updateEndDateStmt->close();
 }
 
 $conn1->close();
-?>
