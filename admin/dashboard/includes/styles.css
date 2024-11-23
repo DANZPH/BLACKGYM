@@ -98,15 +98,13 @@ html, body {
 }
 
 /* Footer */
-/*.footer {
+.footer {
   background-color: #343a40;
   color: #fff;
   text-align: center;
   padding: 10px 0;
-  position: relative;
-  bottom: 0;
   width: 100%;
-}*/
+}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
