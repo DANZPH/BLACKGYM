@@ -7,57 +7,29 @@ if (!isset($_SESSION['MemberID'])) {
 
 include '../../database/connection.php'; // Include database connection
 
-// Get the current MemberID
-$memberID = $_SESSION['MemberID'];
+$memberID = $_SESSION['MemberID']; // Get the logged-in member's ID
 
-// Fetch the membership details including the EndDate
-$query = "SELECT Status, EndDate FROM Membership WHERE MemberID = ?";
-$stmt = $conn1->prepare($query);
+// Query to fetch the membership details (EndDate)
+$sql = "SELECT EndDate FROM Membership WHERE MemberID = ?";
+$stmt = $conn1->prepare($sql);
 $stmt->bind_param("d", $memberID);
 $stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($status, $endDate);
-
-// Check if a row is returned
-if ($stmt->fetch()) {
-    $membershipStatus = $status;
-    $membershipEndDate = $endDate;
-    
-    // Calculate the time remaining until expiration
-    $currentTime = new DateTime(); // Current time
-    $endDateTime = new DateTime($membershipEndDate); // End date from the database
-    $interval = $currentTime->diff($endDateTime); // Get the difference
-
-    // Format the remaining time in a readable format (e.g., 1 day, 3 hours)
-    $remainingTime = '';
-    if ($interval->days > 0) {
-        $remainingTime .= $interval->days . ' days ';
-    }
-    if ($interval->h > 0) {
-        $remainingTime .= $interval->h . ' hours ';
-    }
-    if ($interval->i > 0) {
-        $remainingTime .= $interval->i . ' minutes';
-    }
-
-    // If the membership has expired
-    if ($currentTime >= $endDateTime) {
-        $membershipStatus = 'Expired';
-        $remainingTime = 'Expired';
-    }
-
-} else {
-    $membershipStatus = 'No membership found';
-    $remainingTime = '';
-}
-
-// Close the statement
+$stmt->bind_result($endDate);
+$stmt->fetch();
 $stmt->close();
 
-// Close the connection
-$conn1->close();
-?>
+// Check if a valid EndDate exists
+if ($endDate) {
+    $currentDate = new DateTime(); // Current date and time
+    $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
+    $interval = $currentDate->diff($endDateObj); // Calculate the difference between the current date and the EndDate
 
+    $remainingTime = $interval->format('%a days, %h hours, %i minutes'); // Format the remaining time
+} else {
+    $remainingTime = "No expiration date set."; // Fallback if no EndDate found
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,14 +61,13 @@ $conn1->close();
                         Membership Status
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $membershipStatus; ?></h5>
-                        <?php if ($membershipStatus == 'Active'): ?>
-                            <p class="card-text">Your membership is active and valid until: <?php echo $membershipEndDate; ?></p>
-                            <p class="card-text">Time remaining until expiration: <?php echo $remainingTime; ?></p>
-                        <?php elseif ($membershipStatus == 'Expired'): ?>
-                            <p class="card-text">Your membership has expired.</p>
+                        <?php if ($endDate): ?>
+                            <h5 class="card-title">Active Membership</h5>
+                            <p class="card-text">Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+                            <p class="card-text">Time remaining: <strong><?php echo $remainingTime; ?></strong></p>
                         <?php else: ?>
-                            <p class="card-text">No active membership found.</p>
+                            <h5 class="card-title">No Active Membership</h5>
+                            <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support.</p>
                         <?php endif; ?>
                     </div>
                 </div>
