@@ -7,7 +7,7 @@ session_start();
     <div class="container">
       
           <button class="btn d-md-none" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
-        <span class="glyphicon glyphicon-chevron-down"></span>
+        <span class="navbar-toggler-icon">↓</span>
     </button>
         <a class="navbar-brand" href="index.php">Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
