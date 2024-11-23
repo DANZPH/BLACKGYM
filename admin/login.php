@@ -34,29 +34,29 @@ if (isset($_SESSION['AdminID'])) {
             width: 100%;
             max-width: 400px; /* Smaller width for the form */
             background-color: #333; /* Dark background for the card */
-            border: none; /* Remove border */
-            border-radius: 8px; /* Rounded corners */
-            color: #fff; /* White text color */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Nice shadow effect */
+            border: none; /* Remove default border */
+            border-radius: 10px; /* Rounded corners */
+            color: #fff; /* White text */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Larger shadow for better visibility */
         }
 
         .card-header {
             background-color: #444; /* Slightly lighter background for the header */
-            font-size: 1.5rem; /* Slightly larger text */
+            font-size: 1.5rem; /* Larger font size */
             font-weight: bold;
-            text-align: center; /* Center align header text */
+            text-align: center; /* Center-align the header */
             border-bottom: none; /* Remove bottom border */
         }
 
         .form-control {
             background-color: #444; /* Dark background for inputs */
-            border: 1px solid #fff; /* White border for grid effect */
+            border: 1px solid #fff; /* White border for the grid effect */
             color: #fff; /* White text color */
             border-radius: 4px; /* Rounded corners */
         }
 
         .form-control:focus {
-            background-color: #555; /* Slightly lighter on focus */
+            background-color: #555; /* Slightly lighter background on focus */
             border-color: #007bff; /* Blue border on focus */
             box-shadow: none; /* Remove default focus shadow */
         }
@@ -65,7 +65,7 @@ if (isset($_SESSION['AdminID'])) {
             background-color: #007bff; /* Blue button background */
             border: none; /* Remove border */
             color: #fff; /* White text */
-            width: 100%; /* Full width button */
+            width: 100%; /* Full-width button */
             border-radius: 4px; /* Rounded corners */
             padding: 10px; /* Add padding */
         }
