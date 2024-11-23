@@ -1,28 +1,21 @@
 <?php
-// Include your database configuration
-require 'config.php'; // Ensure this file contains the database credentials as shown earlier
-error_reporting(E_ALL); ini_set('display_errors', 1); // Function to test a connection
-function testConnection($host, $username, $password, $dbname) {
-    $conn = new mysqli($host, $username, $password, $dbname);
+$host = "sql104.infinityfree.com";
+$username = "if0_36048499";
+$password = "LokK4Hhvygq";
 
-    if ($conn->connect_error) {
-        echo "Connection to database '$dbname' failed: " . $conn->connect_error . "\n";
-        return false;
-    } else {
-        echo "Connected successfully to database '$dbname'.\n";
-        $conn->close();
-        return true;
-    }
+$dbname1 = "if0_36048499_db_user";
+$dbname2 = "if0_36048499_db_paste";
+
+$conn1 = new mysqli($host, $username, $password, $dbname1);
+
+if ($conn1->connect_error) {
+    die("Connection failed for first database: " . $conn1->connect_error);
 }
 
-// Test the connections
-echo "Testing connections...\n";
-$success1 = testConnection($host, $username, $password, $dbname1);
-$success2 = testConnection($host, $username, $password, $dbname2);
+$conn2 = new mysqli($host, $username, $password, $dbname2);
 
-if ($success1 && $success2) {
-    echo "All database connections were successful.\n";
-} else {
-    echo "Some database connections failed. Check your configuration.\n";
+if ($conn2->connect_error) {
+    die("Connection failed for second database: " . $conn2->connect_error);
 }
+
 ?>
