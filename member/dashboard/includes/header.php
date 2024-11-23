@@ -6,7 +6,7 @@ session_start();
 <header class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
       
-          <button class="btn d-md-none" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
+          <button class="btn glyphicon glyphicon-chevron-down d-md-none" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="false" aria-controls="sidebar">
         <span class="navbar-toggler-icon"></span>
     </button>
         <a class="navbar-brand" href="index.php">Dashboard</a>
