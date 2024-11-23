@@ -87,7 +87,7 @@ html, body {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .sidebar {
-    
+    transform: translateX(-100%);
   }
 
   .content-wrapper {
