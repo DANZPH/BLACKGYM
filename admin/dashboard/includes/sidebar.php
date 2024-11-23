@@ -1,4 +1,4 @@
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
     <ul class="nav flex-column">
         <li class="nav-item">
             <a class="nav-link" href="index.php">
