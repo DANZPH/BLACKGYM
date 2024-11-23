@@ -53,8 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error updating membership status in Membership: " . $updateMembershipStmt->error);
         }
 
-        // Calculate the number of months for the subscription (Subscription ÷ 600)
-        $subscription;
+        // Get the Subscription value (which will be used to calculate the EndDate)
+        $subscription = $amount;
+
+        // Calculate the number of months based on the Subscription value (Subscription ÷ 600)
         $numMonths = $subscription / 600;
 
         // Calculate the new EndDate by adding the number of months to the current date
@@ -71,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Commit transaction if all updates are successful
         $conn1->commit();
 
-        echo "Payment processed, statuses updated to Active, and EndDate set!";
+        echo "Payment processed, statuses updated to Active, and EndDate set based on subscription!";
     } catch (Exception $e) {
         // Rollback transaction on any error
         $conn1->rollback();
