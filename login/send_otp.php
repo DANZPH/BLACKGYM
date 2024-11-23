@@ -107,7 +107,7 @@ function sendOTP($email, $otp) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('blackgym@gmail.com'); // Your Gmail
+        $mail->setFrom('kentdancel20@gmail.com'); // Your Gmail
         $mail->addAddress($email);
 
         $mail->isHTML(true);
