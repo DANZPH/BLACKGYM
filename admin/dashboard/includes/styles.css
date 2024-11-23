@@ -17,13 +17,7 @@ html, body {
   color: #fff;
   padding-top: 20px;
   z-index: 1000;
-  overflow-y: auto;
-  transform: translateX(0); /* Default visible */
-  transition: transform 0.3s ease-in-out;
-}
-
-.sidebar.hidden {
-  transform: translateX(-100%); /* Hide sidebar */
+  overflow-y: auto; /* Allows scrolling if sidebar content overflows */
 }
 
 .sidebar a {
@@ -44,13 +38,10 @@ html, body {
   background-color: black;
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 250px;
+  width: calc(100% - 250px);
   z-index: 9999;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .navbar-nav .nav-link {
@@ -60,14 +51,6 @@ html, body {
 .navbar-brand {
   color: #fff;
   text-decoration: none;
-}
-
-.sidebar-toggle {
-  background: none;
-  color: #fff;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
 }
 
 /* Content Wrapper */
@@ -80,17 +63,67 @@ html, body {
   box-sizing: border-box;
 }
 
-.content-wrapper.full {
-  margin-left: 0; /* Full width when sidebar is hidden */
+/* Card Styles */
+.card {
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.card-header {
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Footer */
+.footer {
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+  padding-top: 10px;
+  height: 40px;
+  width: 100%;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: 100%;
+    position: static;
+    height: auto;
+    padding-top: 0;
+  }
+
+  .navbar {
+    left: 0;
+    width: 100%;
   }
 
   .content-wrapper {
     margin-left: 0;
+    margin-top: 56px; /* Adjust for navbar height */
   }
 }
+    
