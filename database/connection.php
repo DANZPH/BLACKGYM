@@ -8,7 +8,7 @@ $dbname2 = "if0_36048499_db_paste";
 
 $conn1 = new mysqli($host, $username, $password, $dbname1);
 
-if ($conn1->connect_error) {
+if (!$conn1->connect_error) {
     die("Connection failed for first database: " . $conn1->connect_error);
 }
 
