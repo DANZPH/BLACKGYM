@@ -1,9 +1,7 @@
 <?php
-error_reporting(E_ALL); ini_set('display_errors', 1); 
 // Include your database configuration
 require 'config.php'; // Ensure this file contains the database credentials as shown earlier
-
-// Function to test a connection
+error_reporting(E_ALL); ini_set('display_errors', 1); // Function to test a connection
 function testConnection($host, $username, $password, $dbname) {
     $conn = new mysqli($host, $username, $password, $dbname);
 
