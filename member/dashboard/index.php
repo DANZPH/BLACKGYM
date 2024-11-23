@@ -80,8 +80,8 @@ if ($endDate) {
 
             <!-- Main Content -->
             <div class="col-md-9">
-                <h2>Welcome to Your Dashboard</h2>
-                <p>Here you can view and manage your membership, payments, and attendance.</p>
+                <h2>Dashboard</h2>
+                <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
 
                 <!-- Membership Status Section -->
                 <?php if ($membershipStatus !== 'Pending'): ?>
