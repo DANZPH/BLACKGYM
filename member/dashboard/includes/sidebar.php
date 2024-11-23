@@ -1,5 +1,5 @@
 <!-- sidebar.php -->
-<div class="col-md-3 bg-light">
+<div class="col-md-3 bg-light fixed-top">
     <div class="collapse d-md-block" id="sidebar">
         <div class="list-group">
             <a href="index.php" class="list-group-item list-group-item-action">Dashboard Home</a>
