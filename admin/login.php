@@ -100,8 +100,9 @@ if (isset($_SESSION['AdminID'])) {
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" class="form-control" required>
-                    <a href="../login/forgot_password.php" class="forgot-password">Forgot password?</a>
+
                 </div>
+                                    <a href="../login/forgot_password.php" class="forgot-password">Forgot password?</a>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </div>
