@@ -18,31 +18,46 @@ if (isset($_SESSION['AdminID'])) {
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
-        <link rel="stylesheet" href="dashboard/includes/styles.css">
+    <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .card {
+            width: 100%; /* Ensures responsiveness */
+            max-width: 400px; /* Limits the maximum size of the card */
+            margin: auto; /* Centers the card */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for visibility */
+            border-radius: 10px; /* Slightly rounded corners for aesthetics */
+        }
+        .card-header {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white;
+            text-align: center;
+        }
+        .card-body {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header h2">Admin Login</div>
-                    <div class="card-body">
-                        <form action="action/login_process.php" method="POST">
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                                <a href="../login/forgot_password.php">Forgot password</a>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
-                    </div>
+            <div class="card">
+                <div class="card-header h2">Admin Login</div>
+                <div class="card-body">
+                    <form action="action/login_process.php" method="POST">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                            <a href="../login/forgot_password.php" class="d-block mt-2">Forgot password</a>
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
