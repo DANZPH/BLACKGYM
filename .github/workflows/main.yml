@@ -15,4 +15,4 @@ jobs:
         username: ${{ secrets.FTPUSERNAME }}
         password: ${{ secrets.FTPPASSWORD }}
         protocol: ftps
-        server-dir: beta.dazx.xyz/htdocs/
+        server-dir: gym.dazx.xyz/htdocs/
