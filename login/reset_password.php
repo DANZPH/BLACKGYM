@@ -11,7 +11,8 @@ require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
-require '../database/connection.php';  // Include the database connection
+//require '../database/connection.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email is set
