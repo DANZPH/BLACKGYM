@@ -45,31 +45,62 @@ if ($endDate) {
             flex-direction: column;
             font-family: 'Roboto', sans-serif;
         }
-          
+
         .membership-card {
             background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .membership-card h5 {
             font-weight: bold;
         }
+
         .membership-card .status-active {
             color: green;
             font-weight: bold;
         }
-        .membership-card .status-expired {
+
+        .membership-card .status-expired,
+        .membership-card .status-pending {
             color: red;
             font-weight: bold;
         }
+
         .remaining-time {
             font-size: 1.2em;
             margin-top: 10px;
         }
+
         .remaining-time span {
             font-weight: bold;
             color: #007bff;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .status-expired .status-icon {
+            color: red;
+        }
+
+        .status-pending .status-icon {
+            color: orange;
+        }
+
+        .status-actions {
+            margin-top: 20px;
+        }
+
+        .btn-renew {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -89,31 +120,53 @@ if ($endDate) {
                 <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
 
                 <!-- Membership Status Section -->
-                <?php if ($membershipStatus !== 'Pending'): ?>
+                <?php if ($membershipStatus === 'Active'): ?>
                     <div class="card membership-card">
                         <div class="card-header">
                             <h5>Membership Status</h5>
                         </div>
                         <div class="card-body">
-                            <?php if ($endDate): ?>
-                                <h5 class="card-title status-active">Active Membership</h5>
-                                <p class="card-text">Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                                <div class="remaining-time">
-                                    <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
-                                </div>
-                            <?php else: ?>
-                                <h5 class="card-title status-expired">No Active Membership</h5>
-                                <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support.</p>
-                            <?php endif; ?>
+                            <h5 class="card-title status-active">Active Membership</h5>
+                            <p class="card-text">Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+                            <div class="remaining-time">
+                                <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
+                            </div>
+                        </div>
+                    </div>
+                <?php elseif ($membershipStatus === 'Expired'): ?>
+                    <div class="card membership-card status-expired">
+                        <div class="text-center">
+                            <div class="status-icon">&#x26A0; <!-- Warning Symbol --></div>
+                            <h5 class="card-title">Membership Expired</h5>
+                            <p class="card-text">Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+                            <p>Please renew your membership to regain access to BLACKGYM facilities.</p>
+                        </div>
+                        <div class="status-actions text-center">
+                            <a href="renew.php" class="btn btn-renew">Renew Membership</a>
+                        </div>
+                    </div>
+                <?php elseif ($membershipStatus === 'Pending'): ?>
+                    <div class="card membership-card status-pending">
+                        <div class="text-center">
+                            <div class="status-icon">&#x1F6A8; <!-- Emergency Light Symbol --></div>
+                            <h5 class="card-title">Membership Pending</h5>
+                            <p>Your membership is currently pending. Please make the necessary payment and wait for approval.</p>
+                        </div>
+                        <div class="status-actions text-center">
+                            <a href="payment.php" class="btn btn-primary">Make Payment</a>
                         </div>
                     </div>
                 <?php else: ?>
-                    <p>Your membership is still pending. Please PAY amd wait for approval.</p>
+                    <div class="card membership-card">
+                        <div class="card-body">
+                            <h5 class="card-title">No Active Membership</h5>
+                            <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support for assistance.</p>
+                        </div>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
-<!--                    <?php include '../../includes/footer.php'; ?>-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
