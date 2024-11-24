@@ -28,8 +28,6 @@ if ($endDate) {
 
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,61 +37,46 @@ if ($endDate) {
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-    html, body {
-        background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-        height: 100%;
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-    }
-
-    /* Fix the header */
-    header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        background-color: #fff; /* Optional: Background color for the header */
-    }
-
-    /* Ensure the body starts below the header */
-    .content-container {
-        margin-top: 70px; /* Adjust this value based on the height of the header */
-    }
-
-    .membership-card {
-        background-color: #f8f9fa;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 20px;
-    }
-    .membership-card h5 {
-        font-weight: bold;
-    }
-    .membership-card .status-active {
-        color: green;
-        font-weight: bold;
-    }
-    .membership-card .status-expired {
-        color: red;
-        font-weight: bold;
-    }
-    .remaining-time {
-        font-size: 1.2em;
-        margin-top: 10px;
-    }
-    .remaining-time span {
-        font-weight: bold;
-        color: #007bff;
-    }
+        html, body {
+            background: linear-gradient(90deg, #bdc3c7, #2c3e50);
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Roboto', sans-serif;
+        }
+          
+        .membership-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .membership-card h5 {
+            font-weight: bold;
+        }
+        .membership-card .status-active {
+            color: green;
+            font-weight: bold;
+        }
+        .membership-card .status-expired {
+            color: red;
+            font-weight: bold;
+        }
+        .remaining-time {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        .remaining-time span {
+            font-weight: bold;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <?php include 'includes/header.php'; ?>
-    </header>
+    <?php include 'includes/header.php'; ?>
 
-    <div class="container content-container">
+    <div class="container mt-5">
         <div class="row">
 
             <?php include 'includes/sidebar.php'; ?>
@@ -125,13 +108,12 @@ if ($endDate) {
                         </div>
                     </div>
                 <?php else: ?>
-                    <p>Your membership is still pending. Please PAY and wait for approval.</p>
+                    <p>Your membership is still pending. Please PAY amd wait for approval.</p>
                 <?php endif; ?>
             </div>
         </div>
     </div>
-    <!-- Footer -->
-    <!-- <?php include '../../includes/footer.php'; ?> -->
+<!--                    <?php include '../../includes/footer.php'; ?>-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
