@@ -81,9 +81,9 @@
     <div>
       <h1 class="text-white mb-4">Welcome to BLACKGYM</h1>
       <div class="d-flex justify-content-center">
-        <a href="admin/login.php" class="btn btn-custom">Admin Login</a>
-        <a href="member/login.php" class="btn btn-custom">Member Login</a>
-        <a href="admin/login.php" class="btn btn-custom">Staff Login</a>
+        <a href="admin/login.php" class="btn btn-custom">Admin </a>
+        <a href="member/login.php" class="btn btn-custom">Member</a>
+        <a href="admin/login.php" class="btn btn-custom">Staff</a>
       </div>
     </div>
   </div>
