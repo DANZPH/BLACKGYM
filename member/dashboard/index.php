@@ -39,6 +39,10 @@ if ($endDate) {
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
+    body {
+      display: flex;
+  flex-direction: column;
+    }
         .membership-card {
             background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
