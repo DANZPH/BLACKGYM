@@ -41,9 +41,21 @@ if ($endDate) {
             background: linear-gradient(90deg, #bdc3c7, #2c3e50);
             height: 100%;
             margin: 0;
-            display: flex;
-            flex-direction: column;
             font-family: 'Roboto', sans-serif;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-container {
+            margin-top: 70px; /* Adjust based on header height */
         }
 
         .membership-card {
@@ -105,11 +117,12 @@ if ($endDate) {
     </style>
 </head>
 <body>
-    <?php include 'includes/header.php'; ?>
+    <header>
+        <?php include 'includes/header.php'; ?>
+    </header>
 
-    <div class="container mt-5">
+    <div class="container content-container">
         <div class="row">
-
             <?php include 'includes/sidebar.php'; ?>
 
             <!-- Main Content -->
@@ -150,26 +163,4 @@ if ($endDate) {
                         <div class="text-center">
                             <div class="status-icon">&#x1F6A8; <!-- Emergency Light Symbol --></div>
                             <h5 class="card-title">Membership Pending</h5>
-                            <p>Your membership is currently pending. Please make the necessary payment and wait for approval.</p>
-                        </div>
-                        <div class="status-actions text-center">
-                            <a href="payment.php" class="btn btn-primary">Make Payment</a>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="card membership-card">
-                        <div class="card-body">
-                            <h5 class="card-title">No Active Membership</h5>
-                            <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support for assistance.</p>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+                            <p>Your membership is currently pending. Please make the necessary payment and wait for
