@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = sendResetEmail($email, $resetToken);
 
             if ($result === true) {
-                echo "Reset link sent to your email.";
+                echo "Its take a time to send Reset link sent to your email. please wait...";
             } else {
                 echo "Error sending reset link: " . $result;
             }
