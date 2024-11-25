@@ -17,8 +17,15 @@ use PHPMailer\PHPMailer\Exception;
 class PDF extends FPDF {
     function Header() {
         $this->SetFont('Arial', 'B', 16);
-        $this->Cell(0, 10, 'Payment Receipt', 0, 1, 'C');
-        $this->Ln(10);
+        $this->Cell(0, 10, 'BLACK GYM PAYMENT RECEIPT', 0, 1, 'C');
+        $this->Ln(5);
+
+        $this->SetFont('Arial', '', 12);
+        $this->Cell(0, 10, 'Gym Name: Black Gym', 0, 1, 'C');
+        $this->Cell(0, 10, 'Address: 123 Fitness St, Healthy City', 0, 1, 'C');
+        $this->Cell(0, 10, 'Contact: +1 (234) 567-890', 0, 1, 'C');
+        $this->Cell(0, 10, 'Email: contact@blackgym.com', 0, 1, 'C');
+        $this->Ln(5);
     }
 
     function Footer() {
@@ -44,7 +51,7 @@ function sendReceiptEmail($email, $name, $pdfContent) {
 
         $mail->isHTML(true);
         $mail->Subject = 'Payment Receipt';
-        $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt attached.</p><p>Thank you!</p>";
+        $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt attached.</p><p>Thank you for being a member of Black Gym!</p>";
 
         $mail->addStringAttachment($pdfContent, 'PaymentReceipt.pdf');
         $mail->send();
@@ -105,16 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdf = new PDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', '', 12);
+
+        // Receipt details
         $pdf->Cell(0, 10, "Receipt Number: $receiptNumber", 0, 1);
         $pdf->Cell(0, 10, "Payment Date: $paymentDate", 0, 1);
         $pdf->Cell(0, 10, "Name: $name", 0, 1);
         $pdf->Cell(0, 10, "Membership Up To: $endDate", 0, 1);
+        $pdf->Ln(5);
+
+        // Payment Details
         $pdf->Cell(0, 10, "Payment Type: $paymentType", 0, 1);
         $pdf->Cell(0, 10, "Amount Due: $$amount", 0, 1);
         $pdf->Cell(0, 10, "Amount Paid: $$amountPaid", 0, 1);
         $pdf->Cell(0, 10, "Change: $$changeAmount", 0, 1);
+        $pdf->Ln(10);
+
+        // Footer
+        $pdf->Cell(0, 10, "Thank you for your payment!", 0, 1, 'C');
+
+        // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
 
+        // Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
         $conn1->commit();
 
