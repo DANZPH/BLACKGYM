@@ -55,7 +55,7 @@
             </a>
             <div id="transactions" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="payments_history.php" class="nav-link">Payments</a></li>
+                    <li class="nav-item"><a href="payment_history.php" class="nav-link">Payments</a></li>
                     <li class="nav-item"><a href="receipt_transaction.php" class="nav-link">Receipts</a></li>
                 </ul>
             </div>
