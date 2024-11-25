@@ -112,7 +112,7 @@ function sendOTP($email, $otp) {
 
         $mail->isHTML(true);
         $mail->Subject = 'Verification Code';
-        $mail->Body = 'Your verification code is: ' . $otp ,' valid until 15mintues';
+        $mail->Body = 'Your verification code is: ' . $otp .' valid until 15mintues';
 
         $mail->send();
         return true;
