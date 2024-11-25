@@ -36,20 +36,20 @@ class PDF extends FPDF {
         $this->SetFont('Arial', '', 9);
         
         // Add a compact table for payment breakdown
-        $this->Cell(40, 6, 'Receipt Number:', 0, 0);
-        $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
+        $this->Cell(40, 6, 'Receipt Number:', 0, 0, 'R');
+        $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1, 'L');
 
-        $this->Cell(40, 6, 'Payment Date:', 0, 0);
-        $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
+        $this->Cell(40, 6, 'Payment Date:', 0, 0, 'R');
+        $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1, 'L');
 
-        $this->Cell(40, 6, 'Amount Due:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['amount'], 2), 0, 1);
+        $this->Cell(40, 6, 'Amount Due:', 0, 0, 'R');
+        $this->Cell(40, 6, '$' . number_format($paymentData['amount'], 2), 0, 1, 'L');
 
-        $this->Cell(40, 6, 'Amount Paid:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['amountPaid'], 2), 0, 1);
+        $this->Cell(40, 6, 'Amount Paid:', 0, 0, 'R');
+        $this->Cell(40, 6, '$' . number_format($paymentData['amountPaid'], 2), 0, 1, 'L');
 
-        $this->Cell(40, 6, 'Change:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['changeAmount'], 2), 0, 1);
+        $this->Cell(40, 6, 'Change:', 0, 0, 'R');
+        $this->Cell(40, 6, '$' . number_format($paymentData['changeAmount'], 2), 0, 1, 'L');
         
         $this->Ln(6);
     }
@@ -136,11 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         // Receipt details
         $pdf->SetFont('Arial', '', 9);
-        $pdf->Cell(0, 6, "Receipt Number: $receiptNumber", 0, 1);
-        $pdf->Cell(0, 6, "Payment Date: $paymentDate", 0, 1);
-        $pdf->Cell(0, 6, "Name: $name", 0, 1);
-        $pdf->Cell(0, 6, "Membership Up To: $endDate", 0, 1);
-        $pdf->Cell(0, 6, "Email: $email", 0, 1);  // Added member email
+        $pdf->Cell(0, 6, "Receipt Number: $receiptNumber", 0, 1, 'C');
+        $pdf->Cell(0, 6, "Payment Date: $paymentDate", 0, 1, 'C');
+        $pdf->Cell(0, 6, "Name: $name", 0, 1, 'C');
+        $pdf->Cell(0, 6, "Membership Up To: $endDate", 0, 1, 'C');
+        $pdf->Cell(0, 6, "Email: $email", 0, 1, 'C');  // Added member email
         $pdf->Ln(4);
 
         // Add payment details table
