@@ -132,62 +132,16 @@ include '../../database/connection.php'; // Include database connection
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
-$(document).ready(function () {
-    $('#paymentsTable').DataTable({
-        scrollX: true,
-        columnDefs: [
-            {
-                targets: [0], // Target the first column (MemberID) to hide it
-                visible: false, // Hide the MemberID column
-            }
-        ]
-    });
-
-    $('.pay-btn').click(function () {
-        var memberID = $(this).data('memberid');
-        var totalBill = $(this).data('totalbill');
-        
-        $('#memberID').val(memberID);
-        $('#amount').val(totalBill); // Set the amount to the total bill
-        $('#paymentModal').modal('show');
-    });
-
-    $('#amountPaid').on('input', function () {
-        var amount = parseFloat($('#amount').val());
-        var amountPaid = parseFloat($(this).val());
-        var change = amountPaid - amount;
-        $('#change').val(change.toFixed(2)); // Show the change
-    });
-
-    $('#paymentForm').submit(function (e) {
-        e.preventDefault();
-
-        var amount = parseFloat($('#amount').val());
-        var amountPaid = parseFloat($('#amountPaid').val());
-
-        // Check if amount paid is less than the total bill
-        if (amountPaid < amount) {
-            alert("Error: Amount Paid cannot be less than the Total Bill.");
-            return; // Prevent form submission
-        }
-
-        var formData = $(this).serialize();
-
-        $.ajax({
-            url: '../action/payment_process.php',
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                alert(response);
-                $('#paymentModal').modal('hide');
-                location.reload(); // Reload the page to show updated payments
-            },
-            error: function () {
-                alert('An error occurred. Please try again.');
-            }
+    $(document).ready(function () {
+        $('#paymentsTable').DataTable({
+            scrollX: true,
+            columnDefs: [
+                {
+                    targets: [0], // Target the first column (MemberID) to hide it
+                    visible: false, // Hide the MemberID column
+                }
+            ]
         });
-    });
-});
 
         $('.pay-btn').click(function () {
             var memberID = $(this).data('memberid');
