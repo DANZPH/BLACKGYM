@@ -1,95 +1,82 @@
 <?php
 session_start();
-if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
-    header('Location: ../../admin/login.php');
-    exit();
-}
+include '../../database/connection.php';
 
-include '../../database/connection.php'; // Include database connection
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the data from the form
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memberID = $_POST['memberID'];
     $paymentType = $_POST['paymentType'];
     $amount = $_POST['amount'];
     $amountPaid = $_POST['amountPaid'];
-    
-    // Calculate the change (if any)
-    $changeAmount = $amountPaid - $amount;
+    $email = $_POST['email'];
 
-    // Check if the amount paid is sufficient
-    if ($amountPaid < $amount) {
-        echo "Error: Amount paid cannot be less than the amount.";
-        exit();
+    $change = $amountPaid - $amount;
+
+    if ($amountPaid >= $amount) {
+        // Update membership status
+        $endDate = date('Y-m-d', strtotime('+1 month'));
+        $sql = "UPDATE Membership SET Status = 'Active', EndDate = ? WHERE MemberID = ?";
+        $stmt = $conn1->prepare($sql);
+        $stmt->bind_param('si', $endDate, $memberID);
+
+        if ($stmt->execute()) {
+            // Log payment
+            $paymentLogSQL = "INSERT INTO Payments (MemberID, AmountPaid, PaymentType, PaymentDate) VALUES (?, ?, ?, NOW())";
+            $paymentLogStmt = $conn1->prepare($paymentLogSQL);
+            $paymentLogStmt->bind_param('ids', $memberID, $amountPaid, $paymentType);
+            $paymentLogStmt->execute();
+
+            // Call the receipt email function
+            sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentType);
+
+            echo 'Payment successful and receipt sent.';
+        } else {
+            echo 'Error updating membership.';
+        }
+    } else {
+        echo 'Amount paid is less than the required amount.';
     }
+}
+$conn1->close();
 
-    // Begin transaction to ensure atomicity
-    $conn1->begin_transaction();
+/**
+ * Function to send payment receipt via email.
+ */
+function sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentType) {
+    require '../../login/phpmailer/src/Exception.php';
+    require '../../login/phpmailer/src/PHPMailer.php';
+    require '../../login/phpmailer/src/SMTP.php';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+
+    $mail = new PHPMailer(true);
 
     try {
-        // Insert the payment details into the Payments table
-        $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
-                                 VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your_email@gmail.com'; // Replace with your email
+        $mail->Password = 'your_app_password'; // Replace with your app password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
 
-        if (!$stmt->execute()) {
-            throw new Exception("Error inserting payment: " . $stmt->error);
-        }
+        $mail->setFrom('your_email@gmail.com', 'Your Business'); // Replace with your sender email
+        $mail->addAddress($email);
 
-        // Update the Members table to set MembershipStatus to 'Active'
-        $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
-        $updateMemberStmt->bind_param("d", $memberID);
+        $mail->isHTML(true);
+        $mail->Subject = 'Payment Receipt';
+        $mail->Body = "
+            <h1>Payment Receipt</h1>
+            <p>Member ID: $memberID</p>
+            <p>Payment Type: $paymentType</p>
+            <p>Amount Due: $$amount</p>
+            <p>Amount Paid: $$amountPaid</p>
+            <p>Change: $$change</p>
+            <p>Thank you for your payment!</p>
+        ";
 
-        if (!$updateMemberStmt->execute()) {
-            throw new Exception("Error updating membership status in Members: " . $updateMemberStmt->error);
-        }
-
-        // Update the Membership table to set Status to 'Active'
-        $updateMembershipStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
-        $updateMembershipStmt->bind_param("d", $memberID);
-
-        if (!$updateMembershipStmt->execute()) {
-            throw new Exception("Error updating membership status in Membership: " . $updateMembershipStmt->error);
-        }
-
-        // Get the Subscription value (which will be used to calculate the EndDate)
-        $subscription = $amount;
-
-        // Calculate the number of months based on the Subscription value (Subscription ÷ 600)
-        $numMonths = $subscription / 600;
-
-        // Ensure that numMonths is an integer value (rounding if necessary)
-        $numMonths = floor($numMonths);
-
-        // Calculate the new EndDate by adding the number of months to the current date
-        // Correcting the logic to handle proper month addition.
-        $endDate = date('Y-m-d H:i:s', strtotime("+$numMonths months"));
-
-        // Update the Membership table to set the calculated EndDate
-        $updateEndDateStmt = $conn1->prepare("UPDATE Membership SET EndDate = ? WHERE MemberID = ?");
-        $updateEndDateStmt->bind_param("sd", $endDate, $memberID);
-
-        if (!$updateEndDateStmt->execute()) {
-            throw new Exception("Error updating EndDate in Membership: " . $updateEndDateStmt->error);
-        }
-
-        // Commit transaction if all updates are successful
-        $conn1->commit();
-
-        echo "Payment processed, statuses updated to Active, and EndDate set based on subscription!";
+        $mail->send();
     } catch (Exception $e) {
-        // Rollback transaction on any error
-        $conn1->rollback();
-        echo "Error processing payment: " . $e->getMessage();
+        error_log("Email Error: " . $e->getMessage());
     }
-
-    // Close the statements
-    $stmt->close();
-    $updateMemberStmt->close();
-    $updateMembershipStmt->close();
-    $updateEndDateStmt->close();
 }
-
-$conn1->close();
 ?>
