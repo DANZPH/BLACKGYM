@@ -35,8 +35,6 @@ include '../../database/connection.php'; // Include database connection
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Membership Status</th>
-                                        <th>Subscription</th>
-                                        <th>Session Price</th>
                                         <th>Total Bill</th>
                                         <th>Status</th>
                                         <th>Action</th>
@@ -45,7 +43,6 @@ include '../../database/connection.php'; // Include database connection
                                 <tbody>
                                     <?php
                                     $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
-                                            Membership.Subscription, Membership.SessionPrice, 
                                             (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
                                             CASE 
                                                 WHEN Membership.Status = 'Active' THEN 'Active'
@@ -64,15 +61,13 @@ include '../../database/connection.php'; // Include database connection
                                                 <td>{$row['Username']}</td>
                                                 <td>{$row['Email']}</td>
                                                 <td>{$row['MembershipStatus']}</td>
-                                                <td>" . number_format($row['Subscription'], 2) . "</td>
-                                                <td>" . number_format($row['SessionPrice'], 2) . "</td>
                                                 <td>" . number_format($row['TotalBill'], 2) . "</td>
                                                 <td>{$row['Status']}</td>
                                                 <td><button class='btn btn-primary history-btn' data-memberid='{$row['MemberID']}'>View History</button></td>
                                             </tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
+                                        echo "<tr><td colspan='7' class='text-center'>No members found</td></tr>";
                                     }
                                     ?>
                                 </tbody>
@@ -86,11 +81,11 @@ include '../../database/connection.php'; // Include database connection
     <?php include '../../includes/footer.php'; ?>
 
     <!-- Modal for History -->
-    <div class="modal" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="historyModalLabel">Member History</h5>
+                    <h5 class="modal-title" id="historyModalLabel">Payment History</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
