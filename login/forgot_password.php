@@ -92,7 +92,7 @@
             <button type="submit">Reset Password</button>
         </form>
         <div class="footer">
-            <p>Remembered your password? <a href="/member">Login here</a></p>
+            <p>Remembered your password? <a href="https://gym.dazx.xyz/member/login.php">Login here</a></p>
         </div>
     </div>
 
