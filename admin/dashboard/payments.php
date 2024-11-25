@@ -1,20 +1,18 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
 
-include '../../database/connection.php'; // Include database connection
+include '../../database/connection.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-                  <?php include '../../includes/head.php'; ?>
+<?php include '../../includes/head.php'; ?>
 
 <body>
-
 <?php include 'includes/header.php'; ?>
 
 <div class="container-fluid mt-3">
@@ -32,7 +30,7 @@ include '../../database/connection.php'; // Include database connection
                         <table id="paymentsTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
+                                    <th style="display:none;">Member ID</th>
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Membership Status</th>
@@ -48,11 +46,7 @@ include '../../database/connection.php'; // Include database connection
                                 $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
                                         Membership.Subscription, Membership.SessionPrice, 
                                         (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
-                                        CASE 
-                                            WHEN Membership.Status = 'Active' THEN 'Active'
-                                            WHEN Membership.Status = 'Pending' THEN 'Pending'
-                                            WHEN Membership.Status = 'Expired' THEN 'Expired'
-                                        END AS Status
+                                        Membership.Status
                                         FROM Members 
                                         INNER JOIN Users ON Members.UserID = Users.UserID
                                         LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
@@ -61,7 +55,7 @@ include '../../database/connection.php'; // Include database connection
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
-                                            <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
+                                            <td style='display:none;'>{$row['MemberID']}</td>
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['MembershipStatus']}</td>
@@ -69,8 +63,10 @@ include '../../database/connection.php'; // Include database connection
                                             <td>" . number_format($row['SessionPrice'], 2) . "</td>
                                             <td>" . number_format($row['TotalBill'], 2) . "</td>
                                             <td>{$row['Status']}</td>
-                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}' 
-                                                data-totalbill='{$row['TotalBill']}'>Pay</button></td>
+                                            <td>
+                                                <button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}'
+                                                data-totalbill='{$row['TotalBill']}' data-email='{$row['Email']}'>Pay</button>
+                                            </td>
                                         </tr>";
                                     }
                                 } else {
@@ -85,13 +81,15 @@ include '../../database/connection.php'; // Include database connection
         </div>
     </div>
 </div>
-    <?php include '../../includes/footer.php'; ?>
-<!-- Modal for Payment -->
-<div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+
+<?php include '../../includes/footer.php'; ?>
+
+<!-- Payment Modal -->
+<div class="modal" id="paymentModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="paymentModalLabel">Process Payment</h5>
+        <h5 class="modal-title">Process Payment</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -119,6 +117,7 @@ include '../../database/connection.php'; // Include database connection
             <input type="number" class="form-control" id="change" name="change" readonly>
           </div>
           <input type="hidden" id="memberID" name="memberID">
+          <input type="hidden" id="email" name="email">
           <button type="submit" class="btn btn-primary">Submit Payment</button>
         </form>
       </div>
@@ -126,29 +125,20 @@ include '../../database/connection.php'; // Include database connection
   </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
 <script>
     $(document).ready(function () {
         $('#paymentsTable').DataTable({
-            scrollX: true,
-            columnDefs: [
-                {
-                    targets: [0], // Target the first column (MemberID) to hide it
-                    visible: false, // Hide the MemberID column
-                }
-            ]
+            scrollX: true
         });
 
         $('.pay-btn').click(function () {
             var memberID = $(this).data('memberid');
             var totalBill = $(this).data('totalbill');
-            
+            var email = $(this).data('email');
+
             $('#memberID').val(memberID);
-            $('#amount').val(totalBill); // Set the amount to the total bill
+            $('#email').val(email);
+            $('#amount').val(totalBill);
             $('#paymentModal').modal('show');
         });
 
@@ -156,12 +146,11 @@ include '../../database/connection.php'; // Include database connection
             var amount = parseFloat($('#amount').val());
             var amountPaid = parseFloat($(this).val());
             var change = amountPaid - amount;
-            $('#change').val(change.toFixed(2)); // Show the change
+            $('#change').val(change.toFixed(2));
         });
 
         $('#paymentForm').submit(function (e) {
             e.preventDefault();
-
             var formData = $(this).serialize();
 
             $.ajax({
@@ -171,7 +160,7 @@ include '../../database/connection.php'; // Include database connection
                 success: function (response) {
                     alert(response);
                     $('#paymentModal').modal('hide');
-                    location.reload(); // Reload the page to show updated payments
+                    location.reload();
                 },
                 error: function () {
                     alert('An error occurred. Please try again.');
@@ -180,6 +169,5 @@ include '../../database/connection.php'; // Include database connection
         });
     });
 </script>
-
 </body>
 </html>
