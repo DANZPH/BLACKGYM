@@ -95,7 +95,7 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
                     <h4 class="card-title">
                         <i class="fas fa-dumbbell text-info"></i> Current People
                     </h4>
-                    <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
+                    <h2 class="card-text text-info"><?php echo $currentPeople; ?>/100</h2>
                 </div>
                 <a href="attendance.php" class="btn btn-outline-info btn-sm">View</a>
             </div>
