@@ -149,7 +149,7 @@ function sendResetEmail($email, $resetToken) {
                 <p>Hello,</p>
                 <p>We received a request to reset the password for your Black Gym account. If you did not request this, please ignore this email.</p>
                 <p>To reset your password, please click the link below:</p>
-                <a href='https://beta.dazx.xyz/login/reset.php?email=$email&token=$resetToken' class='reset-link'>
+                <a href='https://gym.dazx.xyz/login/reset.php?email=$email&token=$resetToken' class='reset-link'>
                     Reset Your Password
                 </a>
                 <p>This link will expire in 30 minutes. If you don't reset your password within that time, you will need to request a new password reset.</p>
