@@ -166,7 +166,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
-
-        // Send receipt email
+// Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
         $conn1->commit();
+
+        echo "Payment processed successfully. Receipt sent to $email.";
+    } catch (Exception $e) {
+        $conn1->rollback();
+        echo "Error processing payment: " . $e->getMessage();
+    }
+
+    // Close all statements
+    $stmt->close();
+    $updateMemberStmt->close();
+    $updateMembershipStmt->close();
+}
+
+// Close the database connection
+$conn1->close();
+?>
