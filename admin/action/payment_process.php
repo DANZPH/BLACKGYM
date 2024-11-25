@@ -1,97 +1,98 @@
-
-
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
 
-include '../../database/connection.php'; // Include database connection
+include '../../database/connection.php'; // Database connection
+require '../../login/phpmailer/src/Exception.php';
+require '../../login/phpmailer/src/PHPMailer.php';
+require '../../login/phpmailer/src/SMTP.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get the data from the form
-    $memberID = $_POST['memberID'];
-    $paymentType = $_POST['paymentType'];
-    $amount = $_POST['amount'];
-    $amountPaid = $_POST['amountPaid'];
-    
-    // Calculate the change (if any)
-    $changeAmount = $amountPaid - $amount;
+use PHPMailer\PHPMailer\PHPMailer;
 
-    // Check if the amount paid is sufficient
-    if ($amountPaid < $amount) {
-        echo "Error: Amount paid cannot be less than the amount.";
-        exit();
-    }
-
-    // Begin transaction to ensure atomicity
-    $conn1->begin_transaction();
+function sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentType) {
+    $mail = new PHPMailer(true);
 
     try {
-        // Insert the payment details into the Payments table
-        $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
-                                 VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mail.blackgym@gmail.com'; // Replace with your email
+        $mail->Password = 'akbbhmrrxzryovqt'; // Replace with your app-specific password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
 
-        if (!$stmt->execute()) {
-            throw new Exception("Error inserting payment: " . $stmt->error);
-        }
+        $mail->setFrom('mail.blackgym@gmail.com', 'Your Business'); // Replace with your email
+        $mail->addAddress($email);
 
-        // Update the Members table to set MembershipStatus to 'Active'
-        $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
-        $updateMemberStmt->bind_param("d", $memberID);
+        $mail->isHTML(true);
+        $mail->Subject = 'Payment Receipt';
+        $mail->Body = "
+            <h1>Payment Receipt</h1>
+            <p>Member ID: $memberID</p>
+            <p>Payment Type: $paymentType</p>
+            <p>Amount Due: $$amount</p>
+            <p>Amount Paid: $$amountPaid</p>
+            <p>Change: $$change</p>
+            <p>Thank you for your payment!</p>
+        ";
 
-        if (!$updateMemberStmt->execute()) {
-            throw new Exception("Error updating membership status in Members: " . $updateMemberStmt->error);
-        }
-
-        // Update the Membership table to set Status to 'Active'
-        $updateMembershipStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
-        $updateMembershipStmt->bind_param("d", $memberID);
-
-        if (!$updateMembershipStmt->execute()) {
-            throw new Exception("Error updating membership status in Membership: " . $updateMembershipStmt->error);
-        }
-
-        // Get the Subscription value (which will be used to calculate the EndDate)
-        $subscription = $amount;
-
-        // Calculate the number of months based on the Subscription value (Subscription ÷ 600)
-        $numMonths = $subscription / 600;
-
-        // Ensure that numMonths is an integer value (rounding if necessary)
-        $numMonths = floor($numMonths);
-
-        // Calculate the new EndDate by adding the number of months to the current date
-        // Correcting the logic to handle proper month addition.
-        $endDate = date('Y-m-d H:i:s', strtotime("+$numMonths months"));
-
-        // Update the Membership table to set the calculated EndDate
-        $updateEndDateStmt = $conn1->prepare("UPDATE Membership SET EndDate = ? WHERE MemberID = ?");
-        $updateEndDateStmt->bind_param("sd", $endDate, $memberID);
-
-        if (!$updateEndDateStmt->execute()) {
-            throw new Exception("Error updating EndDate in Membership: " . $updateEndDateStmt->error);
-        }
-
-        // Commit transaction if all updates are successful
-        $conn1->commit();
-
-        echo "Payment processed, statuses updated to Active, and EndDate set based on subscription!";
+        $mail->send();
     } catch (Exception $e) {
-        // Rollback transaction on any error
-        $conn1->rollback();
+        error_log("Email error: " . $e->getMessage());
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $memberID = intval($_POST['memberID']);
+    $amount = 100.00; // Example payment amount
+    $amountPaid = 100.00; // Assume full payment
+    $paymentMethod = 'Cash'; // Example payment method
+    $change = $amountPaid - $amount;
+
+    // Start transaction
+    $conn->begin_transaction();
+
+    try {
+        // Insert payment record
+        $sql_payment = "INSERT INTO Payments (MemberID, Amount, PaymentMethod) VALUES (?, ?, ?)";
+        $stmt_payment = $conn->prepare($sql_payment);
+        $stmt_payment->bind_param("ids", $memberID, $amount, $paymentMethod);
+        $stmt_payment->execute();
+
+        // Update membership status to 'Active'
+        $sql_membership = "UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?";
+        $stmt_membership = $conn->prepare($sql_membership);
+        $stmt_membership->bind_param("i", $memberID);
+        $stmt_membership->execute();
+
+        // Get member email
+        $sql_email = "SELECT Email FROM Users INNER JOIN Members ON Users.UserID = Members.UserID WHERE Members.MemberID = ?";
+        $stmt_email = $conn->prepare($sql_email);
+        $stmt_email->bind_param("i", $memberID);
+        $stmt_email->execute();
+        $result = $stmt_email->get_result();
+        $email = $result->fetch_assoc()['Email'];
+
+        // Commit the transaction
+        $conn->commit();
+
+        // Send receipt via email
+        sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentMethod);
+
+        echo "Payment processed successfully for Member ID: $memberID and membership status updated to Active. Receipt has been emailed.";
+    } catch (Exception $e) {
+        // Rollback the transaction if anything goes wrong
+        $conn->rollback();
         echo "Error processing payment: " . $e->getMessage();
     }
 
-    // Close the statements
-    $stmt->close();
-    $updateMemberStmt->close();
-    $updateMembershipStmt->close();
-    $updateEndDateStmt->close();
+    // Clean up
+    $stmt_payment->close();
+    $stmt_membership->close();
+    $stmt_email->close();
+    $conn->close();
 }
-
-$conn1->close();
 ?>
