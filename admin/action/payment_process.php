@@ -16,22 +16,51 @@ use PHPMailer\PHPMailer\Exception;
 
 class PDF extends FPDF {
     function Header() {
-        $this->SetFont('Arial', 'B', 16);
-        $this->Cell(0, 10, 'BLACK GYM PAYMENT RECEIPT', 0, 1, 'C');
-        $this->Ln(5);
+        $this->SetFont('Arial', 'B', 12);
+        $this->Cell(0, 6, 'BLACK GYM PAYMENT RECEIPT', 0, 1, 'C');
+        $this->Ln(4);
+        $this->SetFont('Arial', '', 9);
+        $this->Cell(0, 6, 'Gym Name: Black Gym', 0, 1, 'C');
+        $this->Cell(0, 6, 'Address: 123 Fitness St, Healthy City', 0, 1, 'C');
+        $this->Cell(0, 6, 'Contact: +1 (234) 567-890 | Email: contact@blackgym.com', 0, 1, 'C');
+        $this->Ln(6);
 
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(0, 10, 'Gym Name: Black Gym', 0, 1, 'C');
-        $this->Cell(0, 10, 'Address: 123 Fitness St, Healthy City', 0, 1, 'C');
-        $this->Cell(0, 10, 'Contact: +1 (234) 567-890', 0, 1, 'C');
-        $this->Cell(0, 10, 'Email: contact@blackgym.com', 0, 1, 'C');
-        $this->Ln(5);
+        // Add a line after the header
+        $this->SetLineWidth(0.5);
+        $this->Line(10, $this->GetY(), 200, $this->GetY());
+        $this->Ln(4);
     }
 
     function Footer() {
         $this->SetY(-15);
-        $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
+        $this->SetFont('Arial', 'I', 7);
+        $this->Cell(0, 4, 'Page ' . $this->PageNo(), 0, 0, 'C');
+    }
+
+    function PaymentDetailsTable($paymentData) {
+        $this->SetFont('Arial', '', 9);
+        
+        // Add a compact table for payment breakdown
+        $this->Cell(40, 6, 'Receipt Number:', 0, 0);
+        $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
+
+        $this->Cell(40, 6, 'Payment Date:', 0, 0);
+        $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
+
+        $this->Cell(40, 6, 'Amount Due:', 0, 0);
+        $this->Cell(40, 6, '$' . number_format($paymentData['amount'], 2), 0, 1);
+
+        $this->Cell(40, 6, 'Amount Paid:', 0, 0);
+        $this->Cell(40, 6, '$' . number_format($paymentData['amountPaid'], 2), 0, 1);
+
+        $this->Cell(40, 6, 'Change:', 0, 0);
+        $this->Cell(40, 6, '$' . number_format($paymentData['changeAmount'], 2), 0, 1);
+        
+        // Add a line after the payment details
+        $this->Ln(6);
+        $this->SetLineWidth(0.5);
+        $this->Line(10, $this->GetY(), 200, $this->GetY());
+        $this->Ln(4);
     }
 }
 
@@ -46,7 +75,7 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('mail.blackgym@gmail.com', 'Your Business');
+        $mail->setFrom('mail.blackgym@gmail.com', 'Black Gym');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
@@ -100,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error updating membership: " . $updateMembershipStmt->error);
         }
 
+        // Fetching email and name for the member
         $emailQuery = $conn1->prepare("SELECT Users.Email, Users.Username AS Name FROM Users 
                                        INNER JOIN Members ON Users.UserID = Members.UserID 
                                        WHERE Members.MemberID = ?");
@@ -109,26 +139,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
+        // Generate PDF
         $pdf = new PDF();
         $pdf->AddPage();
-        $pdf->SetFont('Arial', '', 12);
-
+        
         // Receipt details
-        $pdf->Cell(0, 10, "Receipt Number: $receiptNumber", 0, 1);
-        $pdf->Cell(0, 10, "Payment Date: $paymentDate", 0, 1);
-        $pdf->Cell(0, 10, "Name: $name", 0, 1);
-        $pdf->Cell(0, 10, "Membership Up To: $endDate", 0, 1);
-        $pdf->Ln(5);
+        $pdf->SetFont('Arial', '', 9);
+        $pdf->Cell(0, 6, "Receipt Number: $receiptNumber", 0, 1);
+        $pdf->Cell(0, 6, "Payment Date: $paymentDate", 0, 1);
+        $pdf->Cell(0, 6, "Name: $name", 0, 1);
+        $pdf->Cell(0, 6, "Membership Up To: $endDate", 0, 1);
+        $pdf->Cell(0, 6, "Email: $email", 0, 1);  // Added member email
+        $pdf->Ln(4);
 
-        // Payment Details
-        $pdf->Cell(0, 10, "Payment Type: $paymentType", 0, 1);
-        $pdf->Cell(0, 10, "Amount Due: $$amount", 0, 1);
-        $pdf->Cell(0, 10, "Amount Paid: $$amountPaid", 0, 1);
-        $pdf->Cell(0, 10, "Change: $$changeAmount", 0, 1);
-        $pdf->Ln(10);
+        // Add payment details table
+        $pdf->PaymentDetailsTable([
+            'receiptNumber' => $receiptNumber,
+            'paymentDate' => $paymentDate,
+            'amount' => $amount,
+            'amountPaid' => $amountPaid,
+            'changeAmount' => $changeAmount
+        ]);
 
         // Footer
-        $pdf->Cell(0, 10, "Thank you for your payment!", 0, 1, 'C');
+        $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
 
         // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
