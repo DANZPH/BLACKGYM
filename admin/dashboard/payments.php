@@ -6,180 +6,165 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
-include '../../database/connection.php'; // Include database connection
-?>
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+include '../../database/connection.php';
 
-<!DOCTYPE html>
-<html lang="en">
-                  <?php include '../../includes/head.php'; ?>
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-<body>
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get the data from the form
+    $memberID = $_POST['memberID'];
+    $paymentType = $_POST['paymentType'];
+    $amount = $_POST['amount'];
+    $amountPaid = $_POST['amountPaid'];
+    $changeAmount = $amountPaid - $amount;
 
-<?php include 'includes/header.php'; ?>
+    if ($amountPaid < $amount) {
+        echo "Error: Amount paid cannot be less than the amount.";
+        exit();
+    }
 
-<div class="container-fluid mt-3">
-    <div class="row">
-        <?php include 'includes/sidebar.php'; ?>
+    // Begin transaction to ensure atomicity
+    $conn1->begin_transaction();
 
-        <div class="col-md-9 content-wrapper">
-            <h2 class="mb-4">Member Payments</h2>
-            <div class="card">
-                <div class="card-header">
-                    <h5>Members Payment Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="paymentsTable" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Membership Status</th>
-                                    <th>Subscription</th>
-                                    <th>Session Price</th>
-                                    <th>Total Bill</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
-                                        Membership.Subscription, Membership.SessionPrice, 
-                                        (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
-                                        CASE 
-                                            WHEN Membership.Status = 'Active' THEN 'Active'
-                                            WHEN Membership.Status = 'Pending' THEN 'Pending'
-                                            WHEN Membership.Status = 'Expired' THEN 'Expired'
-                                        END AS Status
-                                        FROM Members 
-                                        INNER JOIN Users ON Members.UserID = Users.UserID
-                                        LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
-                                $result = $conn1->query($sql);
+    try {
+        // Insert the payment details into the Payments table
+        $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount) 
+                                 VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("isddd", $memberID, $paymentType, $amount, $amountPaid, $changeAmount);
 
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td>" . number_format($row['Subscription'], 2) . "</td>
-                                            <td>" . number_format($row['SessionPrice'], 2) . "</td>
-                                            <td>" . number_format($row['TotalBill'], 2) . "</td>
-                                            <td>{$row['Status']}</td>
-                                            <td><button class='btn btn-primary pay-btn' data-memberid='{$row['MemberID']}' 
-                                                data-totalbill='{$row['TotalBill']}'>Pay</button></td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+        if (!$stmt->execute()) {
+            throw new Exception("Error inserting payment: " . $stmt->error);
+        }
+
+        // Update the Members and Membership tables
+        $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
+        $updateMemberStmt->bind_param("d", $memberID);
+        $updateMemberStmt->execute();
+
+        $updateMembershipStmt = $conn1->prepare("UPDATE Membership SET Status = 'Active' WHERE MemberID = ?");
+        $updateMembershipStmt->bind_param("d", $memberID);
+        $updateMembershipStmt->execute();
+
+        // Calculate the subscription period and EndDate
+        $numMonths = floor($amount / 600);
+        $endDate = date('Y-m-d', strtotime("+$numMonths months"));
+
+        $updateEndDateStmt = $conn1->prepare("UPDATE Membership SET EndDate = ? WHERE MemberID = ?");
+        $updateEndDateStmt->bind_param("sd", $endDate, $memberID);
+        $updateEndDateStmt->execute();
+
+        // Fetch the Member details for the receipt
+        $fetchMemberStmt = $conn1->prepare("SELECT * FROM Members WHERE MemberID = ?");
+        $fetchMemberStmt->bind_param("d", $memberID);
+        $fetchMemberStmt->execute();
+        $member = $fetchMemberStmt->get_result()->fetch_assoc();
+
+        // Commit transaction
+        $conn1->commit();
+
+        // Prepare receipt content
+        $receiptNumber = uniqid('REC-', true);
+        $transactionDate = date('Y-m-d H:i:s');
+        $customerName = $member['FullName'];
+        $customerEmail = $member['Email'];
+        $billingAddress = $member['Address'];
+
+        $receiptContent = "
+        <html>
+        <head>
+            <style>
+                .receipt { font-family: Arial, sans-serif; }
+                .receipt h1 { text-align: center; }
+                .receipt table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                .receipt th, .receipt td { padding: 8px 12px; border: 1px solid #ddd; }
+                .receipt .footer { margin-top: 20px; text-align: center; font-size: 12px; }
+            </style>
+        </head>
+        <body>
+            <div class='receipt'>
+                <h1>Business Name</h1>
+                <p>Business Address | Phone: 123-456-7890 | Email: info@business.com</p>
+                <h2>RECEIPT</h2>
+                <p>Receipt Number: $receiptNumber</p>
+                <p>Date: $transactionDate</p>
+
+                <h3>Customer Information:</h3>
+                <p>Name: $customerName</p>
+                <p>Email: $customerEmail</p>
+                <p>Billing Address: $billingAddress</p>
+
+                <h3>Transaction Details:</h3>
+                <table>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                    </tr>
+                    <tr>
+                        <td>Membership Fee</td>
+                        <td>1</td>
+                        <td>\$$amount</td>
+                        <td>\$$amount</td>
+                    </tr>
+                </table>
+
+                <p><strong>Subtotal:</strong> \$$amount</p>
+                <p><strong>Amount Paid:</strong> \$$amountPaid</p>
+                <p><strong>Change Given:</strong> \$$changeAmount</p>
+                <p><strong>End Date:</strong> $endDate</p>
+
+                <h3>Payment Method: $paymentType</h3>
+                <h3>Transaction ID: $receiptNumber</h3>
+
+                <div class='footer'>
+                    <p>Thank you for your payment!</p>
+                    <p>Visit our website for more information.</p>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-    <?php include '../../includes/footer.php'; ?>
-<!-- Modal for Payment -->
-<div class="modal" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="paymentModalLabel">Process Payment</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="paymentForm">
-          <div class="form-group">
-            <label for="paymentType">Payment Type</label>
-            <select class="form-control" id="paymentType" name="paymentType">
-              <option value="Cash">Cash</option>
-              <option value="Credit">Credit</option>
-              <option value="Debit">Debit</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="amount">Amount</label>
-            <input type="number" class="form-control" id="amount" name="amount" readonly>
-          </div>
-          <div class="form-group">
-            <label for="amountPaid">Amount Paid</label>
-            <input type="number" class="form-control" id="amountPaid" name="amountPaid" required>
-          </div>
-          <div class="form-group">
-            <label for="change">Change</label>
-            <input type="number" class="form-control" id="change" name="change" readonly>
-          </div>
-          <input type="hidden" id="memberID" name="memberID">
-          <button type="submit" class="btn btn-primary">Submit Payment</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+        </body>
+        </html>";
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+        // Send the receipt via email
+        $mail = new PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'mail.blackgym@gmail.com'; // Your Gmail
+            $mail->Password = 'akbbhmrrxzryovqt'; // Your Gmail app password
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
 
-<script>
-    $(document).ready(function () {
-        $('#paymentsTable').DataTable({
-            scrollX: true,
-            columnDefs: [
-                {
-                    targets: [0], // Target the first column (MemberID) to hide it
-                    visible: false, // Hide the MemberID column
-                }
-            ]
-        });
+            $mail->setFrom('mail.blackgym@gmail.com');
+            $mail->addAddress($customerEmail);
 
-        $('.pay-btn').click(function () {
-            var memberID = $(this).data('memberid');
-            var totalBill = $(this).data('totalbill');
-            
-            $('#memberID').val(memberID);
-            $('#amount').val(totalBill); // Set the amount to the total bill
-            $('#paymentModal').modal('show');
-        });
+            $mail->isHTML(true);
+            $mail->Subject = 'Payment Receipt';
+            $mail->Body = $receiptContent;
 
-        $('#amountPaid').on('input', function () {
-            var amount = parseFloat($('#amount').val());
-            var amountPaid = parseFloat($(this).val());
-            var change = amountPaid - amount;
-            $('#change').val(change.toFixed(2)); // Show the change
-        });
+            $mail->send();
+            echo "Payment processed successfully, and receipt sent to $customerEmail!";
+        } catch (Exception $e) {
+            echo "Payment processed, but receipt could not be sent: " . $mail->ErrorInfo;
+        }
 
-        $('#paymentForm').submit(function (e) {
-            e.preventDefault();
+    } catch (Exception $e) {
+        // Rollback transaction on any error
+        $conn1->rollback();
+        echo "Error processing payment: " . $e->getMessage();
+    }
 
-            var formData = $(this).serialize();
+    // Close the statements
+    $stmt->close();
+    $updateMemberStmt->close();
+    $updateMembershipStmt->close();
+    $updateEndDateStmt->close();
+}
 
-            $.ajax({
-                url: '../action/payment_process.php',
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    alert(response);
-                    $('#paymentModal').modal('hide');
-                    location.reload(); // Reload the page to show updated payments
-                },
-                error: function () {
-                    alert('An error occurred. Please try again.');
-                }
-            });
-        });
-    });
-</script>
-
-</body>
-</html>
+$conn1->close();
+?>
