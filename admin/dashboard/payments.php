@@ -11,7 +11,7 @@ include '../../database/connection.php'; // Include database connection
 
 <!DOCTYPE html>
 <html lang="en">
-                  <?php include '../../includes/head.php'; ?>
+<?php include '../../includes/head.php'; ?>
 
 <body>
 
@@ -162,6 +162,15 @@ include '../../database/connection.php'; // Include database connection
         $('#paymentForm').submit(function (e) {
             e.preventDefault();
 
+            var amount = parseFloat($('#amount').val());
+            var amountPaid = parseFloat($('#amountPaid').val());
+
+            // Check if amount paid is less than the total bill
+            if (amountPaid < amount) {
+                alert("Error: Amount Paid cannot be less than the Total Bill.");
+                return; // Prevent form submission
+            }
+
             var formData = $(this).serialize();
 
             $.ajax({
@@ -183,5 +192,3 @@ include '../../database/connection.php'; // Include database connection
 
 </body>
 </html>
-
-
