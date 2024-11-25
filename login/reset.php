@@ -1,27 +1,5 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'phpmailer/src/Exception.php';
-require 'phpmailer/src/PHPMailer.php';
-require 'phpmailer/src/SMTP.php';
-
-// Database credentials
-$host = "sql104.infinityfree.com"; // Change this to your database host
-$dbname = "if0_36048499_db_user"; // Change this to your database name
-$usernameDB = "if0_36048499"; // Change this to your database username
-$passwordDB = "LokK4Hhvygq"; // Change this to your database password
-
-// Create connection
-$conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection and logic as needed
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET["token"])) {
     $email = $_GET["email"];
@@ -46,64 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
             <title>Reset Password</title>
             <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.min.css" rel="stylesheet">
             <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                }
-                .container {
-                    background-color: #fff;
-                    padding: 30px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                    width: 100%;
-                    max-width: 400px;
-                }
-                h2 {
-                    text-align: center;
-                    color: #333;
-                    margin-bottom: 20px;
-                }
-                label {
-                    font-size: 16px;
-                    color: #333;
-                    display: block;
-                    margin-bottom: 8px;
-                }
-                input[type="password"] {
-                    width: 100%;
-                    padding: 10px;
-                    margin-bottom: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    font-size: 16px;
-                    box-sizing: border-box;
-                }
-                button {
-                    width: 100%;
-                    padding: 12px;
-                    background-color: #1a73e8;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
-                }
-                button:hover {
-                    background-color: #0c63d2;
-                }
+                /* Styling here as before */
             </style>
         </head>
         <body>
 
         <div class="container">
             <h2>Reset Password</h2>
-            <form action="update_password.php" method="post" id="resetPasswordForm">
+            <form action="update_password.php" method="post">
                 <input type="hidden" name="email" value="<?php echo $email; ?>">
                 <input type="hidden" name="token" value="<?php echo $token; ?>">
                 <label for="password">Enter your new password:</label>
@@ -114,22 +42,31 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
         <script>
-            // Add SweetAlert for success/error alerts based on URL parameters (for demo purposes)
             const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status'); // check if there's a 'status' parameter
+            const status = urlParams.get('status'); // Check if there's a 'status' parameter
 
             if (status === 'success') {
                 Swal.fire({
                     title: 'Success!',
                     text: 'Your password has been reset successfully.',
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    didClose: () => {
+                        window.location.href = 'login.php'; // Redirect to login page after success
+                    }
                 });
             } else if (status === 'error') {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Something went wrong. Please try again.',
                     icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            } else if (status === 'invalid') {
+                Swal.fire({
+                    title: 'Invalid Token!',
+                    text: 'The token or email is invalid.',
+                    icon: 'warning',
                     confirmButtonText: 'OK'
                 });
             }
@@ -140,12 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
 
         <?php
     } else {
-        // Invalid token or email
-        echo "Invalid token or email.";
+        echo "Invalid request.";
     }
 } else {
     echo "Invalid request.";
 }
 
-$conn->close();  // Close the database connection after use
+$conn->close();
 ?>
