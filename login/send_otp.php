@@ -111,8 +111,77 @@ function sendOTP($email, $otp) {
         $mail->addAddress($email);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Verification Code';
-        $mail->Body = 'Your verification code is: ' . $otp .' valid until 15mintues';
+        $mail->Subject = 'Verification Code for Black Gym Account';
+        
+        // Professional and clear email body with better formatting
+        $mail->Body = "
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    color: #333;
+                    line-height: 1.6;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: #f4f4f4;
+                }
+                .container {
+                    background-color: #fff;
+                    padding: 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    width: 100%;
+                    max-width: 600px;
+                    margin: auto;
+                }
+                .header {
+                    text-align: center;
+                    font-size: 22px;
+                    color: #1a73e8;
+                    margin-bottom: 20px;
+                }
+                .otp-code {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333;
+                    display: block;
+                    margin: 20px 0;
+                    text-align: center;
+                    padding: 10px;
+                    background-color: #e0f7fa;
+                    border-radius: 5px;
+                }
+                .footer {
+                    font-size: 14px;
+                    text-align: center;
+                    color: #555;
+                    margin-top: 20px;
+                }
+                .footer a {
+                    color: #1a73e8;
+                    text-decoration: none;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h3>Black Gym Account Verification</h3>
+                </div>
+                <p>Hello,</p>
+                <p>Thank you for choosing Black Gym. To complete your registration or verification process, please use the following code:</p>
+                <div class='otp-code'>
+                    $otp
+                </div>
+                <p>This code is valid for the next 15 minutes. If you did not request this verification code, please ignore this email.</p>
+                <div class='footer'>
+                    <p>If you have any questions or need further assistance, please don't hesitate to <a href='mailto:support@blackgym.com'>contact our support team</a>.</p>
+                    <p>Best regards, <br>Black Gym Team</p>
+                </div>
+            </div>
+        </body>
+        </html>";
 
         $mail->send();
         return true;
@@ -120,5 +189,3 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
-
-?>
