@@ -6,13 +6,26 @@ if (!isset($_SESSION['AdminID'])) {
 }
 include '../../database/connection.php';
 
-// Validate the MemberID from the request
+// Fetch all members for the dropdown
+if (isset($_GET['fetch_members']) && $_GET['fetch_members'] === 'true') {
+    $query = "SELECT MemberID, CONCAT(UserID, ' - ', Address) AS MemberName FROM Members";
+    $result = $conn1->query($query);
+
+    $members = [];
+    while ($row = $result->fetch_assoc()) {
+        $members[] = $row;
+    }
+
+    echo json_encode(['success' => true, 'data' => $members]);
+    exit();
+}
+
+// Fetch payment history for a specific member
 if (isset($_GET['MemberID']) && is_numeric($_GET['MemberID'])) {
     $memberID = intval($_GET['MemberID']);
 
-    // Fetch member's payment history
     $query = "
-        SELECT p.PaymentID, p.PaymentType, p.Amount, p.AmountPaid, p.ChangeAmount, 
+        SELECT p.PaymentType, p.Amount, p.AmountPaid, p.ChangeAmount, 
                p.PaymentDate, m.StartDate, m.EndDate 
         FROM Payments p
         LEFT JOIN Membership m ON p.MemberID = m.MemberID
@@ -22,7 +35,6 @@ if (isset($_GET['MemberID']) && is_numeric($_GET['MemberID'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Collect payments in an array
     $payments = [];
     while ($row = $result->fetch_assoc()) {
         $payments[] = $row;
@@ -32,9 +44,7 @@ if (isset($_GET['MemberID']) && is_numeric($_GET['MemberID'])) {
         'success' => true,
         'data' => $payments
     ]);
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Invalid Member ID'
-    ]);
+    exit();
 }
+
+echo json_encode(['success' => false, 'message' => 'Invalid request']);
