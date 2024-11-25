@@ -1,7 +1,7 @@
 <div class="sidebar">
     <ul class="nav flex-column">
         <li class="nav-item ">
-            <img src="../../../img/logo.jpg" alt="Logo" class="img-fluid" style="max-width: 250px;  position: relative;">
+            <img src="../../../img/logo.jpg" alt="Logo" class="img-fluid fixed-top" style="max-width: 250px;  position: relative;">
         </li>
       
         <li class="nav-item">
