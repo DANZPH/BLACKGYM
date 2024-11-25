@@ -1,7 +1,6 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
@@ -12,6 +11,27 @@ include '../../database/connection.php'; // Include database connection
 <!DOCTYPE html>
 <html lang="en">
 <?php include '../../includes/head.php'; ?>
+
+<style>
+    /* Ensure the modal appears above other content */
+    .modal {
+        z-index: 1050 !important;
+    }
+
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 1; /* Ensure lower than modal */
+    }
+
+    /* Adjust header position if fixed */
+    nav.navbar {
+        z-index: 1030; /* Ensure modal and backdrop appear above the navbar */
+    }
+</style>
 
 <body>
     <?php include 'includes/header.php'; ?>
@@ -31,7 +51,7 @@ include '../../database/connection.php'; // Include database connection
                             <table id="historyTable" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
+                                        <th style="display:none;">Member ID</th>
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Membership Status</th>
@@ -57,7 +77,7 @@ include '../../database/connection.php'; // Include database connection
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
-                                                <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
+                                                <td style='display:none;'>{$row['MemberID']}</td>
                                                 <td>{$row['Username']}</td>
                                                 <td>{$row['Email']}</td>
                                                 <td>{$row['MembershipStatus']}</td>
