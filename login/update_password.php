@@ -1,26 +1,57 @@
+
 <?php
-// Assume connection is established with the database as above
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+// Database credentials
+$host = "sql104.infinityfree.com"; // Change this to your database host
+$dbname = "if0_36048499_db_user"; // Change this to your database name
+$usernameDB = "if0_36048499"; // Change this to your database username
+$passwordDB = "LokK4Hhvygq"; // Change this to your database password
+
+// Create connection
+$conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_POST["token"]) && isset($_POST["password"])) {
     $email = $_POST["email"];
     $token = $_POST["token"];
-    $password = $_POST["password"];
+    $newPassword = $_POST["password"];
 
-    // Hash the password before storing it
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // Update the user's password in the database
-    $stmt = $conn->prepare("UPDATE Users SET Password = ? WHERE Email = ? AND ResetToken = ?");
-    $stmt->bind_param("sss", $hashedPassword, $email, $token);
-    if ($stmt->execute()) {
-        // Redirect back to the password reset page with a success status
-        header("Location: reset_password.php?email=$email&token=$token&status=success");
-    } else {
-        // Redirect back to the password reset page with an error status
-        header("Location: reset_password.php?email=$email&token=$token&status=error");
-    }
+    // Check if user exists and token is valid
+    $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ? AND ResetToken = ?");
+    $stmt->bind_param("ss", $email, $token);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $stmt->close();
+
+    if ($result->num_rows == 1) {
+        // Token is valid, proceed to update password
+        $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+        // Update the password
+        $stmt = $conn->prepare("UPDATE Users SET Password = ?, ResetToken = NULL, ResetTokenExpiration = NULL WHERE Email = ?");
+        $stmt->bind_param("ss", $hashedPassword, $email);
+        $stmt->execute();
+        $stmt->close();
+
+        echo "Password updated successfully!";
+    } else {
+        echo "Invalid token or email.";
+    }
+} else {
+    echo "Error: Email, token, and password are required.";
 }
 
-$conn->close();
+$conn->close(); // Close the database connection after use
+
 ?>
