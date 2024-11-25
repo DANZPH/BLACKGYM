@@ -11,7 +11,7 @@
   <meta property="og:title" content="BLACKGYM - Your Fitness Destination">
   <meta property="og:description" content="Achieve your fitness goals with BLACKGYM. Join now to experience state-of-the-art equipment and professional training.">
   <meta property="og:image" content="img/favicon-512x512.png">
-  <meta property="og:url" content="https://gym.dazx.xyz">
+  <meta property="og:url" content="https://gym.dazx.xyz/index.php">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BLACKGYM">
   <style>
