@@ -1,4 +1,29 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+// Database credentials
+$host = "sql104.infinityfree.com"; // Change this to your database host
+$dbname = "if0_36048499_db_user"; // Change this to your database name
+$usernameDB = "if0_36048499"; // Change this to your database username
+$passwordDB = "LokK4Hhvygq"; // Change this to your database password
+
+// Create connection
+$conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+<?php
 // Include database connection and logic as needed
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET["token"])) {
