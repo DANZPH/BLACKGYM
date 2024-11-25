@@ -1,6 +1,8 @@
-<?php
+ <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -9,146 +11,159 @@ require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
-// Database credentials
-$host = "sql104.infinityfree.com"; // Change this to your database host
-$dbname = "if0_36048499_db_user"; // Change this to your database name
-$usernameDB = "if0_36048499"; // Change this to your database username
-$passwordDB = "LokK4Hhvygq"; // Change this to your database password
+//require '../database/connection.php';
 
-// Create connection
-$conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if email is set
+    if (isset($_POST["email"])) {
+        $email = $_POST["email"];
+
+        // Database connection (adjust according to your setup)
+        $host = "sql104.infinityfree.com"; // Change this to your database host
+        $dbname = "if0_36048499_db_user"; // Change this to your database name
+        $usernameDB = "if0_36048499"; // Change this to your database username
+        $passwordDB = "LokK4Hhvygq"; // Change this to your database password
+
+        $conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // Check if user exists in the database
+        $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        if ($result->num_rows > 0) {
+            // User exists, generate reset token and expiration time
+            $resetToken = generateResetToken();
+            $resetTokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour'));  // Token expiration time (1 hour from now)
+
+            // Update the reset token and expiration time in the Users table
+            $stmt = $conn->prepare("UPDATE Users SET ResetToken = ?, ResetTokenExpiration = ? WHERE Email = ?");
+            $stmt->bind_param("sss", $resetToken, $resetTokenExpiration, $email);
+            $stmt->execute();
+            $stmt->close();
+
+            // Send reset link via email
+            $result = sendResetEmail($email, $resetToken);
+
+            if ($result === true) {
+                echo "Its take a time to send Reset link sent to your email. please wait";
+            } else {
+                echo "Error sending reset link: " . $result;
+            }
+        } else {
+            echo "Error: Email not found.";
+        }
+
+        $conn->close();
+    } else {
+        echo "Error: Email is required.";
+    }
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET["token"])) {
-    $email = $_GET["email"];
-    $token = $_GET["token"];
+function generateResetToken() {
+    // Generate a random reset token
+    return bin2hex(random_bytes(32));  // 64 characters long token
+}
 
-    // Check if user exists and token is valid
-    $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ? AND ResetToken = ?");
-    $stmt->bind_param("ss", $email, $token);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
+function sendResetEmail($email, $resetToken) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mail.blackgym@gmail.com'; // Your Gmail
+        $mail->Password = 'akbbhmrrxzryovqt'; // Your Gmail app password
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
 
-    if ($result->num_rows == 1) {
-        // User exists and token is valid, show password reset form
-        ?>
+        $mail->setFrom('mail.blackgym@gmail.com', 'Black Gym'); // Your Gmail
+        $mail->addAddress($email);
 
-        <!DOCTYPE html>
-        <html lang="en">
+        $mail->isHTML(true);
+        $mail->Subject = 'Password Reset Request for Black Gym Account';
+        
+        // Professional and polished email body
+        $mail->Body = "
+        <html>
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Reset Password</title>
-            <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.min.css" rel="stylesheet">
             <style>
                 body {
                     font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
+                    color: #333;
+                    line-height: 1.6;
                     margin: 0;
+                    padding: 20px;
+                    background-color: #f4f4f4;
                 }
                 .container {
                     background-color: #fff;
-                    padding: 30px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 20px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
                     width: 100%;
-                    max-width: 400px;
+                    max-width: 600px;
+                    margin: auto;
                 }
-                h2 {
+                .header {
                     text-align: center;
-                    color: #333;
+                    font-size: 22px;
+                    color: #1a73e8;
                     margin-bottom: 20px;
                 }
-                label {
-                    font-size: 16px;
-                    color: #333;
+                .reset-link {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #007bff;
+                    text-decoration: none;
                     display: block;
-                    margin-bottom: 8px;
-                }
-                input[type="password"] {
-                    width: 100%;
+                    margin: 20px 0;
+                    text-align: center;
                     padding: 10px;
-                    margin-bottom: 20px;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    font-size: 16px;
-                    box-sizing: border-box;
+                    background-color: #e0f7fa;
+                    border-radius: 5px;
                 }
-                button {
-                    width: 100%;
-                    padding: 12px;
-                    background-color: #1a73e8;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
+                .footer {
+                    font-size: 14px;
+                    text-align: center;
+                    color: #555;
+                    margin-top: 20px;
                 }
-                button:hover {
-                    background-color: #0c63d2;
+                .footer a {
+                    color: #1a73e8;
+                    text-decoration: none;
                 }
             </style>
         </head>
         <body>
-
-        <div class="container">
-            <h2>Reset Password</h2>
-            <form action="update_password.php" method="post" id="resetPasswordForm">
-                <input type="hidden" name="email" value="<?php echo $email; ?>">
-                <input type="hidden" name="token" value="<?php echo $token; ?>">
-                <label for="password">Enter your new password:</label>
-                <input type="password" id="password" name="password" required><br>
-                <button type="submit">Reset Password</button>
-            </form>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
-        <script>
-            // Add SweetAlert for success/error alerts based on URL parameters (for demo purposes)
-            const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status'); // check if there's a 'status' parameter
-
-            if (status === 'success') {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Your password has been reset successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    didClose: () => {
-                        window.location.href = 'login.php'; // Redirect to login page after success
-                    }
-                });
-            } else if (status === 'error') {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
-        </script>
-
+            <div class='container'>
+                <div class='header'>
+                    <h3>Password Reset Request for Your Black Gym Account</h3>
+                </div>
+                <p>Hello,</p>
+                <p>We received a request to reset the password for your Black Gym account. If you did not request this, please ignore this email.</p>
+                <p>To reset your password, please click the link below:</p>
+                <a href='https://beta.dazx.xyz/login/reset.php?email=$email&token=$resetToken' class='reset-link'>
+                    Reset Your Password
+                </a>
+                <p>This link will expire in 30 minutes. If you don't reset your password within that time, you will need to request a new password reset.</p>
+                <div class='footer'>
+                    <p>If you have any questions or need assistance, please don't hesitate to <a href='mailto:support@blackgym.com'>contact our support team</a>.</p>
+                    <p>Best regards, <br>Black Gym Team</p>
+                </div>
+            </div>
         </body>
-        </html>
+        </html>";
 
-        <?php
-    } else {
-        // Invalid token or email
-        echo "Invalid token or email.";
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return $mail->ErrorInfo;
     }
-} else {
-    echo "Invalid request.";
 }
-
-$conn->close();  // Close the database connection after use
-?>
