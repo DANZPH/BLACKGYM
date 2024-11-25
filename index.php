@@ -6,6 +6,14 @@
   <title>BLACKGYM Landing Page</title>
   <link rel="icon" href="img/favicon-512x512.png" sizes="512x512" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="BLACKGYM - Your Fitness Destination">
+  <meta property="og:description" content="Achieve your fitness goals with BLACKGYM. Join now to experience state-of-the-art equipment and professional training.">
+  <meta property="og:image" content="img/favicon-512x512.png">
+  <meta property="og:url" content="https://gym.dazx.xyz">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BLACKGYM">
   <style>
     body {
       background: linear-gradient(90deg, #bdc3c7, #2c3e50);
