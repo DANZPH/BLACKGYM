@@ -23,7 +23,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET["token"])) {
     $email = $_GET["email"];
     $token = $_GET["token"];
@@ -45,66 +44,26 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Reset Password</title>
-            <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.min.css" rel="stylesheet">
-            <style>
-                /* Styling here as before */
-            </style>
         </head>
         <body>
-
-        <div class="container">
             <h2>Reset Password</h2>
             <form action="update_password.php" method="post">
                 <input type="hidden" name="email" value="<?php echo $email; ?>">
                 <input type="hidden" name="token" value="<?php echo $token; ?>">
-                <label for="password">Enter your new password:</label>
-                <input type="password" id="password" name="password" required><br>
+                <label for="password">Enter your new password:</label><br>
+                <input type="password" id="password" name="password" required><br><br>
                 <button type="submit">Reset Password</button>
             </form>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
-        <script>
-            const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status'); // Check if there's a 'status' parameter
-
-            if (status === 'success') {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Your password has been reset successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    didClose: () => {
-                        window.location.href = 'login.php'; // Redirect to login page after success
-                    }
-                });
-            } else if (status === 'error') {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else if (status === 'invalid') {
-                Swal.fire({
-                    title: 'Invalid Token!',
-                    text: 'The token or email is invalid.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-            }
-        </script>
-
         </body>
         </html>
 
         <?php
     } else {
-        echo "Invalid request.";
+        echo "Invalid token or email.";
     }
 } else {
     echo "Invalid request.";
 }
 
-$conn->close();
+$conn->close();  // Close the database connection after use
 ?>
