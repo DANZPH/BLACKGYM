@@ -73,7 +73,7 @@ if (!isset($_SESSION['AdminID'])) {
         $(document).ready(function () {
             // Populate dropdown with members
             $.ajax({
-                url: 'payment_history_process.php',
+                url: '../action/payment_history_process.php',
                 method: 'GET',
                 data: { fetch_members: 'true' },
                 success: function (response) {
