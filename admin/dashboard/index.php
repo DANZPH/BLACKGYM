@@ -29,7 +29,7 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../../includes/head.php'; ?>
+<?php include 'includes/head.php'; ?>
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
