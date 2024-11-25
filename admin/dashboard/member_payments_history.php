@@ -77,7 +77,7 @@ include '../../database/connection.php';
 
                 if (memberID) {
                     $.ajax({
-                        url: 'includes/fetch_payment_history.php',
+                        url: '../action/fetch_payment_history.php',
                         method: 'GET',
                         data: { MemberID: memberID },
                         dataType: 'json',
