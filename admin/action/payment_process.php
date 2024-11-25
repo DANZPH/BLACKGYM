@@ -21,8 +21,8 @@ class PDF extends FPDF {
         $this->Ln(4);
         $this->SetFont('Arial', '', 9);
         $this->Cell(0, 6, 'Gym Name: Black Gym', 0, 1, 'C');
-        $this->Cell(0, 6, 'Address: 123 Matina, Davao City', 0, 1, 'C');
-        $this->Cell(0, 6, 'Contact: +63 9123 456 7890 | Email: mail@blackgym.com', 0, 1, 'C');
+        $this->Cell(0, 6, 'Address: 123 Fitness St, Healthy City', 0, 1, 'C');
+        $this->Cell(0, 6, 'Contact: +1 (234) 567-890 | Email: contact@blackgym.com', 0, 1, 'C');
         $this->Ln(6);
 
         // Add a line after the header
@@ -170,16 +170,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
         $conn1->commit();
-
-        echo "Payment processed successfully. Receipt sent to $email.";
-    } catch (Exception $e) {
-        $conn1->rollback();
-        echo "Error processing payment: " . $e->getMessage();
-    }
-
-    $stmt->close();
-    $updateMemberStmt->close();
-    $updateMembershipStmt->close();
-}
-$conn1->close();
-?>
