@@ -1,7 +1,7 @@
 <div class="sidebar">
     <!-- Add logo at the top of the sidebar -->
     <div class="sidebar-logo fixed-top mb-3">
-<img src="../../../img/logo.jpg" alt="Logo" class="img-fluid" style="max-width: 230px;  position: relative;">
+<img src="../../../img/logo.jpg" alt="Logo" class="img-fluid" style="max-width: 250px;  ">
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
