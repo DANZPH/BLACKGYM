@@ -112,7 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
             </form>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script><script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
+<script>
     // Add SweetAlert for success/error alerts based on URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status'); // check if there's a 'status' parameter
@@ -133,8 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
         });
     }
 </script>
->
-
         </body>
         </html>
 
