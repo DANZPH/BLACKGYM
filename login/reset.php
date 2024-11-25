@@ -113,27 +113,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.all.min.js"></script>
-<script>
-    // Add SweetAlert for success/error alerts based on URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status'); // check if there's a 'status' parameter
+        <script>
+            // Add SweetAlert for success/error alerts based on URL parameters (for demo purposes)
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status'); // check if there's a 'status' parameter
 
-    if (status === 'success') {
-        Swal.fire({
-            title: 'Success!',
-            text: 'Your password has been reset successfully.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    } else if (status === 'error') {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Something went wrong. Please try again.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-        });
-    }
-</script>
+            if (status === 'success') {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Your password has been reset successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else if (status === 'error') {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Something went wrong. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        </script>
+
         </body>
         </html>
 
