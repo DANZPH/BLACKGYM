@@ -76,7 +76,7 @@ if (!isset($_SESSION['AdminID'])) {
 
                 if (memberID) {
                     $.ajax({
-                        url: 'payment_history_process.php',
+                        url: '../action/payment_history_process.php',
                         method: 'GET',
                         data: { MemberID: memberID },
                         success: function (response) {
