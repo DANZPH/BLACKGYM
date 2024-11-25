@@ -1,139 +1,142 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    header('Location: login.php');
+    // Redirect to login page if not logged in as admin
+    header('Location: ../../admin/login.php');
     exit();
 }
+
+include '../../database/connection.php'; // Include database connection
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <?php include '../../includes/head.php'; ?>
 
 <body>
-    <?php include 'includes/sidebar.php'; ?>
+    <?php include 'includes/header.php'; ?>
 
-    <div class="content-wrapper">
-        <?php include 'includes/header.php'; ?>
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <?php include 'includes/sidebar.php'; ?>
 
-        <div class="container mt-5">
-            <h1 class="text-center mb-4 text-white">Payment History</h1>
-            <p class="text-center text-white">View detailed payment history for a specific member.</p>
+            <div class="col-md-9 content-wrapper">
+                <h2 class="mb-4">Member History</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Member Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="historyTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="display:none;">Member ID</th> <!-- Hidden column for MemberID -->
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Membership Status</th>
+                                        <th>Subscription</th>
+                                        <th>Session Price</th>
+                                        <th>Total Bill</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $sql = "SELECT Members.MemberID, Users.Username, Users.Email, Members.MembershipStatus, 
+                                            Membership.Subscription, Membership.SessionPrice, 
+                                            (Membership.Subscription + Membership.SessionPrice) AS TotalBill,
+                                            CASE 
+                                                WHEN Membership.Status = 'Active' THEN 'Active'
+                                                WHEN Membership.Status = 'Pending' THEN 'Pending'
+                                                WHEN Membership.Status = 'Expired' THEN 'Expired'
+                                            END AS Status
+                                            FROM Members 
+                                            INNER JOIN Users ON Members.UserID = Users.UserID
+                                            LEFT JOIN Membership ON Members.MemberID = Membership.MemberID";
+                                    $result = $conn1->query($sql);
 
-            <!-- Member Dropdown -->
-            <div class="row justify-content-center">
-                <div class="col-md-6 mb-4">
-                    <label for="memberSelect" class="form-label text-white">Select Member:</label>
-                    <select id="memberSelect" class="form-control">
-                        <option value="" disabled selected>-- Select Member --</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Payment History Table -->
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="card shadow-lg border-0">
-                        <div class="card-body">
-                            <h4 class="card-title text-center text-primary">Payment Records</h4>
-                            <div class="table-responsive mt-3">
-                                <table class="table table-striped table-bordered text-center">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Payment Type</th>
-                                            <th>Amount</th>
-                                            <th>Amount Paid</th>
-                                            <th>Change</th>
-                                            <th>Payment Date</th>
-                                            <th>Membership Start</th>
-                                            <th>Membership End</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="paymentHistoryTable">
-                                        <tr>
-                                            <td colspan="7">No data available</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                                <td style='display:none;'>{$row['MemberID']}</td> <!-- Hidden MemberID -->
+                                                <td>{$row['Username']}</td>
+                                                <td>{$row['Email']}</td>
+                                                <td>{$row['MembershipStatus']}</td>
+                                                <td>" . number_format($row['Subscription'], 2) . "</td>
+                                                <td>" . number_format($row['SessionPrice'], 2) . "</td>
+                                                <td>" . number_format($row['TotalBill'], 2) . "</td>
+                                                <td>{$row['Status']}</td>
+                                                <td><button class='btn btn-primary history-btn' data-memberid='{$row['MemberID']}'>View History</button></td>
+                                            </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <?php include '../../includes/footer.php'; ?>
 
-    <!-- JavaScript -->
+    <!-- Modal for History -->
+    <div class="modal" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalLabel">Member History</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="historyContent">Loading...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
     <script>
         $(document).ready(function () {
-            // Populate dropdown with members
-            $.ajax({
-                url: '../action/payment_history_process.php',
-                method: 'GET',
-                data: { fetch_members: 'true' },
-                success: function (response) {
-                    const result = JSON.parse(response);
-                    if (result.success && result.data.length > 0) {
-                        result.data.forEach(member => {
-                            $('#memberSelect').append(
-                                `<option value="${member.MemberID}">${member.MemberName}</option>`
-                            );
-                        });
+            $('#historyTable').DataTable({
+                scrollX: true,
+                columnDefs: [
+                    {
+                        targets: [0], // Target the first column (MemberID) to hide it
+                        visible: false, // Hide the MemberID column
                     }
-                },
-                error: function () {
-                    alert('Failed to load members.');
-                }
+                ]
             });
 
-            // Fetch payment history when a member is selected
-            $('#memberSelect').on('change', function () {
-                const memberID = $(this).val();
+            $('.history-btn').click(function () {
+                var memberID = $(this).data('memberid');
+                $('#historyContent').html('Loading...');
+                $('#historyModal').modal('show');
 
-                if (memberID) {
-                    $.ajax({
-                        url: 'payment_history_process.php',
-                        method: 'GET',
-                        data: { MemberID: memberID },
-                        success: function (response) {
-                            const result = JSON.parse(response);
-                            const tableBody = $('#paymentHistoryTable');
-                            tableBody.empty();
-
-                            if (result.success && result.data.length > 0) {
-                                result.data.forEach(payment => {
-                                    const row = `
-                                        <tr>
-                                            <td>${payment.PaymentType}</td>
-                                            <td>₱${parseFloat(payment.Amount).toFixed(2)}</td>
-                                            <td>₱${parseFloat(payment.AmountPaid).toFixed(2)}</td>
-                                            <td>₱${parseFloat(payment.ChangeAmount).toFixed(2)}</td>
-                                            <td>${payment.PaymentDate}</td>
-                                            <td>${payment.StartDate || 'N/A'}</td>
-                                            <td>${payment.EndDate || 'N/A'}</td>
-                                        </tr>
-                                    `;
-                                    tableBody.append(row);
-                                });
-                            } else {
-                                tableBody.append('<tr><td colspan="7">No data available</td></tr>');
-                            }
-                        },
-                        error: function () {
-                            alert('Failed to fetch payment history.');
-                        }
-                    });
-                } else {
-                    $('#paymentHistoryTable').html('<tr><td colspan="7">No data available</td></tr>');
-                }
+                $.ajax({
+                    url: '../action/history_process.php',
+                    type: 'GET',
+                    data: { MemberID: memberID },
+                    success: function (response) {
+                        $('#historyContent').html(response); // Update modal with history details
+                    },
+                    error: function () {
+                        $('#historyContent').html('An error occurred. Please try again.');
+                    }
+                });
             });
         });
     </script>
 </body>
-
 </html>
