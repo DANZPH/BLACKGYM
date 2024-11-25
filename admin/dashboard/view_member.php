@@ -26,7 +26,7 @@ include '../../database/connection.php'; // Include database connection
 
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
-            <h2 class="mb-4">Member List</h2>
+            <h2 class="mb-4 position-relative">Member List</h2>
 
             <!-- Card Container for the Table -->
             <div class="card">
