@@ -82,7 +82,7 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
                     </h4>
                     <h2 class="card-text text-warning"><?php echo $pendingPayments; ?></h2>
                 </div>
-                <a href="pending_memberships.php" class="btn btn-outline-warning btn-sm">View</a>
+                <a href="payments.php" class="btn btn-outline-warning btn-sm">View</a>
             </div>
         </div>
     </div>
