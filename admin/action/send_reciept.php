@@ -12,12 +12,12 @@ function sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentT
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'your_email@gmail.com';
-        $mail->Password = 'your_app_password';
+        $mail->Username = 'mail.blackgym@gmail.com';
+        $mail->Password = 'akbbhmrrxzryovqt';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('your_email@gmail.com', 'Your Business');
+        $mail->setFrom('mail.blackgym@gmail.com', 'Your Business');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
