@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Reset-Password</title>
+            <title>Reset Password</title>
             <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.18/dist/sweetalert2.min.css" rel="stylesheet">
             <style>
                 body {
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["email"]) && isset($_GET[
         <body>
 
         <div class="container">
-            <h2>Reset Password</h2>
+            <h2>Reset8Password</h2>
             <form action="update_password.php" method="post" id="resetPasswordForm">
                 <input type="hidden" name="email" value="<?php echo $email; ?>">
                 <input type="hidden" name="token" value="<?php echo $token; ?>">
