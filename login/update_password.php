@@ -1,4 +1,3 @@
-
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -44,12 +43,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_PO
         $stmt->execute();
         $stmt->close();
 
-        echo "Password updated successfully!";
+        // Redirect with success message
+        header("Location: reset_password.php?email=$email&status=success");
+        exit();
     } else {
-        echo "Invalid token or email.";
+        // Invalid token or email
+        header("Location: reset_password.php?email=$email&status=error");
+        exit();
     }
 } else {
-    echo "Error: Email, token, and password are required.";
+    // Missing fields
+    header("Location: reset_password.php?status=error");
+    exit();
 }
 
 $conn->close(); // Close the database connection after use
