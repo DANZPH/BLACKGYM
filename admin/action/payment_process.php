@@ -24,7 +24,7 @@ function sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentT
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('mail.blackgym@gmail.com', 'Your Business'); // Replace with your email
+        $mail->setFrom('mail.blackgym@gmail.com'); // Replace with your email
         $mail->addAddress($email);
 
         $mail->isHTML(true);
