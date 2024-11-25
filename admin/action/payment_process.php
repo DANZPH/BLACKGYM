@@ -21,8 +21,8 @@ class PDF extends FPDF {
         $this->Ln(4);
         $this->SetFont('Arial', '', 9);
         $this->Cell(0, 6, 'Gym Name: Black Gym', 0, 1, 'C');
-        $this->Cell(0, 6, 'Address: 123 Fitness St, Healthy City', 0, 1, 'C');
-        $this->Cell(0, 6, 'Contact: +1 (234) 567-890 | Email: contact@blackgym.com', 0, 1, 'C');
+        $this->Cell(0, 6, 'Address: 123 Matina, Davao City', 0, 1, 'C');
+        $this->Cell(0, 6, 'Contact: +63 9123 456 7890 | Email: mail@blackgym.com', 0, 1, 'C');
         $this->Ln(6);
 
         // Add a line after the header
@@ -48,13 +48,13 @@ class PDF extends FPDF {
         $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
 
         $this->Cell(40, 6, 'Amount Due:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['amount'], 2), 0, 1);
+        $this->Cell(40, 6, '₱' . number_format($paymentData['amount'], 2), 0, 1);
 
         $this->Cell(40, 6, 'Amount Paid:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['amountPaid'], 2), 0, 1);
+        $this->Cell(40, 6, '₱' . number_format($paymentData['amountPaid'], 2), 0, 1);
 
         $this->Cell(40, 6, 'Change:', 0, 0);
-        $this->Cell(40, 6, '$' . number_format($paymentData['changeAmount'], 2), 0, 1);
+        $this->Cell(40, 6, '₱' . number_format($paymentData['changeAmount'], 2), 0, 1);
         
         // Add a line after the payment details
         $this->Ln(6);
