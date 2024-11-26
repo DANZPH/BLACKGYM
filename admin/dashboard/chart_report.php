@@ -31,33 +31,6 @@ while ($row = $attendanceResult->fetch_assoc()) {
     $attendanceDates[] = $row['date'];
     $attendanceCounts[] = $row['count'];
 }
-
-// Total Revenue
-$totalRevenueQuery = "SELECT SUM(Amount) AS total_amount FROM Payments";
-$totalRevenueResult = $conn1->query($totalRevenueQuery);
-$totalRevenue = $totalRevenueResult->fetch_assoc()['totalRevenue'];
-
-// Revenue by Payment Type
-$revenueByTypeQuery = "SELECT PaymentType, SUM(AmountPaid) AS revenue FROM Payments GROUP BY PaymentType";
-$revenueByTypeResult = $conn1->query($revenueByTypeQuery);
-$revenueByTypeData = [];
-while ($row = $revenueByTypeResult->fetch_assoc()) {
-    $revenueByTypeData[$row['PaymentType']] = $row['revenue'];
-}
-
-// Revenue Trends (Last 7 Days)
-$revenueTrendsQuery = "
-    SELECT DATE(PaymentDate) AS date, SUM(AmountPaid) AS dailyRevenue 
-    FROM Payments 
-    WHERE PaymentDate >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
-    GROUP BY DATE(PaymentDate)";
-$revenueTrendsResult = $conn1->query($revenueTrendsQuery);
-$revenueDates = [];
-$revenueValues = [];
-while ($row = $revenueTrendsResult->fetch_assoc()) {
-    $revenueDates[] = $row['date'];
-    $revenueValues[] = $row['dailyRevenue'];
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,46 +69,11 @@ while ($row = $revenueTrendsResult->fetch_assoc()) {
                 </div>
 
                 <!-- Attendance Trends (Line Chart) -->
-                <div class="col-md-6 mb-4">
+                <div class="col-md-12 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
                             <canvas id="attendanceChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Revenue Analytics -->
-                <div class="row mt-4">
-                    <!-- Total Revenue (Text Display) -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-lg border-0">
-                            <div class="card-body text-center">
-                                <h4>Total Revenue</h4>
-                                <h2 class="text-success">
-                                    <?php echo number_format($totalRevenue, 2); ?> USD
-                                </h2>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Revenue by Payment Type (Pie Chart) -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-lg border-0">
-                            <div class="card-body">
-                                <h4 class="text-center">Revenue by Payment Type</h4>
-                                <canvas id="revenueTypeChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Revenue Trends (Line Chart) -->
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-lg border-0">
-                            <div class="card-body">
-                                <h4 class="text-center">Revenue Trends (Last 7 Days)</h4>
-                                <canvas id="revenueTrendsChart"></canvas>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,7 +94,7 @@ while ($row = $revenueTrendsResult->fetch_assoc()) {
                 labels: <?php echo json_encode(array_keys($membersData)); ?>,
                 datasets: [{
                     data: <?php echo json_encode(array_values($membersData)); ?>,
-                    backgroundColor: ['#4caf50', '#ff9800', '#f44336'],
+                    backgroundColor: ['#4caf50', '#ff9800', '#f44336'], // Active, Inactive, Suspended
                 }]
             }
         });
@@ -175,7 +113,9 @@ while ($row = $revenueTrendsResult->fetch_assoc()) {
             },
             options: {
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         });
@@ -193,35 +133,23 @@ while ($row = $revenueTrendsResult->fetch_assoc()) {
                     backgroundColor: 'rgba(255, 87, 34, 0.2)',
                     fill: true,
                 }]
-            }
-        });
-
-        // Revenue by Payment Type (Pie Chart)
-        const revenueTypeCtx = document.getElementById('revenueTypeChart').getContext('2d');
-        const revenueTypeChart = new Chart(revenueTypeCtx, {
-            type: 'pie',
-            data: {
-                labels: <?php echo json_encode(array_keys($revenueByTypeData)); ?>,
-                datasets: [{
-                    data: <?php echo json_encode(array_values($revenueByTypeData)); ?>,
-                    backgroundColor: ['#4caf50', '#ff9800', '#2196f3'],
-                }]
-            }
-        });
-
-        // Revenue Trends (Line Chart)
-        const revenueTrendsCtx = document.getElementById('revenueTrendsChart').getContext('2d');
-        const revenueTrendsChart = new Chart(revenueTrendsCtx, {
-            type: 'line',
-            data: {
-                labels: <?php echo json_encode($revenueDates); ?>,
-                datasets: [{
-                    label: 'Daily Revenue',
-                    data: <?php echo json_encode($revenueValues); ?>,
-                    borderColor: '#4caf50',
-                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                    fill: true,
-                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Attendance Count'
+                        }
+                    }
+                }
             }
         });
     </script>
