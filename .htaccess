@@ -13,11 +13,12 @@ RewriteBase /
 RewriteCond %{THE_REQUEST} /index\.php [NC]
 RewriteRule ^(.*)index\.php$ /$1 [L,R=301]
 
-# Remove 'login.php' from URL
-RewriteCond %{THE_REQUEST} /login\.php [NC]
-RewriteRule ^(.*)login\.php$ /$1 [L,R=301]
+# Remove '.php' extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1 [L,R=301]
 
-# Redirect all requests to 'index.php' internally (for routing)
+# Handle requests without '.php'
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [L]
+RewriteRule ^(.*)$ $1.php [L]
