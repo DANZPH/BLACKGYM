@@ -10,24 +10,8 @@ use PHPMailer\PHPMailer\Exception;
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-
-/*require '../database/connection.php'; 
-*/
+include '../database/connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if email is set
-    if (isset($_POST["email"])) {
-        $email = $_POST["email"];
-
-        $host = "sql104.infinityfree.com";
-        $dbname = "if0_36048499_db_user";
-        $usernameDB = "if0_36048499"; 
-        $passwordDB = "LokK4Hhvygq";
-
-        $conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
-
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
 
         // Check if user exists in the database
         $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ?");
