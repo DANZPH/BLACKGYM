@@ -13,7 +13,11 @@ RewriteBase /
 RewriteCond %{THE_REQUEST} /index\.php [NC]
 RewriteRule ^(.*)index\.php$ /$1 [L,R=301]
 
-# Redirect all requests to 'index.php' internally
+# Remove 'login.php' from URL
+RewriteCond %{THE_REQUEST} /login\.php [NC]
+RewriteRule ^(.*)login\.php$ /$1 [L,R=301]
+
+# Redirect all requests to 'index.php' internally (for routing)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [L]
