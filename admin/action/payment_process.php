@@ -10,7 +10,6 @@ include '../../database/connection.php';
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-require '../../fpdf/fpdf.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -19,57 +18,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
-class PDF extends FPDF {
-    // Header and Footer as before
-    function Header() {
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(0, 6, 'BLACK GYM PAYMENT RECEIPT', 0, 1, 'C');
-        $this->Ln(4);
-        $this->SetFont('Arial', '', 9);
-        $this->Cell(0, 6, 'Gym Name: Black Gym', 0, 1, 'C');
-        $this->Cell(0, 6, 'Address: 123 Matina, Davao City', 0, 1, 'C');
-        $this->Cell(0, 6, 'Contact: +63 9123 456 7890 | Email: mail@blackgym.com', 0, 1, 'C');
-        $this->Ln(6);
-        $this->SetLineWidth(0.5);
-        $this->Line(10, $this->GetY(), 200, $this->GetY());
-        $this->Ln(4);
-    }
-
-    function Footer() {
-        $this->SetY(-15);
-        $this->SetFont('Arial', 'I', 7);
-        $this->Cell(0, 4, 'Page ' . $this->PageNo(), 0, 0, 'C');
-    }
-
-    function PaymentDetailsTable($paymentData) {
-        $this->SetFont('Arial', '', 9);
-        $this->Cell(40, 6, 'Receipt Number:', 0, 0);
-        $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
-        $this->Cell(40, 6, 'Payment Date:', 0, 0);
-        $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
-        $this->Cell(40, 6, 'Amount Due:', 0, 0);
-        $this->Cell(40, 6, 'P' . number_format($paymentData['amount'], 2), 0, 1);
-        $this->Cell(40, 6, 'Amount Paid:', 0, 0);
-        $this->Cell(40, 6, 'P' . number_format($paymentData['amountPaid'], 2), 0, 1);
-        $this->Cell(40, 6, 'Change:', 0, 0);
-        $this->Cell(40, 6, 'P' . number_format($paymentData['changeAmount'], 2), 0, 1);
-        $this->Ln(6);
-        $this->SetLineWidth(0.5);
-        $this->Line(10, $this->GetY(), 200, $this->GetY());
-        $this->Ln(4);
-    }
-
-    function QRCode($qrCodeImageData) {
-        try {
-            // Embed QR code image directly into PDF using raw image data
-            $this->Image('@' . $qrCodeImageData, 150, 50, 30, 30);  // Adjust position and size as needed
-        } catch (Exception $e) {
-            echo 'Error embedding QR code: ' . $e->getMessage();
-        }
-    }
-}
-
-function sendReceiptEmail($email, $name, $pdfContent) {
+function sendReceiptEmail($email, $name, $qrCodeImageData) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -85,9 +34,12 @@ function sendReceiptEmail($email, $name, $pdfContent) {
 
         $mail->isHTML(true);
         $mail->Subject = 'Payment Successful';
-        $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt attached.</p><p>Thank you for being a member of Black Gym!</p>";
+        $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt and QR code attached.</p><p>Thank you for being a member of Black Gym!</p>";
 
-        $mail->addStringAttachment($pdfContent, 'PaymentReceipt.pdf');
+        // Attach QR code image directly as an attachment
+        $mail->addStringAttachment($qrCodeImageData, 'QRCode.png', 'base64', 'image/png');
+
+        // Send the email
         $mail->send();
     } catch (Exception $e) {
         error_log($e->getMessage());
@@ -143,7 +95,7 @@ function processPayment($memberID, $paymentType, $amount, $amountPaid) {
     $emailQuery->fetch();
     $emailQuery->close();
 
-    // Generate QR code content
+    // Generate QR code content (use receiptNumber as the content for the QR code)
     $builder = new Builder(
         writer: new PngWriter(),
         data: $receiptNumber,  // Use receiptNumber as content for the QR code
@@ -156,39 +108,12 @@ function processPayment($memberID, $paymentType, $amount, $amountPaid) {
     $qrCodeResult = $builder->build();
     $qrCodeImageData = $qrCodeResult->getString();  // Get the QR code image as raw data
 
-    // Generate PDF
-    $pdf = new PDF();
-    $pdf->AddPage();
-
-    // Add receipt details
-    $pdf->SetFont('Arial', '', 9);
-    $pdf->Cell(0, 6, "Receipt Number: $receiptNumber", 0, 1);
-    $pdf->Cell(0, 6, "Payment Date: $paymentDate", 0, 1);
-    $pdf->Cell(0, 6, "Name: $name", 0, 1);
-    $pdf->Cell(0, 6, "Membership Up To: $endDate", 0, 1);
-    $pdf->Cell(0, 6, "Email: $email", 0, 1);
-
-    // Add payment details table
-    $pdf->PaymentDetailsTable([
-        'receiptNumber' => $receiptNumber,
-        'paymentDate' => $paymentDate,
-        'amount' => $amount,
-        'amountPaid' => $amountPaid,
-        'changeAmount' => $changeAmount
-    ]);
-
-    // Embed QR code into the PDF
-    $pdf->QRCode($qrCodeImageData);
-
-    // Output PDF as a string (for email attachment)
-    $pdfContent = $pdf->Output('S');
-
-    // Send email with PDF attached
-    sendReceiptEmail($email, $name, $pdfContent);
+    // Send email with the QR code attached
+    sendReceiptEmail($email, $name, $qrCodeImageData);
 
     // Commit the transaction
     $conn1->commit();
-    echo "Payment processed successfully. Receipt sent to $email.";
+    echo "Payment processed successfully. Receipt and QR code sent to $email.";
 }
 
 // Example of processing a payment
@@ -199,4 +124,3 @@ try {
 }
 
 ?>
-
