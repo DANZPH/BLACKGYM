@@ -6,11 +6,11 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 require_once '../../vendor/autoload.php';
-include '../../database/connection.php'; // Database connection
+include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-require '../../fpdf/fpdf.php'; // Include the FPDF library
+require '../../fpdf/fpdf.php'; 
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
