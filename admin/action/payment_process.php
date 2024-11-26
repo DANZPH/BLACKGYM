@@ -1,22 +1,20 @@
+1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-// Include necessary files
+//endroid/qrcode
 require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
 require '../../fpdf/fpdf.php'; 
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\Writer\PngWriter;
 
 class PDF extends FPDF {
     function Header() {
@@ -65,12 +63,6 @@ class PDF extends FPDF {
         $this->SetLineWidth(0.5);
         $this->Line(10, $this->GetY(), 200, $this->GetY());
         $this->Ln(4);
-    }
-
-    function QRCode($qrCodeImage) {
-        // Insert QR code image
-        $this->Image($qrCodeImage, 10, $this->GetY(), 30, 30);
-        $this->Ln(35);  // Adjust the position after the QR code
     }
 }
 
@@ -149,21 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
-        // Generate QR code for the receipt number
-        $qrBuilder = new Builder(
-            writer: new PngWriter(),
-            writerOptions: [],
-            validateResult: false,
-            data: $receiptNumber, // Content of the QR code (the receipt number)
-            encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::High,
-            size: 300,
-            margin: 10
-        );
-        $qrResult = $qrBuilder->build();
-        $qrImage = '/save/' . $receiptNumber . '.png';  // Ensure this path is writable
-        file_put_contents($qrImage, $qrResult->getString());
-
         // Generate PDF
         $pdf = new PDF();
         $pdf->AddPage();
@@ -177,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdf->Cell(0, 6, "Email: $email", 0, 1);  // Added member email
         $pdf->Ln(4);
 
-// Add payment details table
+        // Add payment details table
         $pdf->PaymentDetailsTable([
             'receiptNumber' => $receiptNumber,
             'paymentDate' => $paymentDate,
@@ -185,9 +162,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'amountPaid' => $amountPaid,
             'changeAmount' => $changeAmount
         ]);
-
-        // Add QR code to PDF
-        $pdf->QRCode($qrImage);
 
         // Footer
         $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
@@ -197,12 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
-
-        // Commit the transaction
         $conn1->commit();
-
-        // Clean up the QR code image
-        unlink($qrImage);
 
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
