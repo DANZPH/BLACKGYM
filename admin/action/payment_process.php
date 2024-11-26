@@ -1,3 +1,4 @@
+1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -64,7 +65,7 @@ class PDF extends FPDF {
     }
 }
 
-function sendReceiptEmail($email, $name, $pdfContent, $receiptNumber) {
+function sendReceiptEmail($email, $name, $pdfContent) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -168,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdfContent = $pdf->Output('S');
 
         // Send receipt email
-        sendReceiptEmail($email, $name, $pdfContent, $receiptNumber);
+        sendReceiptEmail($email, $name, $pdfContent);
         $conn1->commit();
 
         echo "Payment processed successfully. Receipt sent to $email.";
