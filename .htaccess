@@ -1,0 +1,19 @@
+# Redirect custom error pages
+ErrorDocument 403 https://gym.dazx.xyz/404.php
+ErrorDocument 404 https://gym.dazx.xyz/404.php
+ErrorDocument 500 https://gym.dazx.xyz/404.php
+
+# Enable RewriteEngine
+RewriteEngine On
+
+# Ensure .htaccess is working
+RewriteBase /
+
+# Remove 'index.php' from URL
+RewriteCond %{THE_REQUEST} /index\.php [NC]
+RewriteRule ^(.*)index\.php$ /$1 [L,R=301]
+
+# Redirect all requests to 'index.php' internally
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
