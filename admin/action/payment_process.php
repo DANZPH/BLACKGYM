@@ -18,10 +18,10 @@ use PHPMailer\PHPMailer\Exception;
 
 class PDF extends FPDF {
     function Header() {
-        $this->SetFont('Arial', 'B', 12);
+        $this->SetFont('Arial', 'B', 12);  // Bold font for the title
         $this->Cell(0, 6, 'BLACK GYM PAYMENT RECEIPT', 0, 1, 'C');
         $this->Ln(4);
-        $this->SetFont('Arial', '', 9);
+        $this->SetFont('Arial', '', 9);  // Regular font for the details
         $this->Cell(0, 6, 'Gym Name: Black Gym', 0, 1, 'C');
         $this->Cell(0, 6, 'Address: 123 Matina, Davao City', 0, 1, 'C');
         $this->Cell(0, 6, 'Contact: +63 9123 456 7890 | Email: mail@blackgym.com', 0, 1, 'C');
@@ -35,29 +35,39 @@ class PDF extends FPDF {
 
     function Footer() {
         $this->SetY(-15);
-        $this->SetFont('Arial', 'I', 7);
+        $this->SetFont('Arial', 'I', 7);  // Italic font for footer text
         $this->Cell(0, 4, 'Page ' . $this->PageNo(), 0, 0, 'C');
     }
 
     function PaymentDetailsTable($paymentData) {
-        $this->SetFont('Arial', '', 9);
+        $this->SetFont('Arial', '', 9);  // Regular font for payment data
         
         // Add a compact table for payment breakdown
         $this->Cell(40, 6, 'Receipt Number:', 0, 0);
+        $this->SetFont('Arial', 'B', 9);  // Bold font for values
         $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
+        $this->SetFont('Arial', '', 9);  // Reset to regular font
 
         $this->Cell(40, 6, 'Payment Date:', 0, 0);
+        $this->SetFont('Arial', 'B', 9);  // Bold font for values
         $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
+        $this->SetFont('Arial', '', 9);  // Reset to regular font
 
         $this->Cell(40, 6, 'Amount Due:', 0, 0);
+        $this->SetFont('Arial', 'B', 9);  // Bold font for values
         $this->Cell(40, 6, 'P' . number_format($paymentData['amount'], 2), 0, 1);
+        $this->SetFont('Arial', '', 9);  // Reset to regular font
 
         $this->Cell(40, 6, 'Amount Paid:', 0, 0);
+        $this->SetFont('Arial', 'B', 9);  // Bold font for values
         $this->Cell(40, 6, 'P' . number_format($paymentData['amountPaid'], 2), 0, 1);
+        $this->SetFont('Arial', '', 9);  // Reset to regular font
 
         $this->Cell(40, 6, 'Change:', 0, 0);
+        $this->SetFont('Arial', 'B', 9);  // Bold font for values
         $this->Cell(40, 6, 'P' . number_format($paymentData['changeAmount'], 2), 0, 1);
-        
+        $this->SetFont('Arial', '', 9);  // Reset to regular font
+
         // Add a line after the payment details
         $this->Ln(6);
         $this->SetLineWidth(0.5);
@@ -65,6 +75,7 @@ class PDF extends FPDF {
         $this->Ln(4);
     }
 }
+
 
 function sendReceiptEmail($email, $name, $pdfContent) {
     $mail = new PHPMailer(true);
