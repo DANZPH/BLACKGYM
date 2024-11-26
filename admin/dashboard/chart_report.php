@@ -33,7 +33,7 @@ while ($row = $attendanceResult->fetch_assoc()) {
 }
 
 // Total Revenue
-$totalRevenueQuery = "SELECT SUM(AmountPaid) AS totalRevenue FROM Payments";
+$totalRevenueQuery = "SELECT SUM(Amount) AS total_amount FROM Payments";
 $totalRevenueResult = $conn1->query($totalRevenueQuery);
 $totalRevenue = $totalRevenueResult->fetch_assoc()['totalRevenue'];
 
