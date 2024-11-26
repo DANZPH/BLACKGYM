@@ -72,17 +72,15 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-
-                <!-- Payments by Type (Bar Chart) -->
+                                <!-- Subscription vs SessionPrice Count (Pie Chart) -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Payments by Type</h4>
-                            <canvas id="paymentsChart"></canvas>
+                            <h4 class="text-center">Subsciption vs Session</h4>
+                            <canvas id="subscriptionSessionPriceChart"></canvas>
                         </div>
                     </div>
                 </div>
-
                 <!-- Attendance Trends (Line Chart) -->
                 <div class="col-md-12 mb-4">
                     <div class="card shadow-lg border-0">
@@ -102,16 +100,16 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-
-                <!-- Subscription vs SessionPrice Count (Pie Chart) -->
+  <!-- Payments by Type (Bar Chart) -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Subsciption vs Session</h4>
-                            <canvas id="subscriptionSessionPriceChart"></canvas>
+                            <h4 class="text-center">Payments by Type</h4>
+                            <canvas id="paymentsChart"></canvas>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
