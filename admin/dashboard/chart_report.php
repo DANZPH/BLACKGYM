@@ -194,7 +194,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 labels: <?php echo json_encode(array_keys($genderData)); ?>,
                 datasets: [{
                     data: <?php echo json_encode(array_values($genderData)); ?>,
-                    backgroundColor: ['#42a5f5', '#ef5350', '#9c27b0'], // Male, Female, Other
+                    backgroundColor: ['#42a5f5', '#f39f9f', '#9c27b0'], // Male, Female, Other
                 }]
             }
         });
