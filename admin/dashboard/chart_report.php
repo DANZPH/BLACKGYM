@@ -92,7 +92,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 </div>
 
                 <!-- Gender Distribution (Pie Chart) -->
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Gender</h4>
