@@ -107,7 +107,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Membership vs Session</h4>
+                            <h4 class="text-center">Subsciption vs Session</h4>
                             <canvas id="subscriptionSessionPriceChart"></canvas>
                         </div>
                     </div>
