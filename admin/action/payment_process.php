@@ -5,12 +5,11 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-
+include '../../vendor/autoload.php';
 include '../../database/connection.php'; // Database connection
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-require '../../vendor/autoload.php';
 //require '../../fpdf/fpdf.php'; // Include the FPDF library
 
 use PHPMailer\PHPMailer\PHPMailer;
