@@ -5,42 +5,42 @@ include '../../database/connection.php';
 // Fetch data for charts
 // 1. Gender Distribution
 $genderData = [];
-$genderQuery = $conn->query("SELECT Gender, COUNT(*) AS Count FROM Members GROUP BY Gender");
+$genderQuery = $conn1->query("SELECT Gender, COUNT(*) AS Count FROM Members GROUP BY Gender");
 while ($row = $genderQuery->fetch_assoc()) {
     $genderData[] = $row;
 }
 
 // 2. Membership Status Distribution
 $membershipStatusData = [];
-$membershipStatusQuery = $conn->query("SELECT MembershipStatus, COUNT(*) AS Count FROM Members GROUP BY MembershipStatus");
+$membershipStatusQuery = $conn1->query("SELECT MembershipStatus, COUNT(*) AS Count FROM Members GROUP BY MembershipStatus");
 while ($row = $membershipStatusQuery->fetch_assoc()) {
     $membershipStatusData[] = $row;
 }
 
 // 3. Daily Attendance
 $attendanceData = [];
-$attendanceQuery = $conn->query("SELECT DATE(AttendanceDate) AS Date, COUNT(*) AS AttendanceCount FROM Attendance GROUP BY DATE(AttendanceDate)");
+$attendanceQuery = $conn1->query("SELECT DATE(AttendanceDate) AS Date, COUNT(*) AS AttendanceCount FROM Attendance GROUP BY DATE(AttendanceDate)");
 while ($row = $attendanceQuery->fetch_assoc()) {
     $attendanceData[] = $row;
 }
 
 // 4. Payment Type Distribution
 $paymentTypeData = [];
-$paymentTypeQuery = $conn->query("SELECT PaymentType, SUM(AmountPaid) AS TotalAmount FROM Payments GROUP BY PaymentType");
+$paymentTypeQuery = $conn1->query("SELECT PaymentType, SUM(AmountPaid) AS TotalAmount FROM Payments GROUP BY PaymentType");
 while ($row = $paymentTypeQuery->fetch_assoc()) {
     $paymentTypeData[] = $row;
 }
 
 // 5. Daily Revenue
 $dailyRevenueData = [];
-$dailyRevenueQuery = $conn->query("SELECT DATE(PaymentDate) AS Date, SUM(AmountPaid) AS TotalRevenue FROM Payments GROUP BY DATE(PaymentDate)");
+$dailyRevenueQuery = $conn1->query("SELECT DATE(PaymentDate) AS Date, SUM(AmountPaid) AS TotalRevenue FROM Payments GROUP BY DATE(PaymentDate)");
 while ($row = $dailyRevenueQuery->fetch_assoc()) {
     $dailyRevenueData[] = $row;
 }
 
 // 6. Active Membership Distribution by Start Date Range
 $membershipRangeData = [];
-$membershipRangeQuery = $conn->query("
+$membershipRangeQuery = $conn1->query("
     SELECT 
         CASE 
             WHEN StartDate >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) THEN 'Last 30 Days'
@@ -57,7 +57,7 @@ while ($row = $membershipRangeQuery->fetch_assoc()) {
 }
 
 // Close the database connection
-$conn->close();
+$conn1->close();
 ?>
 
 <!DOCTYPE html>
