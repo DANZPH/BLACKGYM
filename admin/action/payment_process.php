@@ -59,8 +59,12 @@ class PDF extends FPDF {
     }
 
     function QRCode($qrCodeImageData) {
-        // Embed QR code image directly into PDF using raw image data
-        $this->Image('@' . $qrCodeImageData, 150, 50, 30, 30);  // Adjust position and size as needed
+        try {
+            // Embed QR code image directly into PDF using raw image data
+            $this->Image('@' . $qrCodeImageData, 150, 50, 30, 30);  // Adjust position and size as needed
+        } catch (Exception $e) {
+            echo 'Error embedding QR code: ' . $e->getMessage();
+        }
     }
 }
 
@@ -174,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'changeAmount' => $changeAmount
         ]);
 
-        // Add QR code to the PDF
+        // Add QR code to PDF
         $pdf->QRCode($qrCodeImageData);
 
         // Output PDF content as a string for emailing
