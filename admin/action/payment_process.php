@@ -64,7 +64,7 @@ class PDF extends FPDF {
     }
 }
 
-function sendReceiptEmail($email, $name, $pdfContent) {
+function sendReceiptEmail($email, $name, $pdfContent, $receiptNumber) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdfContent = $pdf->Output('S');
 
         // Send receipt email
-        sendReceiptEmail($email, $name, $pdfContent);
+        sendReceiptEmail($email, $name, $pdfContent, $receiptNumber);
         $conn1->commit();
 
         echo "Payment processed successfully. Receipt sent to $email.";
