@@ -174,10 +174,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'changeAmount' => $changeAmount
         ]);
 
-        // Add the QR code to the PDF
+        // Add QR code to the PDF
         $pdf->QRCode($qrCodeImageData);
 
-        // Output PDF content as string for emailing
+        // Output PDF content as a string for emailing
         $pdfContent = $pdf->Output('S');
 
         // Send receipt email
@@ -185,9 +185,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Commit the transaction
         $conn1->commit();
-
-        // Clean up the QR code image (no need to delete file since it's not saved)
-        unset($qrCodeImageData);
 
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
