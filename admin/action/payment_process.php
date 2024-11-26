@@ -5,7 +5,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-
+require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; // Database connection
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
