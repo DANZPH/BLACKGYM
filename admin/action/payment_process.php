@@ -1,3 +1,4 @@
+1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -40,7 +41,7 @@ class PDF extends FPDF {
     function PaymentDetailsTable($paymentData) {
         $this->SetFont('Arial', '', 9);
         
-        // Add payment details
+        // Add a compact table for payment breakdown
         $this->Cell(40, 6, 'Receipt Number:', 0, 0);
         $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
 
@@ -61,25 +62,6 @@ class PDF extends FPDF {
         $this->SetLineWidth(0.5);
         $this->Line(10, $this->GetY(), 200, $this->GetY());
         $this->Ln(4);
-    }
-
-    function AddQRCode($receiptNumber) {
-        // Use Google QR Code API to generate QR code
-        $qrCodeUrl = "https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=" . urlencode($receiptNumber);
-
-        // Get the QR code image content
-        $qrImage = file_get_contents($qrCodeUrl);
-
-        // Save the QR code locally
-        $qrImagePath = tempnam(sys_get_temp_dir(), 'qr_') . '.png';
-        file_put_contents($qrImagePath, $qrImage);
-
-        // Add QR code to the PDF
-        $this->Image($qrImagePath, 80, $this->GetY(), 50, 50); // Centered on the page
-        $this->Ln(55); // Add space after QR code
-
-        // Remove temporary file
-        unlink($qrImagePath);
     }
 }
 
@@ -168,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdf->Cell(0, 6, "Payment Date: $paymentDate", 0, 1);
         $pdf->Cell(0, 6, "Name: $name", 0, 1);
         $pdf->Cell(0, 6, "Membership Up To: $endDate", 0, 1);
-        $pdf->Cell(0, 6, "Email: $email", 0, 1);
+        $pdf->Cell(0, 6, "Email: $email", 0, 1);  // Added member email
         $pdf->Ln(4);
 
         // Add payment details table
@@ -179,9 +161,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'amountPaid' => $amountPaid,
             'changeAmount' => $changeAmount
         ]);
-
-        // Add QR Code to the PDF
-        $pdf->AddQRCode($receiptNumber);
 
         // Footer
         $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
