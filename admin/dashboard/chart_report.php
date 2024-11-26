@@ -207,7 +207,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 labels: ['Subscription', 'Session Price'],
                 datasets: [{
                     data: [<?php echo $subscriptionCount; ?>, <?php echo $sessionPriceCount; ?>],
-                    backgroundColor: ['#3ce6df', '#a21eb0'],
+                    backgroundColor: ['#A5C1DC', '#7982B9'],
                 }]
             }
         });
