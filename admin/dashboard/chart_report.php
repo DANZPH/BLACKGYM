@@ -31,11 +31,26 @@ while ($row = $attendanceResult->fetch_assoc()) {
     $attendanceDates[] = $row['date'];
     $attendanceCounts[] = $row['count'];
 }
+
+// Gender Distribution
+$genderQuery = "SELECT Gender, COUNT(*) AS count FROM Members GROUP BY Gender";
+$genderResult = $conn1->query($genderQuery);
+$genderData = [];
+while ($row = $genderResult->fetch_assoc()) {
+    $genderData[$row['Gender']] = $row['count'];
+}
+
+// Total Subscription and SessionPrice
+$membershipQuery = "SELECT SUM(Subscription) AS totalSubscription, SUM(SessionPrice) AS totalSessionPrice FROM Membership";
+$membershipResult = $conn1->query($membershipQuery);
+$membershipTotals = $membershipResult->fetch_assoc();
+$totalSubscription = $membershipTotals['totalSubscription'];
+$totalSessionPrice = $membershipTotals['totalSessionPrice'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <?php include '../../includes/head.php'; ?>
+
 <body>
     <?php include 'includes/sidebar.php'; ?>
 
@@ -74,6 +89,27 @@ while ($row = $attendanceResult->fetch_assoc()) {
                         <div class="card-body">
                             <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
                             <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gender Distribution (Pie Chart) -->
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <h4 class="text-center">Gender Distribution</h4>
+                            <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Membership Totals -->
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body text-center">
+                            <h4>Total Subscription and SessionPrice</h4>
+                            <p><strong>Total Subscription:</strong> <?php echo number_format($totalSubscription, 2); ?></p>
+                            <p><strong>Total Session Price:</strong> <?php echo number_format($totalSessionPrice, 2); ?></p>
                         </div>
                     </div>
                 </div>
@@ -150,6 +186,19 @@ while ($row = $attendanceResult->fetch_assoc()) {
                         }
                     }
                 }
+            }
+        });
+
+        // Gender Distribution (Pie Chart)
+        const genderCtx = document.getElementById('genderChart').getContext('2d');
+        const genderChart = new Chart(genderCtx, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode(array_keys($genderData)); ?>,
+                datasets: [{
+                    data: <?php echo json_encode(array_values($genderData)); ?>,
+                    backgroundColor: ['#42a5f5', '#ef5350', '#9c27b0'], // Male, Female, Other
+                }]
             }
         });
     </script>
