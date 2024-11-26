@@ -5,6 +5,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
+//endroid/qrcode
 require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
