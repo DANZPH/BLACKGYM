@@ -15,7 +15,7 @@ while ($row = $membersResult->fetch_assoc()) {
 }
 
 // Total Payments by Type
-$paymentsQuery = "SELECT PaymentType, SUM(AmountPaid) AS total FROM Payments GROUP BY PaymentType";
+$paymentsQuery = "SELECT PaymentType, SUM(Amount) AS total FROM Payments GROUP BY PaymentType";
 $paymentsResult = $conn1->query($paymentsQuery);
 $paymentsData = [];
 while ($row = $paymentsResult->fetch_assoc()) {
