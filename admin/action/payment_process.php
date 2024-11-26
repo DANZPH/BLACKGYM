@@ -76,11 +76,11 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('mail.blackgym@gmail.com', 'Payment Successfull');
+        $mail->setFrom('mail.blackgym@gmail.com', 'Black Gym');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Payment Receipt';
+        $mail->Subject = 'Payment Successfull';
         $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt attached.</p><p>Thank you for being a member of Black Gym!</p>";
 
         $mail->addStringAttachment($pdfContent, 'PaymentReceipt.pdf');
