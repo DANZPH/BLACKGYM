@@ -81,23 +81,16 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-<!-- Attendance Trends (Line Chart) -->
-<div class="col-md-12 mb-4">
-    <div class="card shadow-lg border-0">
-        <div class="card-body">
-            <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
-            <!-- Collapse button to show/hide the chart -->
-            <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#attendanceChartContainer" aria-expanded="false" aria-controls="attendanceChartContainer">
-                Toggle Chart
-            </button>
-            
-            <!-- Chart container with collapse class -->
-            <div class="collapse" id="attendanceChartContainer">
-                <canvas id="attendanceChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- Attendance Trends (Line Chart) -->
+                <div class="col-md-12 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
+                            <canvas id="attendanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Gender Distribution (Pie Chart) -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
