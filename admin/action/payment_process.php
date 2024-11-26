@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
@@ -163,6 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Footer
         $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
+
+        // Generate QR code URL using the receipt number
+        $qrCodeUrl = "https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=" . urlencode($receiptNumber);
+
+        // Output the QR code as an image in the PDF
+        $pdf->Image($qrCodeUrl, 10, $pdf->GetY(), 30, 30); // Adjust the position and size
 
         // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
