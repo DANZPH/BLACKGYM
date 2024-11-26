@@ -40,12 +40,12 @@ while ($row = $genderResult->fetch_assoc()) {
     $genderData[$row['Gender']] = $row['count'];
 }
 
-// Total Subscription and SessionPrice
-$membershipQuery = "SELECT SUM(Subscription) AS totalSubscription, SUM(SessionPrice) AS totalSessionPrice FROM Membership";
+// Count of Subscription and SessionPrice (not total sum)
+$membershipQuery = "SELECT COUNT(Subscription) AS subscriptionCount, COUNT(SessionPrice) AS sessionPriceCount FROM Membership WHERE Subscription IS NOT NULL OR SessionPrice IS NOT NULL";
 $membershipResult = $conn1->query($membershipQuery);
-$membershipTotals = $membershipResult->fetch_assoc();
-$totalSubscription = $membershipTotals['totalSubscription'];
-$totalSessionPrice = $membershipTotals['totalSessionPrice'];
+$membershipCounts = $membershipResult->fetch_assoc();
+$subscriptionCount = $membershipCounts['subscriptionCount'];
+$sessionPriceCount = $membershipCounts['sessionPriceCount'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,13 +103,12 @@ $totalSessionPrice = $membershipTotals['totalSessionPrice'];
                     </div>
                 </div>
 
-                <!-- Membership Totals -->
+                <!-- Subscription vs SessionPrice Count (Pie Chart) -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
-                        <div class="card-body text-center">
-                            <h4>Total Subscription and SessionPrice</h4>
-                            <p><strong>Total Subscription:</strong> <?php echo number_format($totalSubscription, 2); ?></p>
-                            <p><strong>Total Session Price:</strong> <?php echo number_format($totalSessionPrice, 2); ?></p>
+                        <div class="card-body">
+                            <h4 class="text-center">Subscription vs Session Price</h4>
+                            <canvas id="subscriptionSessionPriceChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -198,6 +197,19 @@ $totalSessionPrice = $membershipTotals['totalSessionPrice'];
                 datasets: [{
                     data: <?php echo json_encode(array_values($genderData)); ?>,
                     backgroundColor: ['#42a5f5', '#ef5350', '#9c27b0'], // Male, Female, Other
+                }]
+            }
+        });
+
+        // Subscription vs SessionPrice Count (Pie Chart)
+        const subscriptionSessionPriceCtx = document.getElementById('subscriptionSessionPriceChart').getContext('2d');
+        const subscriptionSessionPriceChart = new Chart(subscriptionSessionPriceCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Subscription', 'Session Price'],
+                datasets: [{
+                    data: [<?php echo $subscriptionCount; ?>, <?php echo $sessionPriceCount; ?>],
+                    backgroundColor: ['#ffb74d', '#4caf50'],
                 }]
             }
         });
