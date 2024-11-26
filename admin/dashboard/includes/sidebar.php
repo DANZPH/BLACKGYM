@@ -5,7 +5,7 @@
         </li>
       
         <li class="nav-item">
-            <a class="nav-link" href="index.php">
+            <a class="nav-link" href="index">
                 <i class="fa fa-tachometer-alt"></i> Dashboard
             </a>
         </li>
@@ -15,9 +15,9 @@
             </a>
             <div id="manageMembers" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="view_member.php" class="nav-link">View Members</a></li>
-                    <li class="nav-item"><a href="add_member.php" class="nav-link">Add Member</a></li>
-                    <li class="nav-item"><a href="update_member.php" class="nav-link">Update Member</a></li>
+                    <li class="nav-item"><a href="view_member" class="nav-link">View Members</a></li>
+                    <li class="nav-item"><a href="add_member" class="nav-link">Add Member</a></li>
+                    <li class="nav-item"><a href="update_member" class="nav-link">Update Member</a></li>
                 </ul>
             </div>
         </li>
@@ -27,8 +27,8 @@
             </a>
             <div id="manageAttendance" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="attendance.php" class="nav-link">Check-in/Check-out</a></li>
-                    <li class="nav-item"><a href="view_attendance.php" class="nav-link">View Attendance</a></li>
+                    <li class="nav-item"><a href="attendance" class="nav-link">Check-in/Check-out</a></li>
+                    <li class="nav-item"><a href="view_attendance" class="nav-link">View Attendance</a></li>
                 </ul>
             </div>
         </li>
@@ -38,7 +38,7 @@
             </a>
             <div id="managePayments" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="payments.php" class="nav-link">Pay/Cancel</a></li>
+                    <li class="nav-item"><a href="payments" class="nav-link">Pay/Cancel</a></li>
                 </ul>
             </div>
         </li>
@@ -48,8 +48,8 @@
             </a>
             <div id="reports" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="chart_report.php" class="nav-link">Chart Representation</a></li>
-                    <li class="nav-item"><a href="members_report.php" class="nav-link">Members Report</a></li>
+                    <li class="nav-item"><a href="chart_report" class="nav-link">Chart Representation</a></li>
+                    <li class="nav-item"><a href="members_report" class="nav-link">Members Report</a></li>
                 </ul>
             </div>
         </li>
@@ -59,8 +59,8 @@
             </a>
             <div id="transactions" class="collapse">
                 <ul class="nav flex-column ml-3">
-                    <li class="nav-item"><a href="payment_history.php" class="nav-link">Payments</a></li>
-                    <li class="nav-item"><a href="receipt_transaction.php" class="nav-link">Receipts</a></li>
+                    <li class="nav-item"><a href="payment_history" class="nav-link">Payments</a></li>
+                    <li class="nav-item"><a href="receipt_transaction" class="nav-link">Receipts</a></li>
                 </ul>
             </div>
         </li>
