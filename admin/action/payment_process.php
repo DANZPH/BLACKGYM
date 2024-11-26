@@ -1,20 +1,23 @@
-1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-//endroid/qrcode
+
 require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-require '../../fpdf/fpdf.php'; 
+require '../../fpdf/fpdf.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Writer\PngWriter;
 
 class PDF extends FPDF {
     function Header() {
@@ -26,8 +29,6 @@ class PDF extends FPDF {
         $this->Cell(0, 6, 'Address: 123 Matina, Davao City', 0, 1, 'C');
         $this->Cell(0, 6, 'Contact: +63 9123 456 7890 | Email: mail@blackgym.com', 0, 1, 'C');
         $this->Ln(6);
-
-        // Add a line after the header
         $this->SetLineWidth(0.5);
         $this->Line(10, $this->GetY(), 200, $this->GetY());
         $this->Ln(4);
@@ -41,28 +42,25 @@ class PDF extends FPDF {
 
     function PaymentDetailsTable($paymentData) {
         $this->SetFont('Arial', '', 9);
-        
-        // Add a compact table for payment breakdown
         $this->Cell(40, 6, 'Receipt Number:', 0, 0);
         $this->Cell(40, 6, $paymentData['receiptNumber'], 0, 1);
-
         $this->Cell(40, 6, 'Payment Date:', 0, 0);
         $this->Cell(40, 6, $paymentData['paymentDate'], 0, 1);
-
         $this->Cell(40, 6, 'Amount Due:', 0, 0);
         $this->Cell(40, 6, 'P' . number_format($paymentData['amount'], 2), 0, 1);
-
         $this->Cell(40, 6, 'Amount Paid:', 0, 0);
         $this->Cell(40, 6, 'P' . number_format($paymentData['amountPaid'], 2), 0, 1);
-
         $this->Cell(40, 6, 'Change:', 0, 0);
         $this->Cell(40, 6, 'P' . number_format($paymentData['changeAmount'], 2), 0, 1);
-        
-        // Add a line after the payment details
         $this->Ln(6);
         $this->SetLineWidth(0.5);
         $this->Line(10, $this->GetY(), 200, $this->GetY());
         $this->Ln(4);
+    }
+
+    function QRCode($qrCodeImage) {
+        // Embed QR code image directly into PDF
+        $this->Image('@' . $qrCodeImage, 150, 50, 30, 30);  // Adjust position and size as needed
     }
 }
 
@@ -81,7 +79,7 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         $mail->addAddress($email);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Payment Successfull';
+        $mail->Subject = 'Payment Successful';
         $mail->Body = "<p>Dear $name,</p><p>Please find your payment receipt attached.</p><p>Thank you for being a member of Black Gym!</p>";
 
         $mail->addStringAttachment($pdfContent, 'PaymentReceipt.pdf');
@@ -141,6 +139,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
+        // Generate QR code content
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $receiptNumber,  // Use receiptNumber as content for the QR code
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 300,
+            margin: 10
+        );
+
+        $qrCodeResult = $builder->build();
+        $qrCodeImage = $qrCodeResult->getString();  // Get the QR code image as a string
+
         // Generate PDF
         $pdf = new PDF();
         $pdf->AddPage();
@@ -163,6 +174,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'changeAmount' => $changeAmount
         ]);
 
+        // Add QR code to PDF
+        $pdf->QRCode($qrCodeImage);
+
         // Footer
         $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
 
@@ -171,7 +185,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
+
+        // Commit the transaction
         $conn1->commit();
+
+        // Clean up the QR code image (no need to delete file since it's not saved)
+        unset($qrCodeImage);
 
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
