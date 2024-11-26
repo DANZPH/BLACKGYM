@@ -6,25 +6,31 @@ if (!isset($_SESSION['AdminID'])) {
 }
 include '../../database/connection.php';
 
-// Total Members with Active Membership Status
-$totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
-$totalMembersResult = $conn1->query($totalMembersQuery);
-$totalMembers = $totalMembersResult->fetch_assoc()['total_members'];
+// Total Members by Status
+$membersQuery = "SELECT MembershipStatus, COUNT(*) AS count FROM Members GROUP BY MembershipStatus";
+$membersResult = $conn1->query($membersQuery);
+$membersData = [];
+while ($row = $membersResult->fetch_assoc()) {
+    $membersData[$row['MembershipStatus']] = $row['count'];
+}
 
-// Total Payments
-$totalPaymentsQuery = "SELECT SUM(AmountPaid) AS total_amount FROM Payments";
-$totalPaymentsResult = $conn1->query($totalPaymentsQuery);
-$totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'];
+// Total Payments by Type
+$paymentsQuery = "SELECT PaymentType, SUM(AmountPaid) AS total FROM Payments GROUP BY PaymentType";
+$paymentsResult = $conn1->query($paymentsQuery);
+$paymentsData = [];
+while ($row = $paymentsResult->fetch_assoc()) {
+    $paymentsData[$row['PaymentType']] = $row['total'];
+}
 
-// Total Pending Memberships
-$pendingMembershipsQuery = "SELECT COUNT(*) AS total_pending FROM Membership WHERE Status = 'Pending'";
-$pendingMembershipsResult = $conn1->query($pendingMembershipsQuery);
-$pendingMemberships = $pendingMembershipsResult->fetch_assoc()['total_pending'];
-
-// Current People at the Gym
-$currentPeopleQuery = "SELECT COUNT(*) AS current_people FROM Attendance WHERE CheckOut IS NULL OR CheckOut = '0000-00-00 00:00:00'";
-$currentPeopleResult = $conn1->query($currentPeopleQuery);
-$currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
+// Attendance Trends
+$attendanceQuery = "SELECT DATE(AttendanceDate) AS date, COUNT(*) AS count FROM Attendance GROUP BY DATE(AttendanceDate) LIMIT 7";
+$attendanceResult = $conn1->query($attendanceQuery);
+$attendanceDates = [];
+$attendanceCounts = [];
+while ($row = $attendanceResult->fetch_assoc()) {
+    $attendanceDates[] = $row['date'];
+    $attendanceCounts[] = $row['count'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,67 +43,37 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
         <?php include 'includes/header.php'; ?>
 
         <div class="container mt-5">
-            <h1 class="text-center mb-4 text-white">DASHBOARD</h1>
-            <p class="text-center text-white">Monitor and manage system activities below.</p>
+            <h1 class="text-center mb-4 text-white">Analytics Dashboard</h1>
+            <p class="text-center text-white">Visualize system data with charts below.</p>
 
-            <!-- Dashboard Cards -->
+            <!-- Chart Section -->
             <div class="row mt-4">
-                <!-- Active Members Card -->
-                <div class="col-md-4 mb-4">
+                <!-- Members by Status (Pie Chart) -->
+                <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="card-title">
-                                    <i class="fas fa-users text-primary"></i> Active Members
-                                </h4>
-                                <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
-                            </div>
-                            <a href="members.php" class="btn btn-outline-info btn-sm">View</a>
+                        <div class="card-body">
+                            <h4 class="text-center">Members by Status</h4>
+                            <canvas id="membersChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Total Payments Card -->
-                <div class="col-md-4 mb-4">
+                <!-- Payments by Type (Bar Chart) -->
+                <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="card-title">
-                                    <i class="fas fa-credit-card text-success"></i> Earnings
-                                </h4>
-                                <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
-                            </div>
-                            <a href="payments.php" class="btn btn-outline-success btn-sm">View</a>
+                        <div class="card-body">
+                            <h4 class="text-center">Payments by Type</h4>
+                            <canvas id="paymentsChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Pending Memberships Card -->
-                <div class="col-md-4 mb-4">
+                <!-- Attendance Trends (Line Chart) -->
+                <div class="col-md-12 mb-4">
                     <div class="card shadow-lg border-0">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="card-title">
-                                    <i class="fas fa-clock text-warning"></i> Pending
-                                </h4>
-                                <h2 class="card-text text-warning"><?php echo $pendingMemberships; ?></h2>
-                            </div>
-                            <a href="memberships.php" class="btn btn-outline-warning btn-sm">View</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Current People at the Gym Card -->
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <h4 class="card-title">
-                                    <i class="fas fa-dumbbell text-info"></i> Current People
-                                </h4>
-                                <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
-                            </div>
-                            <a href="attendance.php" class="btn btn-outline-info btn-sm">View</a>
+                        <div class="card-body">
+                            <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
+                            <canvas id="attendanceChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -108,7 +84,74 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
     <?php include '../../includes/footer.php'; ?>
 
     <!-- JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Members by Status (Pie Chart)
+        const membersCtx = document.getElementById('membersChart').getContext('2d');
+        const membersChart = new Chart(membersCtx, {
+            type: 'pie',
+            data: {
+                labels: <?php echo json_encode(array_keys($membersData)); ?>,
+                datasets: [{
+                    data: <?php echo json_encode(array_values($membersData)); ?>,
+                    backgroundColor: ['#4caf50', '#ff9800', '#f44336'], // Active, Inactive, Suspended
+                }]
+            }
+        });
+
+        // Payments by Type (Bar Chart)
+        const paymentsCtx = document.getElementById('paymentsChart').getContext('2d');
+        const paymentsChart = new Chart(paymentsCtx, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode(array_keys($paymentsData)); ?>,
+                datasets: [{
+                    label: 'Total Payments',
+                    data: <?php echo json_encode(array_values($paymentsData)); ?>,
+                    backgroundColor: '#2196f3',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Attendance Trends (Line Chart)
+        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(attendanceCtx, {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($attendanceDates); ?>,
+                datasets: [{
+                    label: 'Attendance Count',
+                    data: <?php echo json_encode($attendanceCounts); ?>,
+                    borderColor: '#ff5722',
+                    backgroundColor: 'rgba(255, 87, 34, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Attendance Count'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
