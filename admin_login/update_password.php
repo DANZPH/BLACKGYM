@@ -7,20 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-
-// Database credentials
-$host = "sql104.infinityfree.com"; // Change this to your database host
-$dbname = "if0_36048499_db_user"; // Change this to your database name
-$usernameDB = "if0_36048499"; // Change this to your database username
-$passwordDB = "LokK4Hhvygq"; // Change this to your database password
-
-// Create connection
-$conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include '../database/connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_POST["token"]) && isset($_POST["password"])) {
     $email = $_POST["email"];
@@ -28,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_PO
     $newPassword = $_POST["password"];
 
     // Check if user exists and token is valid
-    $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ? AND ResetToken = ?");
+    $stmt = $comn1->prepare("SELECT * FROM Users WHERE Email = ? AND ResetToken = ?");
     $stmt->bind_param("ss", $email, $token);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -39,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_PO
         $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
 
         // Update the password
-        $stmt = $conn->prepare("UPDATE Users SET Password = ?, ResetToken = NULL, ResetTokenExpiration = NULL WHERE Email = ?");
+        $stmt = $comn1->prepare("UPDATE Users SET Password = ?, ResetToken = NULL, ResetTokenExpiration = NULL WHERE Email = ?");
         $stmt->bind_param("ss", $hashedPassword, $email);
         $stmt->execute();
         $stmt->close();
@@ -52,6 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_PO
     echo "Error: Email, token, and password are required.";
 }
 
-$conn->close(); // Close the database connection after use
+$comn1->close(); // Close the database connection after use
 
 ?>
