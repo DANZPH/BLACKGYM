@@ -1,8 +1,6 @@
- <?php
+<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -11,28 +9,16 @@ require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
-//require '../database/connection.php';
-
+// Include the database connection (ensure connection.php defines $conn1)
+include '../database/connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email is set
     if (isset($_POST["email"])) {
         $email = $_POST["email"];
 
-        // Database connection (adjust according to your setup)
-        $host = "sql104.infinityfree.com"; // Change this to your database host
-        $dbname = "if0_36048499_db_user"; // Change this to your database name
-        $usernameDB = "if0_36048499"; // Change this to your database username
-        $passwordDB = "LokK4Hhvygq"; // Change this to your database password
-
-        $conn = new mysqli($host, $usernameDB, $passwordDB, $dbname);
-
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
         // Check if user exists in the database
-        $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ?");
+        $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -44,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resetTokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour'));  // Token expiration time (1 hour from now)
 
             // Update the reset token and expiration time in the Users table
-            $stmt = $conn->prepare("UPDATE Users SET ResetToken = ?, ResetTokenExpiration = ? WHERE Email = ?");
+            $stmt = $conn1->prepare("UPDATE Users SET ResetToken = ?, ResetTokenExpiration = ? WHERE Email = ?");
             $stmt->bind_param("sss", $resetToken, $resetTokenExpiration, $email);
             $stmt->execute();
             $stmt->close();
@@ -53,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = sendResetEmail($email, $resetToken);
 
             if ($result === true) {
-                echo "Its take a time to send Reset link sent to your email. please wait";
+                echo "It takes some time to send the reset link. Please wait.";
             } else {
                 echo "Error sending reset link: " . $result;
             }
@@ -61,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: Email not found.";
         }
 
-        $conn->close();
+        // No need to close $conn1 here if it's handled in connection.php
     } else {
         echo "Error: Email is required.";
     }
