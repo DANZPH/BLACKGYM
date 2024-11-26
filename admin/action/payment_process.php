@@ -76,7 +76,7 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
-        $mail->setFrom('mail.blackgym@gmail.com', 'Black Gym');
+        $mail->setFrom('mail.blackgym@gmail.com', 'Payment Successfull');
         $mail->addAddress($email);
 
         $mail->isHTML(true);
