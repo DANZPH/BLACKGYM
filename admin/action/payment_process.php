@@ -5,7 +5,7 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
-require_once '../../vendor/autoload.php';
+require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
@@ -197,4 +197,6 @@ try {
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
+
 ?>
+
