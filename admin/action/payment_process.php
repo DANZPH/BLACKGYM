@@ -1,4 +1,3 @@
-1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -63,6 +62,19 @@ class PDF extends FPDF {
         $this->Line(10, $this->GetY(), 200, $this->GetY());
         $this->Ln(4);
     }
+
+    function AddQRCode($qrCodePath) {
+        $this->Image($qrCodePath, 80, $this->GetY(), 50, 50);
+        $this->Ln(60);
+    }
+}
+
+function generateQRCode($receiptNumber) {
+    $qrCodeData = urlencode($receiptNumber);
+    $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$qrCodeData";
+    $qrCodePath = "../../temp/qr_$receiptNumber.png";
+    file_put_contents($qrCodePath, file_get_contents($qrCodeUrl));
+    return $qrCodePath;
 }
 
 function sendReceiptEmail($email, $name, $pdfContent) {
@@ -140,6 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
+        // Generate QR Code
+        $qrCodePath = generateQRCode($receiptNumber);
+
         // Generate PDF
         $pdf = new PDF();
         $pdf->AddPage();
@@ -162,19 +177,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'changeAmount' => $changeAmount
         ]);
 
+        // Add QR Code
+        $pdf->AddQRCode($qrCodePath);
+
         // Footer
         $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
 
         // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
 
-        // Send receipt email
+// Send receipt email
         sendReceiptEmail($email, $name, $pdfContent);
         $conn1->commit();
+
+        // Delete the temporary QR code image after use
+        unlink($qrCodePath);
 
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
         $conn1->rollback();
+        // Delete the temporary QR code image if something goes wrong
+        if (file_exists($qrCodePath)) {
+            unlink($qrCodePath);
+        }
         echo "Error processing payment: " . $e->getMessage();
     }
 
