@@ -4,27 +4,27 @@ include '../../database/connection.php';
 // Fetch data for charts
 // 1. Gender Distribution
 $genderData = [];
-$genderQuery = $conn1->query("SELECT Gender, COUNT(*) AS Count FROM Members GROUP BY Gender");
+$genderQuery = $conn->query("SELECT Gender, COUNT(*) AS Count FROM Members GROUP BY Gender");
 while ($row = $genderQuery->fetch_assoc()) {
     $genderData[] = $row;
 }
 
 // 2. Membership Status Distribution
 $membershipStatusData = [];
-$membershipStatusQuery = $conn1->query("SELECT MembershipStatus, COUNT(*) AS Count FROM Members GROUP BY MembershipStatus");
+$membershipStatusQuery = $conn->query("SELECT MembershipStatus, COUNT(*) AS Count FROM Members GROUP BY MembershipStatus");
 while ($row = $membershipStatusQuery->fetch_assoc()) {
     $membershipStatusData[] = $row;
 }
 
 // 3. Daily Attendance
 $attendanceData = [];
-$attendanceQuery = $conn1->query("SELECT DATE(AttendanceDate) AS Date, COUNT(*) AS AttendanceCount FROM Attendance GROUP BY DATE(AttendanceDate)");
+$attendanceQuery = $conn->query("SELECT DATE(AttendanceDate) AS Date, COUNT(*) AS AttendanceCount FROM Attendance GROUP BY DATE(AttendanceDate)");
 while ($row = $attendanceQuery->fetch_assoc()) {
     $attendanceData[] = $row;
 }
 
 // Close the database connection
-$conn1->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
