@@ -58,9 +58,9 @@ class PDF extends FPDF {
         $this->Ln(4);
     }
 
-    function QRCode($qrCodeImage) {
-        // Embed QR code image directly into PDF
-        $this->Image('@' . $qrCodeImage, 150, 50, 30, 30);  // Adjust position and size as needed
+    function QRCode($qrCodeImageData) {
+        // Embed QR code image directly into PDF using raw image data
+        $this->Image('@' . $qrCodeImageData, 150, 50, 30, 30);  // Adjust position and size as needed
     }
 }
 
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         );
 
         $qrCodeResult = $builder->build();
-        $qrCodeImage = $qrCodeResult->getString();  // Get the QR code image as a string
+        $qrCodeImageData = $qrCodeResult->getString();  // Get the QR code image as raw data
 
         // Generate PDF
         $pdf = new PDF();
@@ -174,11 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'changeAmount' => $changeAmount
         ]);
 
-        // Add QR code to PDF
-        $pdf->QRCode($qrCodeImage);
-
-        // Footer
-        $pdf->Cell(0, 6, "Thank you for your payment!", 0, 1, 'C');
+        // Add the QR code to the PDF
+        $pdf->QRCode($qrCodeImageData);
 
         // Output PDF content as string for emailing
         $pdfContent = $pdf->Output('S');
@@ -190,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn1->commit();
 
         // Clean up the QR code image (no need to delete file since it's not saved)
-        unset($qrCodeImage);
+        unset($qrCodeImageData);
 
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
