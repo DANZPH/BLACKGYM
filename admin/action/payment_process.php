@@ -1,4 +1,4 @@
-
+1
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -10,8 +10,7 @@ include '../../database/connection.php'; // Database connection
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-require_once '../../vendor/autoload.php'; 
-//require '../../fpdf/fpdf.php'; // Include the FPDF library
+require '../../fpdf/fpdf.php'; // Include the FPDF library
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
