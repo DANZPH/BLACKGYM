@@ -52,7 +52,6 @@ if ($latestReceiptNumber) {
 <!-- Div to hold the generated QR Code -->
 
 <div id="qrcode">
-  <img id="qrcode">
 </div>
 
 <script type="text/javascript">
