@@ -8,7 +8,7 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
 try {
-  $query = "SELECT ReceiptNumber FROM Payments ORDER BY PaymentDate DESC LIMIT 1";
+  $query = "SELECT ReceiptNumber FROM Payments";
     $result = $conn1->query($query);
     // Initialize the builder (no logo or label)
     $builder = new Builder(
