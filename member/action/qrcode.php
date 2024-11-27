@@ -12,7 +12,7 @@
 
     <!-- Element to display the QR Code -->
     <div id="qrcode">
-        <img id="qr-code-img" alt="QR Code" />
+        <img id="qrcode" alt="QR Code" />
       
     </div>
 
