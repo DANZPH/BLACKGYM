@@ -28,20 +28,20 @@ if (isset($_SESSION['AdminID'])) {
                 <div class="card">
                     <div class="card-header h2">Admin Login</div>
                     <div class="card-body">
-                        <form action="action/login_process.php" method="POST">
-                            <div class="form-group">
-                                <label for="text">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                                <a href="../login/forgot_password.php">Forgot password</a>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
+                      <form action="action/login_process.php" method="POST">
+                          <div class="form-group">
+                              <label for="email">Username or Email:</label>
+                              <input type="text" id="email" name="email" class="form-control" placeholder="Enter your username or email" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="password">Password:</label>
+                              <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                              <a href="../login/forgot_password.php">Forgot password?</a>
+                          </div>
+                          <div class="form-group">
+                              <button type="submit" class="btn btn-primary">Login</button>
+                          </div>
+                      </form>
                     </div>
                 </div>
             </div>
