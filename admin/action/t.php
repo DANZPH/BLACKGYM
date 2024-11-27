@@ -1,5 +1,5 @@
 <?php
-include '../../database/connection.php';
+
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 
 use Endroid\QrCode\Builder\Builder;
@@ -7,15 +7,13 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
-try {
-  $query = "SELECT ReceiptNumber FROM Payments";
-    $result = $conn1->query($query);
+
     // Initialize the builder (no logo or label)
     $builder = new Builder(
         writer: new PngWriter(),
         writerOptions: [],
         validateResult: false,
-        data: '$receiptNumber', // Content of the QR code (this can be any string)
+        data: 'Custom QR code contents', // Content of the QR code (this can be any string)
         encoding: new Encoding('UTF-8'),
         errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
         size: 300, // Size of the QR code (pixels)
@@ -29,7 +27,4 @@ try {
     header('Content-Type: '.$result->getMimeType());
     echo $result->getString(); // Directly output the generated QR code image
     
-} catch (\Exception $e) {
-    // Catch and display any errors that occur during QR code generation
-    echo 'Error generating QR code: ' . $e->getMessage();
-}
+?>
