@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL); ini_set('display_errors', 1); 
 include '../../database/connection.php';
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 
