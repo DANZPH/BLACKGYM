@@ -50,7 +50,9 @@ if ($latestReceiptNumber) {
 ?>
 
 <!-- Div to hold the generated QR Code -->
+
 <div id="qrcode">
+  <img id="qrcode">
 </div>
 
 <script type="text/javascript">
@@ -59,10 +61,10 @@ if ($latestReceiptNumber) {
     if (receiptNumber) {
         var qrcode = new QRCode(document.getElementById("qrcode"), {
             text: receiptNumber,  // Set the text to the receipt number
-            width: 128,           // Width of the QR code
-            height: 128,          // Height of the QR code
-            colorDark : "#000000", // Dark color
-            colorLight : "#ffffff", // Light color
+            width: 500,           // Width of the QR code
+            height: 500,          // Height of the QR code
+            colorDark : "#2c3e50", // Dark color
+            colorLight : "#bdc3c7", // Light color
             correctLevel : QRCode.CorrectLevel.H // Error correction level
         });
     }
