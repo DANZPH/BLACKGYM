@@ -137,8 +137,8 @@ $latestReceiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['late
     if (receiptNumber) {
         var qrcode = new QRCode(document.getElementById("qrcode"), {
             text: receiptNumber,  // Set the text to the receipt number
-            width: 300,           // Width of the QR code
-            height: 300,          // Height of the QR code
+            width: 256,           // Width of the QR code
+            height: 256,          // Height of the QR code
             colorDark: "#000000", // Dark color
             colorLight: "#ffffff", // Light color
             correctLevel: QRCode.CorrectLevel.H // Error correction level
