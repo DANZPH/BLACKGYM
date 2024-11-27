@@ -2,8 +2,12 @@
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 include '../../database/connection.php'; // Include the database connection
 
-use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
+
+header('Content-Type: image/png'); // Ensure the header is set to output an image
 
 try {
     // Fetch the latest receipt number from the database
@@ -17,23 +21,31 @@ try {
         throw new Exception("No receipt numbers found in the database.");
     }
 
-    // Generate the QR code
-    $qrCode = QrCode::create($receiptNumber)
-        ->setEncoding(new \Endroid\QrCode\Encoding\Encoding('UTF-8'))
-        ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh())
-        ->setSize(300)
-        ->setMargin(10);
+    // Initialize the QR code builder with the receipt number as data
+    $builder = new Builder(
+        writer: new PngWriter(),
+        writerOptions: [],
+        validateResult: false,
+        data: $receiptNumber, // Set the QR code data to the latest receipt number
+        encoding: new Encoding('UTF-8'),
+        errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
+        size: 300, // Size of the QR code (pixels)
+        margin: 10 // Margin around the QR code
+    );
 
-    // Write the QR code to a PNG image
-    $writer = new PngWriter();
-    $result = $writer->write($qrCode);
+    // Build the QR code
+    $result = $builder->build();
 
-    // Output the QR code directly to the browser as a PNG image
-    header('Content-Type: ' . $result->getMimeType());
-    echo $result->getString();
+    // Output the QR code directly to the browser
+    echo $result->getString(); // Output the generated QR code as a PNG image
 } catch (\Exception $e) {
-    // Catch and display any errors that occur during QR code generation
-    echo 'Error generating QR code: ' . $e->getMessage();
+    // Output a blank image with error text in case of failure
+    $im = imagecreate(300, 300); // Create a blank image
+    $bgColor = imagecolorallocate($im, 255, 255, 255); // White background
+    $textColor = imagecolorallocate($im, 0, 0, 0); // Black text
+    imagestring($im, 5, 50, 140, 'Error: ' . $e->getMessage(), $textColor);
+    imagepng($im); // Output the blank image
+    imagedestroy($im);
 } finally {
     $conn1->close(); // Ensure the database connection is closed
 }
