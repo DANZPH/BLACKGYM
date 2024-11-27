@@ -7,13 +7,17 @@ session_start(); // Start the session to track the user
 include '../../database/connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the email and password from the form
-    $email = $_POST["email"];
+    // Get the username/email and password from the form
+    $input = $_POST["email"]; // Can be either email or username
     $password = $_POST["password"];
 
     // Check if the user exists in the Users table
-    $stmt = $conn1->prepare("SELECT UserID, Username, Password, Verified FROM Users WHERE Email = ?");
-    $stmt->bind_param("s", $email);
+    $stmt = $conn1->prepare("
+        SELECT UserID, Username, Password, Verified 
+        FROM Users 
+        WHERE Email = ? OR Username = ?
+    ");
+    $stmt->bind_param("ss", $input, $input); // Bind the input to both email and username
     $stmt->execute();
     $result = $stmt->get_result();
     
@@ -54,13 +58,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } else {
             // Incorrect password
-            $_SESSION['error'] = "Invalid email or password.";
+            $_SESSION['error'] = "Invalid username/email or password.";
             header('Location: ../../member/login.php');
             exit();
         }
     } else {
         // No user found
-        $_SESSION['error'] = "Invalid email or password.";
+        $_SESSION['error'] = "Invalid username/email or password.";
         header('Location: ../../member/login.php');
         exit();
     }
