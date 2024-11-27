@@ -120,7 +120,7 @@ if ($endDate) {
     <header>
         <?php include 'includes/header.php'; ?>
     </header>
-
+<?php include 'action/fetch_receipt.php'; ?>
     <div class="container content-container">
         <div class="row">
             <?php include 'includes/sidebar.php'; ?>
