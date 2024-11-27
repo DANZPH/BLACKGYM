@@ -30,7 +30,7 @@ if (isset($_SESSION['AdminID'])) {
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
                             <div class="form-group">
-                                <label for="email">Email:</label>
+                                <label for="text">Email:</label>
                                 <input type="email" id="email" name="email" class="form-control" required>
                             </div>
                             <div class="form-group">
