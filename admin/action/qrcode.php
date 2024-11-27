@@ -11,7 +11,7 @@
     
     <script>
         // Fetch the latest receipt number from the backend
-        fetch('getReceiptNumber.php')  // Assuming 'getReceiptNumber.php' will return the receipt number
+        fetch('qr.php')  // Assuming 'getReceiptNumber.php' will return the receipt number
             .then(response => response.json()) // Expecting JSON data from the PHP backend
             .then(data => {
                 const receiptNumber = data.receiptNumber;
