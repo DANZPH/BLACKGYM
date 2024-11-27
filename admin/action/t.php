@@ -7,7 +7,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
-header('Content-Type: image/png'); // Ensure the header is set to output an image
+header('Content-Type: image/png'); // Ensure proper header for image output
 
 try {
     // Fetch the latest receipt number from the database
@@ -21,30 +21,29 @@ try {
         throw new Exception("No receipt numbers found in the database.");
     }
 
-    // Initialize the QR code builder with the receipt number as data
-    $builder = new Builder(
-        writer: new PngWriter(),
-        writerOptions: [],
-        validateResult: false,
-        data: $receiptNumber, // Set the QR code data to the latest receipt number
-        encoding: new Encoding('UTF-8'),
-        errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
-        size: 300, // Size of the QR code (pixels)
-        margin: 10 // Margin around the QR code
-    );
-
     // Build the QR code
-    $result = $builder->build();
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($receiptNumber)
+        ->encoding(new Encoding('UTF-8'))
+        ->errorCorrectionLevel(ErrorCorrectionLevel::HIGH)
+        ->size(300)
+        ->margin(10)
+        ->build();
 
-    // Output the QR code directly to the browser
-    echo $result->getString(); // Output the generated QR code as a PNG image
+    // Output the QR code image
+    echo $result->getString();
 } catch (\Exception $e) {
-    // Output a blank image with error text in case of failure
-    $im = imagecreate(300, 300); // Create a blank image
+    // Log the error and output a placeholder image
+    error_log("QR Code Generation Error: " . $e->getMessage());
+
+    // Create a blank image with an error message
+    $im = imagecreate(300, 300);
     $bgColor = imagecolorallocate($im, 255, 255, 255); // White background
     $textColor = imagecolorallocate($im, 0, 0, 0); // Black text
-    imagestring($im, 5, 50, 140, 'Error: ' . $e->getMessage(), $textColor);
-    imagepng($im); // Output the blank image
+    imagestring($im, 5, 10, 140, 'Error: ' . $e->getMessage(), $textColor);
+    imagepng($im);
     imagedestroy($im);
 } finally {
     $conn1->close(); // Ensure the database connection is closed
