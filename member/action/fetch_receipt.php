@@ -113,7 +113,7 @@ $latestReceiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['late
     <?php
     // Display a message if no receipt number is found
     if ($latestReceiptNumber) {
-        echo "<h2>Latest Receipt Number: $latestReceiptNumber</h2>";
+        echo "<h2> $latestReceiptNumber</h2>";
     } else {
         echo "<h2>No receipt found for this member.</h2>";
     }
