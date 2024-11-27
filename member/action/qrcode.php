@@ -11,9 +11,13 @@
     <h1>Generate QR Code for Receipt</h1>
 
     <!-- Element to display the QR Code -->
-    <div id="qrcode"></div>
+    <div id="qrcode">
+        <img id="qr-code-img" alt="QR Code" />
+      
+    </div>
 
     <script>
+              fetch('qr.php')
         // Fetch the latest receipt number stored in the session using PHP
         <?php
         // Start session and retrieve the latest receipt number
