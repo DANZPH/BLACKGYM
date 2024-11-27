@@ -25,10 +25,49 @@ if (isset($_SESSION['MemberID'])) {
     exit();
 }
 
-// Display the latest receipt number
-if (isset($_SESSION['latestReceiptNumber']) && $_SESSION['latestReceiptNumber'] !== null) {
-    echo "Latest Receipt Number: " . $_SESSION['latestReceiptNumber'];
+// Fetch the latest receipt number
+$latestReceiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['latestReceiptNumber'] : null;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display QR Code</title>
+    <!-- Include qrcode.js -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body>
+
+<?php
+// Display a message if no receipt number is found
+if ($latestReceiptNumber) {
+    echo "<h2>Latest Receipt Number: $latestReceiptNumber</h2>";
 } else {
-    echo "No receipt found for this member.";
+    echo "<h2>No receipt found for this member.</h2>";
 }
 ?>
+
+<!-- Div to hold the generated QR Code -->
+<div id="qrcode">
+            <img id="qrcode" alt="QR Code" />
+</div>
+
+<script type="text/javascript">
+    // Generate the QR code if there's a receipt number
+    var receiptNumber = "<?php echo $latestReceiptNumber; ?>";
+    if (receiptNumber) {
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: receiptNumber,  // Set the text to the receipt number
+            width: 128,           // Width of the QR code
+            height: 128,          // Height of the QR code
+            colorDark : "#000000", // Dark color
+            colorLight : "#ffffff", // Light color
+            correctLevel : QRCode.CorrectLevel.H // Error correction level
+        });
+    }
+</script>
+
+</body>
+</html>
