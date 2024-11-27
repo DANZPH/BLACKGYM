@@ -15,7 +15,7 @@ try {
         writer: new PngWriter(),
         writerOptions: [],
         validateResult: false,
-        data: $receiptNumber, // Content of the QR code (this can be any string)
+        data: "",$receiptNumber, // Content of the QR code (this can be any string)
         encoding: new Encoding('UTF-8'),
         errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
         size: 300, // Size of the QR code (pixels)
