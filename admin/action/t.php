@@ -1,5 +1,5 @@
 <?php
-
+include '../../database/connection.php';
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 
 use Endroid\QrCode\Builder\Builder;
@@ -8,12 +8,14 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
 
 try {
+  $query = "SELECT ReceiptNumber FROM Payments ORDER BY PaymentDate DESC LIMIT 1";
+    $result = $conn1->query($query);
     // Initialize the builder (no logo or label)
     $builder = new Builder(
         writer: new PngWriter(),
         writerOptions: [],
         validateResult: false,
-        data: 'RCT-67452e9e07106', // Content of the QR code (this can be any string)
+        data: $receiptNumber, // Content of the QR code (this can be any string)
         encoding: new Encoding('UTF-8'),
         errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
         size: 300, // Size of the QR code (pixels)
