@@ -31,11 +31,11 @@ if (isset($_SESSION['AdminID'])) {
                       <form action="action/login_process.php" method="POST">
                           <div class="form-group">
                               <label for="email">Username or Email:</label>
-                              <input type="text" id="email" name="email" class="form-control" placeholder="Enter your username or email" required>
+                              <input type="text" id="email" name="email" class="form-control" placeholder="username or email" required>
                           </div>
                           <div class="form-group">
                               <label for="password">Password:</label>
-                              <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                              <input type="password" id="password" name="password" class="form-control" placeholder="*******" required>
                               <a href="../login/forgot_password.php">Forgot password?</a>
                           </div>
                           <div class="form-group">
