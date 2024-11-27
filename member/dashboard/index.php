@@ -35,7 +35,6 @@ if ($endDate) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard</title>
     <!-- Bootstrap CSS -->
-        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body {
@@ -121,8 +120,7 @@ if ($endDate) {
     <header>
         <?php include 'includes/header.php'; ?>
     </header>
-        <?php include 'action/fetch_receipt.php'; ?>
-        <div id="qrcode">
+
     <div class="container content-container">
         <div class="row">
             <?php include 'includes/sidebar.php'; ?>
@@ -182,7 +180,7 @@ if ($endDate) {
             </div>
         </div>
     </div>
-<script type="text/javascript"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
