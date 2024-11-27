@@ -4,34 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generate QR Code</title>
+    <!-- Include QRCode.js library from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-    <h1>Generated QR Code</h1>
-    
-    <!-- The <img> element where the QR code will be rendered -->
-    <img id="qr-code-img" alt="QR Code" />
+    <h1>Generate QR Code for Receipt</h1>
+
+    <!-- Element to display the QR Code -->
+    <div id="qrcode"></div>
 
     <script>
-        // Fetch the latest receipt number from the backend
-        fetch('qr.php')  // Assuming 'getReceiptNumber.php' will return the receipt number
-            .then(response => response.json()) // Expecting JSON data from the PHP backend
-            .then(data => {
-                const receiptNumber = data.receiptNumber;
-                
-                // Generate the QR code and set it as the src of the img element
-                QRCode.toDataURL(receiptNumber, { errorCorrectionLevel: 'H' }, function (error, url) {
-                    if (error) {
-                        console.error('Error generating QR code:', error);
-                    } else {
-                        // Set the generated QR code as the image source
-                        document.getElementById('qr-code-img').src = url;
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching receipt number:", error);
+        // Fetch the latest receipt number stored in the session using PHP
+        <?php
+        // Start session and retrieve the latest receipt number
+        session_start();
+        $receiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['latestReceiptNumber'] : null;
+        ?>
+
+        // Ensure the receipt number exists
+        const receiptNumber = "<?php echo $receiptNumber; ?>";
+
+        if (receiptNumber) {
+            // Use QRCode.js to generate the QR code
+            QRCode.toCanvas(document.getElementById("qrcode"), receiptNumber, function (error) {
+                if (error) {
+                    console.error("Error generating QR code:", error);
+                }
             });
+        } else {
+            // If no receipt number is found, display an error message
+            document.getElementById("qrcode").innerHTML = "No receipt found for this member.";
+        }
     </script>
 </body>
 </html>
