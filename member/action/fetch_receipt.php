@@ -41,7 +41,9 @@ $latestReceiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['late
     <h2>Latest Receipt QR Code</h2>
     
     <!-- Container for QR Code -->
-    <div id="qrcode"></div>
+    <div id="qrcode">
+          <img id="qrcode" alt="QR Code" />
+    </div>
 
     <script>
         // Get the latest receipt number passed from PHP
