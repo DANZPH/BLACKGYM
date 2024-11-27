@@ -31,7 +31,7 @@ if (isset($_SESSION['latestReceiptNumber']) && $_SESSION['latestReceiptNumber'] 
 } else {
     echo "No receipt found for this member.";
 }
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,3 +67,5 @@ if (isset($_SESSION['latestReceiptNumber']) && $_SESSION['latestReceiptNumber'] 
     </script>
 </body>
 </html>
+?>
+
