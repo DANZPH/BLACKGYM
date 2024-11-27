@@ -1,30 +1,44 @@
 <?php
-
+include '../../database/connection.php';
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\QrCode;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
 
+// Ensure the database connection is valid
+if (!$conn1) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-    // Initialize the builder (no logo or label)
-    $builder = new Builder(
-        writer: new PngWriter(),
-        writerOptions: [],
-        validateResult: false,
-        data: 'Custom QR code contents', // Content of the QR code (this can be any string)
-        encoding: new Encoding('UTF-8'),
-        errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
-        size: 300, // Size of the QR code (pixels)
-        margin: 10 // Margin around the QR code
-    );
+// Query to fetch the latest receipt number
+$query = "SELECT ReceiptNumber FROM Payments ORDER BY PaymentDate DESC LIMIT 1";
+$result = $conn1->query($query);
 
-    // Build the QR code
-    $result = $builder->build();
+if (!$result) {
+    die("Query failed: " . $conn1->error);
+}
 
-    // Output the QR code directly to the browser as a PNG image
-    header('Content-Type: '.$result->getMimeType());
-    echo $result->getString(); // Directly output the generated QR code image
-    
+// Fetch the result
+$row = $result->fetch_assoc();
+if (!$row) {
+    die("No receipt found.");
+}
+
+$receiptNumber = $row['ReceiptNumber'];
+
+// Create a new QR code instance
+$qrCode = new QrCode($receiptNumber);
+$qrCode->setSize(300); // Set the size of the QR code
+$qrCode->setMargin(10); // Set the margin around the QR code
+$qrCode->setEncoding(new Encoding('UTF-8')); // Set the encoding
+$qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH); // Set error correction level
+
+// Create a writer instance
+$writer = new PngWriter();
+
+// Output the QR code directly to the browser as a PNG image
+header('Content-Type: ' . $writer->getMimeType());
+echo $writer->writeString($qrCode); // Directly output the generated QR code image
 ?>
