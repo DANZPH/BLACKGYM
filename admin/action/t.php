@@ -13,7 +13,7 @@ try {
         writer: new PngWriter(),
         writerOptions: [],
         validateResult: false,
-        data: 'Custom QR code contents', // Content of the QR code (this can be any string)
+        data: 'RCT-67452e9e07106', // Content of the QR code (this can be any string)
         encoding: new Encoding('UTF-8'),
         errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
         size: 300, // Size of the QR code (pixels)
