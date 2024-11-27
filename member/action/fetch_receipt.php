@@ -74,8 +74,8 @@ $latestReceiptNumber = isset($_SESSION['latestReceiptNumber']) ? $_SESSION['late
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #f9f9f9;
-            width: 150px;
-            height: 150px;
+            width: 180px;
+            height: 180px;
             margin-bottom: 20px;
         }
 
