@@ -24,4 +24,11 @@ if (isset($_SESSION['MemberID'])) {
     header('Location: ../../member/login.php');
     exit();
 }
+
+// Display the latest receipt number
+if (isset($_SESSION['latestReceiptNumber']) && $_SESSION['latestReceiptNumber'] !== null) {
+    echo "Latest Receipt Number: " . $_SESSION['latestReceiptNumber'];
+} else {
+    echo "No receipt found for this member.";
+}
 ?>
