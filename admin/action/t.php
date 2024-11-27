@@ -2,9 +2,7 @@
 require_once '../../vendor/autoload.php'; // Ensure the autoloader is included
 include '../../database/connection.php'; // Include the database connection
 
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 
 try {
@@ -19,24 +17,20 @@ try {
         throw new Exception("No receipt numbers found in the database.");
     }
 
-    // Initialize the QR code builder with the receipt number as data
-    $builder = new Builder(
-        writer: new PngWriter(),
-        writerOptions: [],
-        validateResult: false,
-        data: $receiptNumber, // Set the QR code data to the latest receipt number
-        encoding: new Encoding('UTF-8'),
-        errorCorrectionLevel: ErrorCorrectionLevel::High, // High error correction
-        size: 300, // Size of the QR code (pixels)
-        margin: 10 // Margin around the QR code
-    );
+    // Generate the QR code
+    $qrCode = QrCode::create($receiptNumber)
+        ->setEncoding(new \Endroid\QrCode\Encoding\Encoding('UTF-8'))
+        ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh())
+        ->setSize(300)
+        ->setMargin(10);
 
-    // Build the QR code
-    $result = $builder->build();
+    // Write the QR code to a PNG image
+    $writer = new PngWriter();
+    $result = $writer->write($qrCode);
 
     // Output the QR code directly to the browser as a PNG image
     header('Content-Type: ' . $result->getMimeType());
-    echo $result->getString(); // Directly output the generated QR code image
+    echo $result->getString();
 } catch (\Exception $e) {
     // Catch and display any errors that occur during QR code generation
     echo 'Error generating QR code: ' . $e->getMessage();
