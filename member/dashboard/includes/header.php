@@ -16,7 +16,7 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="../../action/fetch_receipt.php">Hello, <?php echo $_SESSION['username']; ?></a>
+                    <a class="nav-link" href="../action/fetch_receipt.php">Hello, <?php echo $_SESSION['username']; ?></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../action/logout.php">Logout</a>
