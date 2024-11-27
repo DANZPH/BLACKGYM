@@ -7,8 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-    <div id="qrcode"></div> <!-- Container where QR code will be generated -->
+    <h1>Generated QR Code</h1>
     
+    <!-- The <img> element where the QR code will be rendered -->
+    <img id="qr-code-img" alt="QR Code" />
+
     <script>
         // Fetch the latest receipt number from the backend
         fetch('qr.php')  // Assuming 'getReceiptNumber.php' will return the receipt number
@@ -16,10 +19,14 @@
             .then(data => {
                 const receiptNumber = data.receiptNumber;
                 
-                // Generate the QR Code using the QRCode.js library
-                QRCode.toCanvas(document.getElementById('qrcode'), receiptNumber, function (error) {
-                    if (error) console.error(error);
-                    console.log('QR code successfully generated!');
+                // Generate the QR code and set it as the src of the img element
+                QRCode.toDataURL(receiptNumber, { errorCorrectionLevel: 'H' }, function (error, url) {
+                    if (error) {
+                        console.error('Error generating QR code:', error);
+                    } else {
+                        // Set the generated QR code as the image source
+                        document.getElementById('qr-code-img').src = url;
+                    }
                 });
             })
             .catch(error => {
