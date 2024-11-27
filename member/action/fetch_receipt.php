@@ -32,3 +32,38 @@ if (isset($_SESSION['latestReceiptNumber']) && $_SESSION['latestReceiptNumber'] 
     echo "No receipt found for this member.";
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt QR Code</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+</head>
+<body>
+    <h2>Latest Receipt QR Code</h2>
+    
+    <!-- Container for QR Code -->
+    <div id="qrcode"></div>
+
+    <script>
+        // Get the latest receipt number passed from PHP
+        var latestReceiptNumber = <?php echo json_encode($latestReceiptNumber); ?>;
+
+        // Check if a valid receipt number is available
+        if (latestReceiptNumber) {
+            // Generate the QR code using QRCode.js
+            new QRCode(document.getElementById("qrcode"), {
+                text: latestReceiptNumber,
+                width: 128, // Width of the QR code
+                height: 128, // Height of the QR code
+                colorDark : "#000000", // Dark color of the QR code
+                colorLight : "#ffffff", // Light color of the QR code
+                correctLevel : QRCode.CorrectLevel.H // Error correction level
+            });
+        } else {
+            document.getElementById("qrcode").innerHTML = "No receipt found.";
+        }
+    </script>
+</body>
+</html>
