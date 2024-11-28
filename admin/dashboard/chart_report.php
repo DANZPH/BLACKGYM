@@ -64,7 +64,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <!-- Chart Section -->
             <div class="row mt-4">
                 <!-- Members by Status (Pie Chart) -->
-                <div class="col-md-6 mb-4">
+                <div class=".col-sm-1 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Members by Status</h4>
@@ -72,7 +72,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-                                <!-- Subscription vs SessionPrice Count (Pie Chart) -->
+                <!-- Subscription vs SessionPrice Count (Pie Chart) -->
                 <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
