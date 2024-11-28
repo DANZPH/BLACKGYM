@@ -82,7 +82,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </div>
                 </div>
                 <!-- Attendance Trends (Line Chart) -->
-                <div class="col-md-12 mb-4">
+                <div class=".col-sm-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
