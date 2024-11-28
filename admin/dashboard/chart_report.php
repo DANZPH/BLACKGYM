@@ -67,7 +67,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Members by Status</h4>
+                            <h4 class="text-center">Status</h4>
                             <canvas id="membersChart"></canvas>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Member Type</h4>
+                            <h4 class="text-center">Type</h4>
                             <canvas id="subscriptionSessionPriceChart"></canvas>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                   <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
-                            <h4 class="text-center">Payments by Type</h4>
+                            <h4 class="text-center">Payments</h4>
                             <canvas id="paymentsChart"></canvas>
                         </div>
                     </div>
