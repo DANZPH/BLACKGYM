@@ -100,8 +100,8 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-  <!-- Payments by Type (Bar Chart) -->
-                <div class="col-md-6 mb-4">
+                  <!-- Payments by Type (Bar Chart) -->
+                  <div class="col-md-6 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Payments by Type</h4>
@@ -109,7 +109,6 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
