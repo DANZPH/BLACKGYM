@@ -5,7 +5,7 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 include '../../database/connection.php';
-
+//cards
 // Total Members with Active Membership Status
 $totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
 $totalMembersResult = $conn1->query($totalMembersQuery);
@@ -26,6 +26,8 @@ $currentPeopleQuery = "SELECT COUNT(*) AS current_people FROM Attendance WHERE C
 $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
+
+//Chart
 // Total Members by Status
 $membersQuery = "SELECT MembershipStatus, COUNT(*) AS count FROM Members GROUP BY MembershipStatus";
 $membersResult = $conn1->query($membersQuery);
@@ -93,7 +95,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </h4>
                     <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
                 </div>
-                <a href="members.php" class="btn btn-outline-info btn-sm">View</a>
+                <a href="view_members" class="btn btn-outline-info btn-sm">View</a>
             </div>
         </div>
     </div>
@@ -108,7 +110,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </h4>
                     <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                 </div>
-                <a href="payments.php" class="btn btn-outline-success btn-sm">View</a>
+                <a href="payments" class="btn btn-outline-success btn-sm">View</a>
             </div>
         </div>
     </div>
@@ -123,7 +125,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </h4>
                     <h2 class="card-text text-warning"><?php echo $pendingPayments; ?></h2>
                 </div>
-                <a href="payments.php" class="btn btn-outline-warning btn-sm">View</a>
+                <a href="payments" class="btn btn-outline-warning btn-sm">View</a>
             </div>
         </div>
     </div>
@@ -138,7 +140,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </h4>
                     <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
                 </div>
-                <a href="attendance.php" class="btn btn-outline-info btn-sm">View</a>
+                <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
             </div>
         </div>
     </div>
@@ -190,9 +192,9 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </div>
                 </div>
             </div>
-</div>
         </div>
     </div>
+</div>
                     <?php include '../../includes/footer.php'; ?>
 
 
