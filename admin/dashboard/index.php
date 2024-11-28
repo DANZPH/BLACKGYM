@@ -95,7 +95,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </h4>
                     <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
                 </div>
-                <a href="view_members" class="btn btn-outline-info btn-sm">View</a>
+                <a href="view_member" class="btn btn-outline-info btn-sm">View</a>
             </div>
         </div>
     </div>
