@@ -64,7 +64,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <!-- Chart Section -->
             <div class="row mt-4">
                 <!-- Members by Status (Pie Chart) -->
-                <div class=".col-sm-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Members by Status</h4>
@@ -73,7 +73,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </div>
                 </div>
                 <!-- Subscription vs SessionPrice Count (Pie Chart) -->
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Subsciption vs Session</h4>
@@ -82,7 +82,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </div>
                 </div>
                 <!-- Attendance Trends (Line Chart) -->
-                <div class=".col-sm-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
@@ -92,7 +92,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                 </div>
 
                 <!-- Gender Distribution (Pie Chart) -->
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Gender</h4>
@@ -101,7 +101,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     </div>
                 </div>
                   <!-- Payments by Type (Bar Chart) -->
-                  <div class="col-md-6 mb-4">
+                  <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Payments by Type</h4>
