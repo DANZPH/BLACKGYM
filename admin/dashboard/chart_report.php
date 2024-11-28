@@ -81,22 +81,21 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                         </div>
                     </div>
                 </div>
-                <!-- Attendance Trends (Line Chart) -->
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-lg border-0">
-                        <div class="card-body">
-                            <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
-                            <canvas id="attendanceChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Gender Distribution (Pie Chart) -->
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-lg border-0">
                         <div class="card-body">
                             <h4 class="text-center">Gender</h4>
                             <canvas id="genderChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Attendance Trends (Line Chart) -->
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <h4 class="text-center">Attendance Trends (Last 7 Days)</h4>
+                            <canvas id="attendanceChart"></canvas>
                         </div>
                     </div>
                 </div>
