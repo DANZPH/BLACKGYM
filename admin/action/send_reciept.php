@@ -5,6 +5,7 @@ require '../../login/phpmailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+
 function sendReceipt($email, $memberID, $amount, $amountPaid, $change, $paymentType) {
     $mail = new PHPMailer(true);
 
