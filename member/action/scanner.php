@@ -21,23 +21,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qrData'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
         #scanner-container {
+            position: relative;
             width: 100%;
             max-width: 500px;
-            margin: 0 auto;
             text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
         #video {
             width: 100%;
             height: auto;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
+            border-radius: 10px;
         }
+
+        #scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            border: 2px solid rgba(255, 0, 0, 0.8);
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
         #output {
+            margin-top: 20px;
             font-size: 1.2em;
             font-weight: bold;
             color: green;
         }
+
         #error {
             color: red;
             font-size: 1em;
@@ -49,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qrData'])) {
 <div id="scanner-container">
     <h1>QR Code Scanner</h1>
     <video id="video" autoplay></video>
+    <div id="scanner-overlay"></div>
     <div id="output">Scan a QR code to see the result.</div>
     <div id="error"></div>
 </div>
@@ -58,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qrData'])) {
     const video = document.getElementById('video');
     const output = document.getElementById('output');
     const errorDiv = document.getElementById('error');
+    const scannerOverlay = document.getElementById('scanner-overlay');
 
     // Access the user's camera
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
