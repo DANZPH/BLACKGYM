@@ -106,7 +106,7 @@
                 
                 $.ajax({
                     type: "POST",
-                    url: "action/add_member_process.php",
+                    url: "../action/add_member_process.php",
                     data: {
                         username: $('#username').val(),
                         email: $('#email').val(),
