@@ -1,3 +1,19 @@
+<?php
+// scanner.php
+
+// Handle the POST request if QR data is received
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qrData'])) {
+    $qrData = $_POST['qrData'];
+
+    // Log the QR code data to a file or process it (for example, save to a database)
+    file_put_contents('qr_log.txt', "Scanned QR Code: $qrData\n", FILE_APPEND);
+
+    // Optionally, you can send a response back to the frontend
+    echo 'QR code data received: ' . htmlspecialchars($qrData);
+    exit();  // Stop further execution (we already handled the request)
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,6 +36,11 @@
         #output {
             font-size: 1.2em;
             font-weight: bold;
+            color: green;
+        }
+        #error {
+            color: red;
+            font-size: 1em;
         }
     </style>
 </head>
@@ -29,53 +50,54 @@
     <h1>QR Code Scanner</h1>
     <video id="video" autoplay></video>
     <div id="output">Scan a QR code to see the result.</div>
+    <div id="error"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
-    // Get video element and canvas to capture frames from video feed
     const video = document.getElementById('video');
     const output = document.getElementById('output');
+    const errorDiv = document.getElementById('error');
 
-    // Check if browser supports video
+    // Access the user's camera
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
             .then(stream => {
                 video.srcObject = stream;
-                video.setAttribute('playsinline', true);
+                video.setAttribute('playsinline', true); // Important for iOS
                 video.play();
                 requestAnimationFrame(scanQRCode);
             })
             .catch(err => {
                 console.error("Error accessing camera: " + err);
-                output.innerText = 'Camera error: ' + err;
+                errorDiv.innerText = 'Error accessing camera: ' + err;
             });
     } else {
-        output.innerText = 'Your browser does not support camera access.';
+        errorDiv.innerText = 'Your browser does not support camera access.';
     }
 
     function scanQRCode() {
-        // Create a canvas to extract the current video frame
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        
+
         // Set canvas size equal to the video element
         canvas.height = video.videoHeight;
         canvas.width = video.videoWidth;
-        
+
         // Draw current video frame onto the canvas
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
+
         // Get image data from the canvas
         const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        
+
         // Try to decode the QR code from the image data
         const qrCode = jsQR(imageData.data, canvas.width, canvas.height);
 
         if (qrCode) {
-            // If QR code is found, display the result
+            // QR code found, display the result
             output.innerText = 'QR Code Data: ' + qrCode.data;
-            // Optionally, send the result to your server
+
+            // Send the QR code data to the server (POST request)
             sendQRCodeData(qrCode.data);
         } else {
             // Keep scanning
@@ -84,7 +106,7 @@
     }
 
     function sendQRCodeData(data) {
-        // Send the scanned QR code data to your server using AJAX (Optional)
+        // Send the scanned QR code data to your server using AJAX (POST request)
         fetch('scanner.php', {
             method: 'POST',
             headers: {
@@ -95,6 +117,7 @@
         .then(response => response.text())
         .then(responseData => {
             console.log('Server Response: ' + responseData);
+            // You can handle the server response here if needed
         })
         .catch(error => {
             console.error('Error sending QR data to server:', error);
