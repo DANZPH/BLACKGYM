@@ -42,7 +42,11 @@ include '../../includes/head.php';
             <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
-                       
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body">
                             <form id="registerForm">
