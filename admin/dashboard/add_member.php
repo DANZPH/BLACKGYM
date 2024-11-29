@@ -18,15 +18,15 @@
                         <form id="registerForm">
                             <div class="form-group">
                                 <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" >
+                                <input type="text" id="username" name="username" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" >
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Optional">
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" >
+                                <input type="password" id="password" name="password" class="form-control" required>
                             </div>
 
                             <!-- Gender, Age, and Address Fields -->
@@ -40,17 +40,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="age">Age:</label>
-                                <input type="number" id="age" name="age" class="form-control" >
+                                <input type="number" id="age" name="age" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="address">Address:</label>
-                                <input type="text" id="address" name="address" class="form-control" >
+                                <input type="text" id="address" name="address" class="form-control" required>
                             </div>
 
                             <!-- Membership Option Fields -->
                             <div class="form-group">
                                 <label for="membershipType">Choose Membership Type:</label>
-                                <select id="membershipType" name="membershipType" class="form-control" >
+                                <select id="membershipType" name="membershipType" class="form-control" required>
                                     <option value="SessionPrice">Pay Per Session</option>
                                     <option value="Subscription">Subscription</option>
                                 </select>
