@@ -10,7 +10,7 @@ include '../../database/connection.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <?php include '../../includes/head.php';?>
 <body>
 <?php include 'includes/header.php'; ?>
@@ -32,7 +32,7 @@ include '../../database/connection.php';
                 <div class="card-body">
                     <!-- Wrap table in a responsive div -->
                     <div class="table">
-                        <table id="membersTable" class="table table-striped table-bordered" data-bs-theme="dark">
+                        <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Username</th>
