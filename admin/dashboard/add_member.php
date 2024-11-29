@@ -18,21 +18,21 @@
                         <form id="registerForm">
                             <div class="form-group">
                                 <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" required>
+                                <input type="text" id="username" name="username" class="form-control" >
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
+                                <input type="email" id="email" name="email" class="form-control" >
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
+                                <input type="password" id="password" name="password" class="form-control" >
                             </div>
 
                             <!-- Gender, Age, and Address Fields -->
                             <div class="form-group">
                                 <label for="gender">Gender:</label>
-                                <select id="gender" name="gender" class="form-control" required>
+                                <select id="gender" name="gender" class="form-control" >
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     <option value="Other">Other</option>
@@ -40,17 +40,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="age">Age:</label>
-                                <input type="number" id="age" name="age" class="form-control" required>
+                                <input type="number" id="age" name="age" class="form-control" >
                             </div>
                             <div class="form-group">
                                 <label for="address">Address:</label>
-                                <input type="text" id="address" name="address" class="form-control" required>
+                                <input type="text" id="address" name="address" class="form-control" >
                             </div>
 
                             <!-- Membership Option Fields -->
                             <div class="form-group">
                                 <label for="membershipType">Choose Membership Type:</label>
-                                <select id="membershipType" name="membershipType" class="form-control" required>
+                                <select id="membershipType" name="membershipType" class="form-control" >
                                     <option value="SessionPrice">Pay Per Session</option>
                                     <option value="Subscription">Subscription</option>
                                 </select>
