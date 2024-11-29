@@ -52,7 +52,7 @@ include '../../includes/head.php';
                             <form id="registerForm">
                                 <!-- Username -->
                                 <div class="form-group">
-                                    <label for="username">Username</label>
+                                    <label for="username">Full name</label>
                                     <input type="text" id="username" name="username" class="form-control" required>
                                 </div>
 
@@ -87,7 +87,7 @@ include '../../includes/head.php';
                                 <!-- Address -->
                                 <div class="form-group">
                                     <label for="address">Address</label>
-                                    <textarea id="address" name="address" class="form-control" rows="2" required></textarea>
+                                    <textarea id="address" name="address" class="form-control" rows="2"></textarea>
                                 </div>
 
                                 <!-- Membership Type -->
@@ -207,7 +207,6 @@ include '../../includes/head.php';
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function(){
-            // Toggle Subscription and SessionPrice options based on membership type
             $('#membershipType').change(function() {
                 var membershipType = $(this).val();
                 if (membershipType === 'Subscription') {
@@ -222,10 +221,8 @@ include '../../includes/head.php';
             // Submit form via AJAX
             $('#registerForm').submit(function(e){
                 e.preventDefault();
-
-                // Generate a random OTP for the user
                 var otp = Math.floor(100000 + Math.random() * 900000);
-                var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();  // OTP expires in 15 minutes
+                var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString(); 
                 
                 $.ajax({
                     type: "POST",
