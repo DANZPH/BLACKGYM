@@ -47,7 +47,7 @@ include '../../database/connection.php'; // Include database connection
                         <h5>Member Details</h5>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table">
                             <table id="historyTable" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
