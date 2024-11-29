@@ -16,7 +16,6 @@
             <div id="manageMembers" class="collapse">
                 <ul class="nav flex-column ml-3">
                     <li class="nav-item"><a href="view_member" class="nav-link">View Members</a></li>
-                    <li class="nav-item"><a href="add_member" class="nav-link">Add Member</a></li>
                     <li class="nav-item"><a href="update_member" class="nav-link">Update Member</a></li>
                 </ul>
             </div>
