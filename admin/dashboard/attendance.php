@@ -136,18 +136,19 @@ include '../../database/connection.php';
                     memberID: memberID
                 },
                 success: function (response) {
+                    location.reload();
                     if (response === 'checkedIn') {
                         button.removeClass('btn-success').addClass('btn-danger').text('Check Out');
-                        location.reload(); // Reload the page after successful check-in
+                         // Reload the page after successful check-in
                     } else if (response === 'checkedOut') {
                         button.removeClass('btn-danger').addClass('btn-success').text('Check In');
-                        location.reload(); // Reload the page after successful check-out
+                        
                     } else if (response === 'error') {
                         alert('An error occurred while processing attendance.');
                     } else if (response === 'noRecord') {
                         alert('No attendance record found for this member.');
                     } else {
-                        alert('Unexpected response: ' + response);
+                        alert(response);
                     }
                 },
                 error: function () {
