@@ -1,60 +1,133 @@
+<?php
+session_start();
+
+// Check if the member is logged in
+if (!isset($_SESSION['MemberID'])) {
+    // Redirect to login page if not logged in
+    header('Location: ../../member/login.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <!-- Include the html5-qrcode library -->
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="https://cdn.rawgit.com/cozmo/jsQR/gh-pages/dist/jsQR.js"></script>
     <style>
-        #qr-reader {
-            width: 100%; /* Full width of the container */
-            height: 500px; /* Set a fixed height for the camera feed */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #qrText {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #scannerCanvas {
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 500px; /* Prevent stretching */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
 
-<h2>Scan a QR Code</h2>
+<div class="container">
+    <h2>QR Code Scanner</h2>
 
-<!-- Add a button to start scanning -->
-<button id="startButton">Start Scanning</button>
+    <div id="qrText">Scan your QR code to check-in/check-out.</div>
 
-<!-- Add a div for the QR code scanning -->
-<div id="qr-reader"></div>
+    <video id="videoElement" autoplay></video>
 
-<!-- Display the decoded QR code data -->
-<p id="result"></p>
+    <canvas id="scannerCanvas"></canvas>
+
+</div>
 
 <script>
-    // Create an instance of Html5QrcodeScanner
-    const qrCodeScanner = new Html5QrcodeScanner(
-        "qr-reader", 
-        {
-            fps: 10, // Frames per second for scanning
-            qrbox: 250 // Size of the scanning box that detects QR codes
-        }, 
-        true // Automatically request camera permission
-    );
+// Initialize the video element and canvas
+const videoElement = document.getElementById('videoElement');
+const qrTextElement = document.getElementById('qrText');
 
-    // Start scanning when the button is clicked
-    document.getElementById('startButton').addEventListener('click', function () {
-        qrCodeScanner.render(onScanSuccess, onScanError);
+// Initialize the video stream from the user's camera
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(function (stream) {
+        videoElement.srcObject = stream;
+        videoElement.setAttribute('playsinline', true); // Required for iOS
+        videoElement.play();
+        requestAnimationFrame(scanQRCode);
+    })
+    .catch(function (error) {
+        qrTextElement.textContent = 'Error accessing camera: ' + error;
+        console.error(error);
     });
 
-    // Success callback for QR code scan
-    function onScanSuccess(decodedText, decodedResult) {
-        // Display the decoded text
-        document.getElementById('result').textContent = "QR Code Data: " + decodedText;
+// Function to scan QR code from the video stream
+function scanQRCode() {
+    if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+        // Ensure the video dimensions are available
+        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            // Draw current video frame on canvas
+            const canvasElement = document.createElement('canvas');
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            const ctx = canvasElement.getContext("2d");
+            ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
-        // Optionally stop scanning after successful scan
-        qrCodeScanner.clear();
-    }
+            // Scan the image for QR code
+            let imageData = ctx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            let decoded = jsQR(imageData.data, imageData.width, imageData.height);
 
-    // Error callback (optional)
-    function onScanError(errorMessage) {
-        console.warn("QR Code error: " + errorMessage);
+            if (decoded) {
+                // Successfully decoded QR code, display the result
+                qrTextElement.textContent = "Decoded QR: " + decoded.data;
+            } else {
+                requestAnimationFrame(scanQRCode); // Continue scanning
+            }
+        } else {
+            console.warn("Video dimensions are not available yet. Retrying...");
+            requestAnimationFrame(scanQRCode); // Retry if dimensions are not yet set
+        }
+    } else {
+        console.warn("Video stream not ready. Retrying...");
+        requestAnimationFrame(scanQRCode); // Retry if video is not ready
     }
+}
 </script>
 
 </body>
