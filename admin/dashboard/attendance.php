@@ -31,8 +31,8 @@ include '../../database/connection.php';
                 </div>
                 <div class="card-body">
                     <!-- Wrap table in a responsive div -->
-                    <div class="table" data-bs-theme="dark">
-                        <table id="membersTable" class="table table-striped table-bordered">
+                    <div class="table">
+                        <table id="membersTable" class="table table-striped table-bordered" data-bs-theme="dark">
                             <thead>
                                 <tr>
                                     <th>Username</th>
