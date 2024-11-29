@@ -43,11 +43,12 @@ include '../../includes/head.php';
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         
-                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+
                         
                         <div class="modal-body">
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                             <form id="registerForm">
                                 <!-- Username -->
                                 <div class="form-group">
