@@ -1,160 +1,135 @@
 <?php
 session_start();
-include '../../database/connection.php';
 
-// Ensure the user is logged in
-if (!isset($_SESSION['MemberID'])) {
-    echo json_encode(["status" => "error", "message" => "User not logged in."]);
+// Check if the member is logged in
+if (!isset($_SESSION['AdminID'])) {
+    // Redirect to login page if not logged in
+    header('Location: ../../member/login.php');
     exit();
 }
-
-$memberID = $_SESSION['MemberID'];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the scanned receipt number
-    if (isset($_POST['receiptNumber'])) {
-        $receiptNumber = $_POST['receiptNumber'];
-
-        // Query to check if the receipt number exists in the database
-        $query = "SELECT * FROM Payments WHERE ReceiptNumber = ? AND MemberID = ?";
-        $stmt = $conn1->prepare($query);
-        $stmt->bind_param("si", $receiptNumber, $memberID);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $payment = $result->fetch_assoc();
-            
-            // Check attendance status (check-in or check-out)
-            $attendanceQuery = "SELECT * FROM Attendance WHERE ReceiptNumber = ?";
-            $attendanceStmt = $conn1->prepare($attendanceQuery);
-            $attendanceStmt->bind_param("s", $receiptNumber);
-            $attendanceStmt->execute();
-            $attendanceResult = $attendanceStmt->get_result();
-
-            if ($attendanceResult->num_rows == 0) {
-                // First-time check-in
-                $attendanceInsert = "INSERT INTO Attendance (ReceiptNumber, MemberID, status) VALUES (?, ?, 'checkin')";
-                $attendanceInsertStmt = $conn1->prepare($attendanceInsert);
-                $attendanceInsertStmt->bind_param("si", $receiptNumber, $memberID);
-                $attendanceInsertStmt->execute();
-
-                echo json_encode(["status" => "success", "action" => "checkin"]);
-            } else {
-                // Already checked in, now checkout
-                $attendanceUpdate = "UPDATE Attendance SET status = 'checkout' WHERE ReceiptNumber = ?";
-                $attendanceUpdateStmt = $conn1->prepare($attendanceUpdate);
-                $attendanceUpdateStmt->bind_param("s", $receiptNumber);
-                $attendanceUpdateStmt->execute();
-
-                echo json_encode(["status" => "success", "action" => "checkout"]);
-            }
-        } else {
-            echo json_encode(["status" => "error", "message" => "Receipt not found for this member."]);
-        }
-    } else {
-        echo json_encode(["status" => "error", "message" => "No receipt number provided."]);
-    }
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
+    <!-- Use an updated working JSQR library -->
     <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            background-color: #f4f7f6;
+            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        #video {
+
+        .container {
             width: 100%;
             max-width: 600px;
-            height: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 24px;
             margin-bottom: 20px;
         }
-        .message {
+
+        #qrText {
             font-size: 18px;
-            margin-top: 20px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #scannerCanvas {
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 500px; /* Prevent stretching */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
-    <h1>Scan Your QR Code</h1>
-    
-    <video id="video" autoplay></video>
-    <canvas id="canvas" style="display: none;"></canvas>
 
-    <div class="message" id="message"></div>
+<div class="container">
+    <h2>QR Code Scanner</h2>
 
-    <script>
-        let videoElement = document.getElementById("video");
-        let canvasElement = document.getElementById("canvas");
-        let messageElement = document.getElementById("message");
+    <div id="qrText">Scan your QR code to check-in/check-out.</div>
 
-        // Set up the camera
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-            .then(function(stream) {
-                videoElement.srcObject = stream;
-                videoElement.setAttribute("playsinline", true);
-                videoElement.play();
-                requestAnimationFrame(scanQRCode);
-            })
-            .catch(function(err) {
-                console.error("Camera access denied:", err);
-                messageElement.textContent = "Unable to access camera.";
-            });
+    <video id="videoElement" autoplay></video>
 
-        function scanQRCode() {
-            // Set canvas size to match video element
+    <canvas id="scannerCanvas"></canvas>
+
+</div>
+
+<script>
+// Initialize the video element and canvas
+const videoElement = document.getElementById('videoElement');
+const qrTextElement = document.getElementById('qrText');
+
+// Initialize the video stream from the user's camera
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(function (stream) {
+        videoElement.srcObject = stream;
+        videoElement.setAttribute('playsinline', true); // Required for iOS
+        videoElement.play();
+        requestAnimationFrame(scanQRCode);
+    })
+    .catch(function (error) {
+        qrTextElement.textContent = 'Error accessing camera: ' + error;
+        console.error(error);
+    });
+
+// Function to scan QR code from the video stream
+function scanQRCode() {
+    if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+        // Ensure the video dimensions are available
+        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            // Draw current video frame on canvas
+            const canvasElement = document.createElement('canvas');
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
-
-            // Draw current video frame on canvas
-            canvasElement.getContext("2d").drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            const ctx = canvasElement.getContext("2d");
+            ctx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
             // Scan the image for QR code
-            let imageData = canvasElement.getContext("2d").getImageData(0, 0, canvasElement.width, canvasElement.height);
+            let imageData = ctx.getImageData(0, 0, canvasElement.width, canvasElement.height);
             let decoded = jsQR(imageData.data, imageData.width, imageData.height);
 
             if (decoded) {
-                // Successfully decoded QR code
-                handleQRCode(decoded.data);
+                // Successfully decoded QR code, display the result
+                qrTextElement.textContent = "Decoded QR: " + decoded.data;
             } else {
-                // No QR code detected
-                requestAnimationFrame(scanQRCode);
+                requestAnimationFrame(scanQRCode); // Continue scanning
             }
+        } else {
+            console.warn("Video dimensions are not available yet. Retrying...");
+            requestAnimationFrame(scanQRCode); // Retry if dimensions are not yet set
         }
+    } else {
+        console.warn("Video stream not ready. Retrying...");
+        requestAnimationFrame(scanQRCode); // Retry if video is not ready
+    }
+}
+</script>
 
-        function handleQRCode(receiptNumber) {
-            messageElement.textContent = "QR Code scanned: " + receiptNumber;
-
-            // Send the decoded receipt number to the backend
-            fetch('scanner.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `receiptNumber=${receiptNumber}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    const action = data.action === "checkin" ? "Checked In" : "Checked Out";
-                    messageElement.textContent = `Success: You have been ${action}.`;
-                } else {
-                    messageElement.textContent = `Error: ${data.message}`;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                messageElement.textContent = "An error occurred. Please try again.";
-            });
-        }
-    </script>
 </body>
 </html>
