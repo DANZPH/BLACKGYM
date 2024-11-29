@@ -2,68 +2,83 @@
 <html lang="en">
 <?php include '../../includes/head.php'; ?>
 <body>
-      <?php include 'includes/sidebar.php'; ?>
-          <div class="content-wrapper">
-        <?php include 'includes/header.php'; ?>
+<?php include 'includes/sidebar.php'; ?>
+<div class="content-wrapper">
+    <?php include 'includes/header.php'; ?>
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header h2">User Registration</div>
-                    <div class="card-body">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow-lg border-0 rounded">
+                    <div class="card-header bg-gradient-primary text-white text-center py-4">
+                        <h3 class="mb-0">User Registration</h3>
+                        <p class="mb-0">Create your account with ease</p>
+                    </div>
+                    <div class="card-body p-4">
                         <form id="registerForm">
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" placeholder="Optional">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
+                            <!-- Username -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
                             </div>
 
-                            <!-- Gender, Age, and Address Fields -->
-                            <div class="form-group">
-                                <label for="gender">Gender:</label>
-                                <select id="gender" name="gender" class="form-control" >
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email (optional)">
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select id="gender" name="gender" class="form-select">
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="age">Age:</label>
-                                <input type="number" id="age" name="age" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="address">Address:</label>
-                                <input type="text" id="address" name="address" class="form-control" required>
+
+                            <!-- Age -->
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" id="age" name="age" class="form-control" placeholder="Enter your age" required>
                             </div>
 
-                            <!-- Membership Option Fields -->
-                            <div class="form-group">
-                                <label for="membershipType">Choose Membership Type:</label>
-                                <select id="membershipType" name="membershipType" class="form-control" required>
+                            <!-- Address -->
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea id="address" name="address" class="form-control" rows="2" placeholder="Enter your address" required></textarea>
+                            </div>
+
+                            <!-- Membership Type -->
+                            <div class="mb-3">
+                                <label for="membershipType" class="form-label">Membership Type</label>
+                                <select id="membershipType" name="membershipType" class="form-select" required>
                                     <option value="SessionPrice">Pay Per Session</option>
                                     <option value="Subscription">Subscription</option>
                                 </select>
                             </div>
 
-                            <div class="form-group" id="subscriptionOptions" style="display: none;">
-                                <label for="subscriptionMonths">Choose Number of Months:</label>
-                                <input type="number" id="subscriptionMonths" name="subscriptionMonths" class="form-control" min="1" max="12">
+                            <!-- Subscription Options -->
+                            <div class="mb-3" id="subscriptionOptions" style="display: none;">
+                                <label for="subscriptionMonths" class="form-label">Number of Months</label>
+                                <input type="number" id="subscriptionMonths" name="subscriptionMonths" class="form-control" min="1" max="12" placeholder="Enter subscription duration">
                             </div>
 
-                            <div class="form-group" id="sessionPriceOptions" style="display: none;">
-                                <label for="sessionPrice">Price per Session:</label>
+                            <!-- Session Price Options -->
+                            <div class="mb-3" id="sessionPriceOptions" style="display: none;">
+                                <label for="sessionPrice" class="form-label">Price per Session</label>
                                 <input type="number" id="sessionPrice" name="sessionPrice" class="form-control" value="50" min="0">
                             </div>
 
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Register</button>
+                            <!-- Submit Button -->
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Register</button>
                             </div>
                         </form>
                     </div>
@@ -72,34 +87,29 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- SweetAlert JS -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $(document).ready(function(){
-            // Toggle Subscription and SessionPrice options based on membership type
+        $(document).ready(function() {
+            // Membership Type Toggle
             $('#membershipType').change(function() {
-                var membershipType = $(this).val();
+                const membershipType = $(this).val();
                 if (membershipType === 'Subscription') {
-                    $('#subscriptionOptions').show();
-                    $('#sessionPriceOptions').hide();
+                    $('#subscriptionOptions').slideDown();
+                    $('#sessionPriceOptions').slideUp();
                 } else {
-                    $('#sessionPriceOptions').show();
-                    $('#subscriptionOptions').hide();
+                    $('#sessionPriceOptions').slideDown();
+                    $('#subscriptionOptions').slideUp();
                 }
             });
 
-            // Submit form via AJAX
-            $('#registerForm').submit(function(e){
+            // Form Submission
+            $('#registerForm').submit(function(e) {
                 e.preventDefault();
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                const otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();
 
-                // Generate a random OTP for the user
-                var otp = Math.floor(100000 + Math.random() * 900000);
-                var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString();  // OTP expires in 15 minutes
-                
                 $.ajax({
                     type: "POST",
                     url: "../action/add_member_process.php",
@@ -116,41 +126,54 @@
                         otp: otp,
                         otpExpiration: otpExpiration
                     },
-                    success: function(response){
+                    success: function(response) {
                         if (response.trim() === "Email already registered.") {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Error',
-                                text: 'Email already registered.',
-                                confirmButtonColor: '#d33',
-                                confirmButtonText: 'OK'
+                                title: 'Registration Failed',
+                                text: 'This email is already registered.',
                             });
                         } else {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Registration Successful!',
-                                text: 'Verification OTP sent to your email.',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = 'otp.php?email=' + $('#email').val();
-                                }
+                                title: 'Registration Successful',
+                                text: 'A verification OTP has been sent to your email.',
+                            }).then(() => {
+                                window.location.href = 'otp.php?email=' + $('#email').val();
                             });
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function() {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Unable to send OTP. Please try again later.',
-                            confirmButtonColor: '#d33',
-                            confirmButtonText: 'OK'
+                            text: 'Unable to process your request. Please try again later.',
                         });
                     }
                 });
             });
         });
     </script>
+
+    <!-- Custom CSS -->
+    <style>
+        .card-header {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #0056b3;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
 </body>
 </html>
