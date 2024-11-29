@@ -8,25 +8,21 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            text-align: center;
             margin: 0;
+            padding: 20px;
         }
         #reader {
             width: 300px;
-            margin-bottom: 20px;
+            margin: auto;
         }
         .message {
-            font-size: 18px;
             margin-top: 20px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-
     <h1>QR Code Scanner</h1>
     <div id="reader"></div>
     <div class="message" id="message"></div>
@@ -39,9 +35,12 @@
             messageElement.style.color = isSuccess ? "green" : "red";
         }
 
+        // Function to handle successful scans
         function onScanSuccess(decodedText) {
-            // Send the decoded text (ReceiptNumber) to the server
-            fetch('../scanner.php', {
+            showMessage("QR Code scanned: " + decodedText);
+
+            // Send the decoded text to the server
+            fetch('attendance.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -63,13 +62,15 @@
                 });
         }
 
+        // Function to handle scan errors
         function onScanFailure(error) {
-            // Handle scan errors (optional)
             console.warn("QR Code scan error:", error);
         }
 
         // Initialize the QR Code scanner
         const html5QrCode = new Html5Qrcode("reader");
+
+        // Start the scanner
         html5QrCode.start(
             { facingMode: "environment" }, // Use the back camera
             {
@@ -78,7 +79,10 @@
             },
             onScanSuccess,
             onScanFailure
-        );
+        ).catch(err => {
+            console.error("Error starting QR Code scanner:", err);
+            showMessage("Unable to start QR scanner. Check browser permissions.", false);
+        });
     </script>
 </body>
 </html>
