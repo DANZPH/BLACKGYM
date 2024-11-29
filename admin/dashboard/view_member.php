@@ -42,13 +42,13 @@ include '../../includes/head.php';
             <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
-                        
-
-                        
-                        <div class="modal-body">
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <!-- <div class="modal-header bg-primary text-white"> -->
+                            <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
+                        <!-- </div> -->
+                        <div class="modal-body">
                             <form id="registerForm">
                                 <!-- Username -->
                                 <div class="form-group">
@@ -127,7 +127,7 @@ include '../../includes/head.php';
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
