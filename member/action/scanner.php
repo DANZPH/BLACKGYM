@@ -15,7 +15,8 @@ if (!isset($_SESSION['MemberID'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <script src="https://cdn.rawgit.com/cozmo/jsQR/gh-pages/dist/jsQR.js"></script>
+    <!-- Use an updated working JSQR library -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
