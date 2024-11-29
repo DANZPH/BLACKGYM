@@ -1,124 +1,110 @@
 <?php
 session_start();
-include '../../database/connection.php';
 
-// Ensure the user is logged in
+// Check if the member is logged in
 if (!isset($_SESSION['MemberID'])) {
-    echo json_encode(["status" => "error", "message" => "User not logged in."]);
+    // Redirect to login page if not logged in
+    header('Location: ../../member/login.php');
     exit();
 }
-
-$memberID = $_SESSION['MemberID'];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the scanned receipt number
-    if (isset($_POST['receiptNumber'])) {
-        $receiptNumber = $_POST['receiptNumber'];
-
-        // Query to check if the receipt number exists in the database
-        $query = "SELECT * FROM Payments WHERE ReceiptNumber = ? AND MemberID = ?";
-        $stmt = $conn1->prepare($query);
-        $stmt->bind_param("si", $receiptNumber, $memberID);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $payment = $result->fetch_assoc();
-            
-            // Check attendance status (check-in or check-out)
-            $attendanceQuery = "SELECT * FROM Attendance WHERE ReceiptNumber = ?";
-            $attendanceStmt = $conn1->prepare($attendanceQuery);
-            $attendanceStmt->bind_param("s", $receiptNumber);
-            $attendanceStmt->execute();
-            $attendanceResult = $attendanceStmt->get_result();
-
-            if ($attendanceResult->num_rows == 0) {
-                // First-time check-in
-                $attendanceInsert = "INSERT INTO Attendance (ReceiptNumber, MemberID, status) VALUES (?, ?, 'checkin')";
-                $attendanceInsertStmt = $conn1->prepare($attendanceInsert);
-                $attendanceInsertStmt->bind_param("si", $receiptNumber, $memberID);
-                $attendanceInsertStmt->execute();
-
-                echo json_encode(["status" => "success", "action" => "checkin"]);
-            } else {
-                // Already checked in, now checkout
-                $attendanceUpdate = "UPDATE Attendance SET status = 'checkout' WHERE ReceiptNumber = ?";
-                $attendanceUpdateStmt = $conn1->prepare($attendanceUpdate);
-                $attendanceUpdateStmt->bind_param("s", $receiptNumber);
-                $attendanceUpdateStmt->execute();
-
-                echo json_encode(["status" => "success", "action" => "checkout"]);
-            }
-        } else {
-            echo json_encode(["status" => "error", "message" => "Receipt not found for this member."]);
-        }
-    } else {
-        echo json_encode(["status" => "error", "message" => "No receipt number provided."]);
-    }
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
+    <script src="https://cdn.rawgit.com/cozmo/jsQR/gh-pages/dist/jsQR.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
+            background-color: #f4f7f6;
+            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        #video {
+
+        .container {
             width: 100%;
             max-width: 600px;
-            height: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 24px;
             margin-bottom: 20px;
         }
-        .message {
-            font-size: 18px;
-            margin-top: 20px;
-        }
+
         #qrText {
-            font-size: 16px;
-            color: green;
-            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        #scannerCanvas {
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
-    <h1>Scan Your QR Code</h1>
-    
-    <video id="video" autoplay></video>
-    <canvas id="canvas" style="display: none;"></canvas>
 
-    <div class="message" id="message"></div>
-    <!-- Debugging section to show the scanned QR code text -->
-    <div id="qrText"></div>
+<div class="container">
+    <h2>QR Code Scanner</h2>
 
-    <script>
-        let videoElement = document.getElementById("video");
-        let canvasElement = document.getElementById("canvas");
-        let messageElement = document.getElementById("message");
-        let qrTextElement = document.getElementById("qrText");
+    <div id="qrText">Scan your QR code to check in/check out.</div>
 
-        // Set up the camera
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-            .then(function(stream) {
-                videoElement.srcObject = stream;
-                videoElement.setAttribute("playsinline", true);
-                videoElement.play();
-                requestAnimationFrame(scanQRCode);
-            })
-            .catch(function(err) {
-                console.error("Camera access denied:", err);
-                messageElement.textContent = "Unable to access camera.";
-            });
+    <video id="videoElement" autoplay></video>
 
-        function scanQRCode() {
-            // Set canvas size to match video element
+    <canvas id="scannerCanvas"></canvas>
+
+    <div id="status"></div>
+</div>
+
+<script>
+// Initialize the video element and canvas
+const videoElement = document.getElementById('videoElement');
+const canvasElement = document.getElementById('scannerCanvas');
+const qrTextElement = document.getElementById('qrText');
+const statusElement = document.getElementById('status');
+
+// Initialize the video stream from the user's camera
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(function (stream) {
+        videoElement.srcObject = stream;
+        videoElement.setAttribute('playsinline', true); // Required for iOS
+        videoElement.play();
+        requestAnimationFrame(scanQRCode);
+    })
+    .catch(function (error) {
+        statusElement.textContent = 'Error accessing camera: ' + error;
+        console.error(error);
+    });
+
+// Function to scan QR code from the video stream
+function scanQRCode() {
+    if (videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
+        // Ensure the video dimensions are available
+        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0) {
+            // Set canvas size to match video dimensions
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
 
@@ -134,36 +120,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 qrTextElement.textContent = "Decoded QR: " + decoded.data;
                 handleQRCode(decoded.data);
             } else {
-                // No QR code detected
-                requestAnimationFrame(scanQRCode);
+                requestAnimationFrame(scanQRCode); // Continue scanning
             }
+        } else {
+            console.warn("Video dimensions are not available yet. Retrying...");
+            requestAnimationFrame(scanQRCode); // Retry if dimensions are not yet set
         }
+    } else {
+        console.warn("Video stream not ready. Retrying...");
+        requestAnimationFrame(scanQRCode); // Retry if video is not ready
+    }
+}
 
-        function handleQRCode(receiptNumber) {
-            messageElement.textContent = "QR Code scanned: " + receiptNumber;
+// Handle the decoded QR code
+function handleQRCode(decodedText) {
+    // Check if the decoded text matches a specific condition (ReceiptNumber or other)
+    if (decodedText === "<?php echo $_SESSION['latestReceiptNumber']; ?>") {
+        statusElement.textContent = "QR Code Matched! Proceeding with check-in/check-out...";
 
-            // Send the decoded receipt number to the backend
-            fetch('scanner.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `receiptNumber=${receiptNumber}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    const action = data.action === "checkin" ? "Checked In" : "Checked Out";
-                    messageElement.textContent = `Success: You have been ${action}.`;
-                } else {
-                    messageElement.textContent = `Error: ${data.message}`;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                messageElement.textContent = "An error occurred. Please try again.";
-            });
-        }
-    </script>
+        // Optionally send AJAX request to handle attendance check-in/check-out
+        // Example using fetch:
+        fetch('process_attendance.php', {
+            method: 'POST',
+            body: JSON.stringify({ receiptNumber: decodedText }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                statusElement.textContent = "Check-in/check-out successful!";
+            } else {
+                statusElement.textContent = "Error processing attendance.";
+            }
+        })
+        .catch(error => {
+            statusElement.textContent = "Error communicating with server.";
+            console.error(error);
+        });
+    } else {
+        statusElement.textContent = "QR Code not recognized. Try again!";
+    }
+}
+</script>
+
 </body>
 </html>
