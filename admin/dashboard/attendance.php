@@ -10,7 +10,7 @@ include '../../database/connection.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <?php include '../../includes/head.php';?>
 <body>
 <?php include 'includes/header.php'; ?>
