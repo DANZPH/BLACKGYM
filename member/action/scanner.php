@@ -81,6 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 18px;
             margin-top: 20px;
         }
+        #qrText {
+            font-size: 16px;
+            color: green;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -90,11 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <canvas id="canvas" style="display: none;"></canvas>
 
     <div class="message" id="message"></div>
+    <!-- Debugging section to show the scanned QR code text -->
+    <div id="qrText"></div>
 
     <script>
         let videoElement = document.getElementById("video");
         let canvasElement = document.getElementById("canvas");
         let messageElement = document.getElementById("message");
+        let qrTextElement = document.getElementById("qrText");
 
         // Set up the camera
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
@@ -122,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             let decoded = jsQR(imageData.data, imageData.width, imageData.height);
 
             if (decoded) {
-                // Successfully decoded QR code
+                // Successfully decoded QR code, display the result
+                qrTextElement.textContent = "Decoded QR: " + decoded.data;
                 handleQRCode(decoded.data);
             } else {
                 // No QR code detected
