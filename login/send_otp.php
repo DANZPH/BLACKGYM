@@ -21,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? $_POST["subscriptionMonths"] : null;
         $sessionPrice = isset($_POST["sessionPrice"]) ? $_POST["sessionPrice"] : null;
 
+        // Set the timezone to Asia/Manila
+        date_default_timezone_set('Asia/Manila');
+        
+        // Get the current timestamp in Asia/Manila timezone
+        $createdAt = date('Y-m-d H:i:s'); // Current time in Asia/Manila timezone
+
         // Check if email is already registered
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
         $stmt->bind_param("s", $email);
@@ -40,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
             // Insert email, username, hashed password, OTP, and OTP expiration into the Users table
-            $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $verified = 0; // Set the user as not verified
-            $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
+            $stmt->bind_param("sssssis", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified, $createdAt);
             $stmt->execute();
             $userID = $stmt->insert_id;  // Get the inserted user ID
             $stmt->close();
