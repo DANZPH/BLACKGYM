@@ -97,7 +97,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <h1 class="text-center mb-4 text-white">DASHBOARD</h1>
             <p class="text-center text-white">Monitor and manage system activities below.</p>
 
-            <!-- Dashboard Cards -->
+<!-- Dashboard Cards -->
 <div class="row mt-4">
     <!-- Active Members Card -->
     <div class="col-md-4 mb-4">
@@ -144,34 +144,24 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
         </div>
     </div>
     
-    <!-- Daily Earnings Card -->
+    <!-- Earnings Card with Modal Trigger -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
-                        <i class="fas fa-calendar-day text-info"></i> Daily Earnings
+                        <i class="fas fa-credit-card text-success"></i> Earnings
                     </h4>
-                    <h2 class="card-text text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
+                    <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                 </div>
-                <a href="payments" class="btn btn-outline-info btn-sm">View</a>
+                <!-- Button to trigger modal -->
+                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#earningsModal">
+                    View
+                </button>
             </div>
         </div>
     </div>
-    <!-- Monthly Earnings Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <h4 class="card-title">
-                        <i class="fas fa-calendar-alt text-primary"></i> Monthly Earnings
-                    </h4>
-                    <h2 class="card-text text-primary">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
-                </div>
-                <a href="payments" class="btn btn-outline-primary btn-sm">View</a>
-            </div>
-        </div>
-    </div>
+
     <!-- Current People Card-->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
@@ -183,6 +173,33 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
                 </div>
                 <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Daily and Monthly Earnings -->
+<div class="modal fade" id="earningsModal" tabindex="-1" aria-labelledby="earningsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="earningsModalLabel">Earnings Overview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Daily Earnings -->
+                <div class="mb-3">
+                    <h6><strong>Daily Earnings</strong></h6>
+                    <p>₱<?php echo number_format($dailyEarnings, 2); ?></p>
+                </div>
+                <!-- Monthly Earnings -->
+                <div class="mb-3">
+                    <h6><strong>Monthly Earnings</strong></h6>
+                    <p>₱<?php echo number_format($monthlyEarnings, 2); ?></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
