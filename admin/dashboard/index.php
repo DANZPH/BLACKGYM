@@ -175,7 +175,6 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
     </div>
 </div>
     
-    <div class="row mt-4">
     <!-- Current People at the Gym Card -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
@@ -190,6 +189,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
+    <div class="row mt-4">
             <!-- Chart Section -->
             <div class="row mt-4">
                 <!-- Members by Status (Pie Chart) -->
