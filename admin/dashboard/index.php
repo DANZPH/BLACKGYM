@@ -113,18 +113,17 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-
-    <!-- Total Payments Card -->
+    <!-- Current People Card-->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
-                        <i class="fas fa-credit-card text-success"></i> Earnings
+                        <i class="fas fa-dumbbell text-info"></i> Current People
                     </h4>
-                    <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
+                    <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
                 </div>
-                <a href="payments" class="btn btn-outline-success btn-sm">View</a>
+                <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
             </div>
         </div>
     </div>
@@ -150,7 +149,8 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
-                        <i class="fas fa-calendar-day text-info"></i> Daily Earnings
+                        <i class="fas fa-calendar-day text-info"></i> 
+                    Earnings D
                     </h4>
                     <h2 class="card-text text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
                 </div>
@@ -164,7 +164,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
-                        <i class="fas fa-calendar-alt text-primary"></i> Monthly Earnings
+                        <i class="fas fa-calendar-alt text-primary"></i> Earnings M
                     </h4>
                     <h2 class="card-text text-primary">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
                 </div>
@@ -172,17 +172,17 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-    <!-- Current People Card-->
+        <!-- Total Payments Card -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
-                        <i class="fas fa-dumbbell text-info"></i> Current People
+                        <i class="fas fa-credit-card text-success"></i> total
                     </h4>
-                    <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
+                    <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
                 </div>
-                <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
+                <a href="payments" class="btn btn-outline-success btn-sm">View</a>
             </div>
         </div>
     </div>
