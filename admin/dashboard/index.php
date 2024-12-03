@@ -27,12 +27,17 @@ $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
 // Daily Earnings
-$dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings FROM Payments WHERE DATE(PaymentDate) = CURDATE()";
+$dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
+                       FROM Payments 
+                       WHERE DATE(PaymentDate) = CURDATE()";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 
 // Monthly Earnings
-$monthlyEarningsQuery = "SELECT SUM(AmountPaid) AS monthly_earnings FROM Payments WHERE MONTH(PaymentDate) = MONTH(CURDATE()) AND YEAR(PaymentDate) = YEAR(CURDATE())";
+$monthlyEarningsQuery = "SELECT SUM(AmountPaid) AS monthly_earnings 
+                         FROM Payments 
+                         WHERE MONTH(PaymentDate) = MONTH(CURDATE()) 
+                         AND YEAR(PaymentDate) = YEAR(CURDATE())";
 $monthlyEarningsResult = $conn1->query($monthlyEarningsQuery);
 $monthlyEarnings = $monthlyEarningsResult->fetch_assoc()['monthly_earnings'] ?? 0;
 
@@ -138,32 +143,35 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-<!-- Daily Earnings Card -->
-<div class="col-md-4 mb-4">
-    <div class="card shadow-lg border-0">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="card-title">
-                    <i class="fas fa-calendar-day text-primary"></i> Daily Earnings
-                </h4>
-                <h2 class="card-text text-primary">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
+    
+    <div class="row mt-4">
+    <!-- Daily Earnings Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-calendar-day text-info"></i> Daily Earnings
+                    </h4>
+                    <h2 class="card-text text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-info btn-sm">View</a>
             </div>
-            <a href="payments?filter=daily" class="btn btn-outline-primary btn-sm">View</a>
         </div>
     </div>
-</div>
 
-<!-- Monthly Earnings Card -->
-<div class="col-md-4 mb-4">
-    <div class="card shadow-lg border-0">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-                <h4 class="card-title">
-                    <i class="fas fa-calendar-alt text-info"></i> Monthly Earnings
-                </h4>
-                <h2 class="card-text text-info">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
+    <!-- Monthly Earnings Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-calendar-alt text-primary"></i> Monthly Earnings
+                    </h4>
+                    <h2 class="card-text text-primary">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-primary btn-sm">View</a>
             </div>
-            <a href="payments?filter=monthly" class="btn btn-outline-info btn-sm">View</a>
         </div>
     </div>
 </div>
