@@ -144,8 +144,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
         </div>
     </div>
     
-    <div class="row mt-4">
-    <!-- Daily Earnings Card -->
+        <!-- Daily Earnings Card -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
@@ -175,6 +174,8 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
         </div>
     </div>
 </div>
+    
+    <div class="row mt-4">
     <!-- Current People at the Gym Card -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
