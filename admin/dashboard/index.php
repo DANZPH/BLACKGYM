@@ -97,7 +97,7 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <h1 class="text-center mb-4 text-white">DASHBOARD</h1>
             <p class="text-center text-white">Monitor and manage system activities below.</p>
 
-<!-- Dashboard Cards -->
+            <!-- Dashboard Cards -->
 <div class="row mt-4">
     <!-- Active Members Card -->
     <div class="col-md-4 mb-4">
@@ -143,10 +143,10 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-
-    <!-- Daily Earnings Card (Modal Trigger) -->
+    
+    <!-- Daily Earnings Card -->
     <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0" data-bs-toggle="modal" data-bs-target="#dailyEarningsModal">
+        <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
@@ -158,10 +158,9 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-
-    <!-- Monthly Earnings Card (Modal Trigger) -->
+    <!-- Monthly Earnings Card -->
     <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0" data-bs-toggle="modal" data-bs-target="#monthlyEarningsModal">
+        <div class="card shadow-lg border-0">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="card-title">
@@ -173,7 +172,6 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             </div>
         </div>
     </div>
-
     <!-- Current People Card-->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
@@ -185,48 +183,6 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
                     <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
                 </div>
                 <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal for Daily Earnings -->
-<div class="modal fade" id="dailyEarningsModal" tabindex="-1" aria-labelledby="dailyEarningsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="dailyEarningsModalLabel">Daily Earnings</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h2 class="text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
-                <p>Here are the details for the daily earnings.</p>
-                <!-- Add more details or information here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="payments" class="btn btn-info">View Full Report</a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal for Monthly Earnings -->
-<div class="modal fade" id="monthlyEarningsModal" tabindex="-1" aria-labelledby="monthlyEarningsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="monthlyEarningsModalLabel">Monthly Earnings</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h2 class="text-primary">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
-                <p>Here are the details for the monthly earnings.</p>
-                <!-- Add more details or information here -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="payments" class="btn btn-primary">View Full Report</a>
             </div>
         </div>
     </div>
