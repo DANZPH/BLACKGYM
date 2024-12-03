@@ -8,9 +8,6 @@ include '../database/connection.php'; // Include the connection file without int
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Set the default timezone to Asia/Manila
-date_default_timezone_set('Asia/Manila');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email, username, and password are set
     if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"])) {
