@@ -8,6 +8,9 @@ include '../../database/connection.php'; // Include the connection file without 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+// Set the timezone to Asia/Manila
+date_default_timezone_set('Asia/Manila');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email, username, and password are set
     if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"])) {
@@ -58,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Insert the user into the Membership table based on their membership choice
             if ($membershipType === 'Subscription') {
                 // For Subscription, calculate the end date based on months
-                $startDate = date('Y-m-d H:i:s');
+                $startDate = date('Y-m-d H:i:s'); // Current date/time in Asia/Manila
                 $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
                 
                 // Insert Subscription details into Membership table
@@ -189,3 +192,4 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
+?>
