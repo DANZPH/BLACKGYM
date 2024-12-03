@@ -8,9 +8,6 @@ include '../../database/connection.php'; // Include the connection file without 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Set the timezone to Asia/Manila
-date_default_timezone_set('Asia/Manila');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email, username, and password are set
     if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"])) {
@@ -23,6 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $membershipType = $_POST["membershipType"];
         $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? $_POST["subscriptionMonths"] : null;
         $sessionPrice = isset($_POST["sessionPrice"]) ? $_POST["sessionPrice"] : null;
+
+        // Set the timezone to Asia/Manila
+        date_default_timezone_set('Asia/Manila');
+        
+        // Get the current timestamp in Asia/Manila timezone
+        $createdAt = date('Y-m-d H:i:s'); // Current time in Asia/Manila timezone
 
         // Check if email is already registered
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
@@ -43,17 +46,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
             // Insert email, username, hashed password, OTP, and OTP expiration into the Users table
-            $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt = $conn1->prepare("INSERT INTO Users (Username, Email, Password, OTP, OTPExpiration, Verified, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $verified = 0; // Set the user as not verified
-            $stmt->bind_param("sssssi", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified);
+            $stmt->bind_param("sssssis", $username, $email, $hashedPassword, $otp, $otpExpiration, $verified, $createdAt);
             $stmt->execute();
             $userID = $stmt->insert_id;  // Get the inserted user ID
             $stmt->close();
 
-            // Insert the user into the Members table with default status 'Inactive'
-            $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus) VALUES (?, ?, ?, ?, ?)");
+            // Insert the user into the Members table with default status 'Inactive' and created_at
+            $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus, created_at) VALUES (?, ?, ?, ?, ?, ?)");
             $membershipStatus = 'Inactive';  // Default membership status is 'Inactive'
-            $stmt->bind_param("isiss", $userID, $gender, $age, $address, $membershipStatus);
+            $stmt->bind_param("isisss", $userID, $gender, $age, $address, $membershipStatus, $createdAt);
             $stmt->execute();
             $memberID = $stmt->insert_id;  // Get the inserted member ID
             $stmt->close();
@@ -61,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Insert the user into the Membership table based on their membership choice
             if ($membershipType === 'Subscription') {
                 // For Subscription, calculate the end date based on months
-                $startDate = date('Y-m-d H:i:s'); // Current date/time in Asia/Manila
+                $startDate = date('Y-m-d H:i:s');
                 $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
                 
                 // Insert Subscription details into Membership table
@@ -192,4 +195,3 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
-?>
