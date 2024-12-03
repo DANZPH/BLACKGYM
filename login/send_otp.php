@@ -1,5 +1,8 @@
 <?php
+
+// Set timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
+
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
@@ -34,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Email not registered, proceed with registration and OTP sending
             $otp = generateOTP();
-            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes
+            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes (in Manila timezone)
 
             // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
