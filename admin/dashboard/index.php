@@ -27,12 +27,12 @@ $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
 // Daily Earnings
-$dailyEarningsQuery = "SELECT SUM(Amount) AS daily_earnings FROM Payments WHERE DATE(PaymentDate) = CURDATE()";
+$dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings FROM Payments WHERE DATE(PaymentDate) = CURDATE()";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 
 // Monthly Earnings
-$monthlyEarningsQuery = "SELECT SUM(Amount) AS monthly_earnings FROM Payments WHERE MONTH(PaymentDate) = MONTH(CURDATE()) AND YEAR(PaymentDate) = YEAR(CURDATE())";
+$monthlyEarningsQuery = "SELECT SUM(AmountPaid) AS monthly_earnings FROM Payments WHERE MONTH(PaymentDate) = MONTH(CURDATE()) AND YEAR(PaymentDate) = YEAR(CURDATE())";
 $monthlyEarningsResult = $conn1->query($monthlyEarningsQuery);
 $monthlyEarnings = $monthlyEarningsResult->fetch_assoc()['monthly_earnings'] ?? 0;
 
