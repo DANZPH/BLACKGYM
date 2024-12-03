@@ -97,12 +97,96 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
             <h1 class="text-center mb-4 text-white">DASHBOARD</h1>
             <p class="text-center text-white">Monitor and manage system activities below.</p>
 
-<!-- Add Bootstrap 5 CSS in the <head> section -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+            <!-- Dashboard Cards -->
+<div class="row mt-4">
+    <!-- Active Members Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-users text-primary"></i> Active Members
+                    </h4>
+                    <h2 class="card-text text-primary"><?php echo $totalMembers; ?></h2>
+                </div>
+                <a href="view_member" class="btn btn-outline-info btn-sm">View</a>
+            </div>
+        </div>
+    </div>
 
-<!-- Add Bootstrap 5 JS and Popper.js before closing the <body> tag -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <!-- Total Payments Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-credit-card text-success"></i> Earnings
+                    </h4>
+                    <h2 class="card-text text-success">₱<?php echo number_format($totalPayments, 2); ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-success btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Memberships Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-clock text-warning"></i> Pending
+                    </h4>
+                    <h2 class="card-text text-warning"><?php echo $pendingPayments; ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-warning btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Daily Earnings Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-calendar-day text-info"></i> Daily Earnings
+                    </h4>
+                    <h2 class="card-text text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-info btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    <!-- Monthly Earnings Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-calendar-alt text-primary"></i> Monthly Earnings
+                    </h4>
+                    <h2 class="card-text text-primary">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
+                </div>
+                <a href="payments" class="btn btn-outline-primary btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    <!-- Current People Card-->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="card-title">
+                        <i class="fas fa-dumbbell text-info"></i> Current People
+                    </h4>
+                    <h2 class="card-text text-info"><?php echo $currentPeople; ?>/50</h2>
+                </div>
+                <a href="attendance" class="btn btn-outline-info btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+</div>
     
     <div class="row mt-4">
             <!-- Chart Section -->
