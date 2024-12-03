@@ -21,10 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $subscriptionMonths = isset($_POST["subscriptionMonths"]) ? $_POST["subscriptionMonths"] : null;
         $sessionPrice = isset($_POST["sessionPrice"]) ? $_POST["sessionPrice"] : null;
 
-        // Set timezone
-        $timezone = new DateTimeZone("Asia/Manila"); // Replace with your preferred timezone
-        $currentTime = new DateTime("now", $timezone);
-
         // Check if email is already registered
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ?");
         $stmt->bind_param("s", $email);
@@ -38,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Email not registered, proceed with registration and OTP sending
             $otp = generateOTP();
-            $otpExpiration = $currentTime->add(new DateInterval('PT15M'))->format('Y-m-d H:i:s'); // OTP expires in 15 minutes
+            $otpExpiration = date('Y-m-d H:i:s', strtotime('+15 minutes'));  // OTP expires in 15 minutes
 
             // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
@@ -62,8 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Insert the user into the Membership table based on their membership choice
             if ($membershipType === 'Subscription') {
                 // For Subscription, calculate the end date based on months
-                $startDate = $currentTime->format('Y-m-d H:i:s');
-                $endDate = $currentTime->add(new DateInterval("P{$subscriptionMonths}M"))->format('Y-m-d H:i:s');
+                $startDate = date('Y-m-d H:i:s');
+                $endDate = date('Y-m-d H:i:s', strtotime("+$subscriptionMonths months"));
                 
                 // Insert Subscription details into Membership table
                 $stmt = $conn1->prepare("INSERT INTO Membership (MemberID, Subscription, Status, StartDate, EndDate) VALUES (?, ?, ?, ?, ?)");
@@ -193,4 +189,3 @@ function sendOTP($email, $otp) {
         return $mail->ErrorInfo;
     }
 }
-?>
