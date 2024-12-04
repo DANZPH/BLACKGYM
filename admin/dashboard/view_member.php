@@ -71,7 +71,7 @@ include '../../includes/head.php';
                                     <input type="text" class="form-control" id="editAddress" name="editAddress" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="editMembershipStatus">Status</label>
+                                    <label for="editMembershipStatus">Membership Status</label>
                                     <select class="form-control" id="editMembershipStatus" name="editMembershipStatus" required>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
@@ -103,7 +103,7 @@ include '../../includes/head.php';
                                     <th>Gender</th>
                                     <th>Age</th>
                                     <th>Address</th>
-                                    <th>Membership Status</th>
+                                    <th>Membership</th>
                                     <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
