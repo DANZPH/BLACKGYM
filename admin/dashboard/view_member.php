@@ -103,7 +103,7 @@ include '../../includes/head.php';
                                     <th>Gender</th>
                                     <th>Age</th>
                                     <th>Address</th>
-                                    <th>Membership</th>
+                                    <th>Membership Status</th>
                                     <th>Created At</th>
                                     <th>Action</th>
                                 </tr>
