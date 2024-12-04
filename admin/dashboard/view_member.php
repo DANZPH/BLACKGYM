@@ -103,45 +103,46 @@ include '../../includes/head.php';
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php
-                                $sql = "
-                                    SELECT 
-                                        Members.MemberID, 
-                                        Users.Username, 
-                                        Users.Email, 
-                                        Members.Gender, 
-                                        Members.Age, 
-                                        Members.Address, 
-                                        Members.MembershipStatus, 
-                                        Members.created_at 
-                                    FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID
-                                ";
-                                $result = $conn1->query($sql);
+<tbody>
+    <?php
+    $sql = "
+        SELECT 
+            Members.MemberID, 
+            Users.Username, 
+            Users.Email, 
+            Members.Gender, 
+            Members.Age, 
+            Members.Address, 
+            Members.MembershipStatus, 
+            Members.created_at 
+        FROM Members 
+        INNER JOIN Users ON Members.UserID = Users.UserID
+    ";
+    $result = $conn1->query($sql);
 
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['Gender']}</td>
-                                            <td>{$row['Age']}</td>
-                                            <td>{$row['Address']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['created_at']}</td>
-                                            <td>
-                                                <button class='btn btn-info btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
-                                                <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
-                                            </td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                <td>{$row['MemberID']}</td>
+                <td>{$row['Username']}</td>
+                <td>{$row['Email']}</td>
+                <td>{$row['Gender']}</td>
+                <td>{$row['Age']}</td>
+                <td>{$row['Address']}</td>
+                <td>{$row['MembershipStatus']}</td>
+                <td>{$row['created_at']}</td>
+                <td>
+                    <button class='btn btn-info' onclick='fetchMember({$row['MemberID']})'>Edit</button>
+                    <button class='btn btn-danger' onclick='deleteMember({$row['MemberID']})'>Delete</button>
+                </td>
+            </tr>";
+        }
+    } else {
+        echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
+    }
+    ?>
+</tbody>
+
                         </table>
                     </div>
                 </div>
@@ -206,63 +207,65 @@ $(document).ready(function() {
         });
     });
 
-    // Fetch member details to edit
-    function fetchMember(memberID) {
-        $.ajax({
-            type: 'POST',
-            url: '../action/edit_member.php',
-            data: { memberID: memberID },
-            success: function(response) {
-                const data = JSON.parse(response);
-                if (data.success) {
-                    $('#memberID').val(data.success.MemberID);
-                    $('#username').val(data.success.Username);
-                    $('#email').val(data.success.Email);
-                    $('#gender').val(data.success.Gender);
-                    $('#age').val(data.success.Age);
-                    $('#address').val(data.success.Address);
-                    $('#membershipStatus').val(data.success.MembershipStatus);
-                    $('#updateMemberModal').modal('show');
-                } else {
-                    Swal.fire('Error', data.error, 'error');
-                }
-            },
-            error: function() {
-                Swal.fire('Error', 'Failed to fetch member details.', 'error');
-            }
-        });
-    }
-
-    // Handle delete member
-    function deleteMember(memberID) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This action cannot be undone!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: 'POST',
-                    url: '../action/delete_member.php',
-                    data: { memberID: memberID },
-                    success: function(response) {
-                        const data = JSON.parse(response);
-                        if (data.success) {
-                            Swal.fire('Deleted!', data.success, 'success').then(() => location.reload());
-                        } else {
-                            Swal.fire('Error', data.error, 'error');
-                        }
-                    },
-                    error: function() {
-                        Swal.fire('Error', 'Failed to delete member.', 'error');
+// Function to delete a member
+function deleteMember(memberID) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: '../action/delete_member.php', // Ensure the correct path to the file
+                data: { memberID: memberID },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire('Deleted!', data.success, 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
                     }
-                });
+                },
+                error: function() {
+                    Swal.fire('Error', 'Failed to delete member.', 'error');
+                }
+            });
+        }
+    });
+}
+
+// Function to fetch member data for editing
+function fetchMember(memberID) {
+    $.ajax({
+        type: 'POST',
+        url: '../action/edit_member.php', // Ensure the correct path to the file
+        data: { memberID: memberID },
+        success: function(response) {
+            const data = JSON.parse(response);
+            if (data.success) {
+                $('#memberID').val(data.success.MemberID);
+                $('#username').val(data.success.Username);
+                $('#email').val(data.success.Email);
+                $('#gender').val(data.success.Gender);
+                $('#age').val(data.success.Age);
+                $('#address').val(data.success.Address);
+                $('#membershipStatus').val(data.success.MembershipStatus);
+
+                $('#updateMemberModal').modal('show');
+            } else {
+                Swal.fire('Error', data.error, 'error');
             }
-        });
-    }
+        },
+        error: function() {
+            Swal.fire('Error', 'Failed to fetch member details.', 'error');
+        }
+    });
+}
+
 });
 </script>
 </body>
