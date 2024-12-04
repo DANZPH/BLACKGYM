@@ -159,39 +159,7 @@ include '../../includes/head.php';
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="includes/JS/add_member.js"></script>
-<script>
-    $(document).ready(function() {
-        // Initialize DataTable
-        $('#membersTable').DataTable();
-
-        // Edit button click event
-   $(document).ready(function() {
-    // Edit button click event
-    $('.editBtn').click(function() {
-        var memberID = $(this).data('id');
-        $.ajax({
-            url: '../action/fetch_member.php',
-            method: 'GET',
-            data: { memberID: memberID },
-            success: function(response) {
-                var data = JSON.parse(response);
-                $('#editUsername').val(data.Username);
-                $('#editEmail').val(data.Email);
-                $('#editGender').val(data.Gender);
-                $('#editAge').val(data.Age);
-                $('#editAddress').val(data.Address);
-                $('#editMembershipStatus').val(data.MembershipStatus);
-                $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
-                $('#editMemberModal').modal('show');
-            }
-        });
-    });
-});
-
-    });
-</script>
-
 </body>
 </html>
