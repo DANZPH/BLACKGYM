@@ -140,6 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p>Contact: +63 9123 456 7890 | Email: mail@blackgym.com</p>
                         </div>
                         <div class='section receipt-info'>
+                        
+                                                </div>
+                        <div class='qr-code'>
+                            <img src='data:image/png;base64,$qrCodeBase64' alt='QR Code' />
+                        </div>
+                        
                             <h3>Receipt Details</h3>
                             <p><strong>Receipt Number:</strong> $receiptNumber</p>
                             <p><strong>Payment Date:</strong> $paymentDate</p>
@@ -152,11 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <tr><th>Amount Paid</th><td>P" . number_format($amountPaid, 2) . "</td></tr>
                                 <tr><th>Change</th><td>P" . number_format($changeAmount, 2) . "</td></tr>
                             </table>
-                        </div>
-                        <div class='qr-code'>
-                            <h4>QR Code for Receipt</h4>
-                            <img src='data:image/png;base64,$qrCodeBase64' alt='QR Code' />
-                        </div>
                         <div class='footer'>
                             <p>Thank you for your payment!</p>
                             <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
