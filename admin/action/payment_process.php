@@ -5,18 +5,23 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
-require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
 
+// Manually include Dompdf
+require_once '../../dompdf/autoload.inc.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
-function sendReceiptEmail($email, $name, $receiptHtml) {
+function sendReceiptEmail($email, $name, $pdfContent) {
     $mail = new PHPMailer(true);
     try {
+        // SMTP settings
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -25,16 +30,28 @@ function sendReceiptEmail($email, $name, $receiptHtml) {
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
+        // Sender and recipient
         $mail->setFrom('mail.blackgym@gmail.com', 'Black Gym');
         $mail->addAddress($email);
 
+        // Set the email body content (even if it's just simple)
         $mail->isHTML(true);
         $mail->Subject = 'Payment Successful';
-        $mail->Body = $receiptHtml;
+        $mail->Body    = "<h2>Dear $name,</h2>
+                          <p>Your payment has been successfully processed. Please find your receipt attached.</p>";
 
+        // Attach PDF to the email
+        $mail->addStringAttachment($pdfContent, 'receipt.pdf', 'base64', 'application/pdf');
+
+        // Enable debug output to troubleshoot email sending
+        $mail->SMTPDebug = 2;  // 0 = off, 1 = client, 2 = client and server
+        $mail->Debugoutput = 'html';  // Show debug info in HTML format
+
+        // Attempt to send the email
         $mail->send();
     } catch (Exception $e) {
-        error_log($e->getMessage());
+        error_log("Mail Error: " . $e->getMessage());
+        echo "Error sending email: " . $e->getMessage();
     }
 }
 
@@ -55,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conn1->begin_transaction();
 
     try {
+        // Insert payment details into the database
         $stmt = $conn1->prepare("INSERT INTO Payments (MemberID, PaymentType, Amount, AmountPaid, ChangeAmount, ReceiptNumber, PaymentDate) 
                                  VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("isddsss", $memberID, $paymentType, $amount, $amountPaid, $changeAmount, $receiptNumber, $paymentDate);
@@ -62,12 +80,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error inserting payment: " . $stmt->error);
         }
 
+        // Update membership status
         $updateMemberStmt = $conn1->prepare("UPDATE Members SET MembershipStatus = 'Active' WHERE MemberID = ?");
         $updateMemberStmt->bind_param("d", $memberID);
         if (!$updateMemberStmt->execute()) {
             throw new Exception("Error updating membership status: " . $updateMemberStmt->error);
         }
 
+        // Update membership details with new end date
         $subscription = $amount;
         $numMonths = floor($subscription / 600);
         $endDate = date('Y-m-d H:i:s', strtotime("+$numMonths months"));
@@ -78,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             throw new Exception("Error updating membership: " . $updateMembershipStmt->error);
         }
 
-        // Fetching email and name for the member
+        // Fetch the email and name of the member
         $emailQuery = $conn1->prepare("SELECT Users.Email, Users.Username AS Name FROM Users 
                                        INNER JOIN Members ON Users.UserID = Members.UserID 
                                        WHERE Members.MemberID = ?");
@@ -104,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         .receipt-info table, .receipt-info th, .receipt-info td { border: 1px solid #ddd; padding: 10px; }
                         .footer { text-align: center; margin-top: 20px; font-size: 12px; }
                         .footer a { text-decoration: none; color: #007bff; }
-                        .download-pdf-btn { display: block; text-align: center; margin: 20px 0; }
                     </style>
                 </head>
                 <body>
@@ -133,31 +152,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p>Thank you for your payment!</p>
                             <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
                         </div>
-                        <div class='download-pdf-btn'>
-                            <button onclick='downloadReceipt()'>Download PDF</button>
-                        </div>
                     </div>
                 </body>
             </html>
-
-            <script src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js'></script>
-            <script>
-                function downloadReceipt() {
-                    const element = document.querySelector('.container');
-                    const options = {
-                        margin: 10,
-                        filename: 'receipt_$receiptNumber.pdf',
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2 },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-                    html2pdf().from(element).set(options).save();
-                }
-            </script>
         ";
 
-        // Send the receipt email with HTML content
-        sendReceiptEmail($email, $name, $receiptHtml);
+        // Convert the HTML to PDF using Dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($receiptHtml);
+        $dompdf->render();
+        $pdfContent = $dompdf->output();
+
+        // Send the receipt email with the attached PDF
+        sendReceiptEmail($email, $name, $pdfContent);
 
         $conn1->commit();
 
