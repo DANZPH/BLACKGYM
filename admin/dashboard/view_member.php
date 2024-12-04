@@ -183,7 +183,7 @@ include '../../includes/head.php';
 
         $.ajax({
             type: "POST",
-            url: "path/to/your/edit_member_process.php", // Change to your process file
+            url: "../action/edit_member.php", // Change to your process file
             data: formData,
             success: function(response) {
                 if (response === "success") {
