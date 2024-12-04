@@ -1,12 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
-    // Redirect to login page if not logged in as admin
     header('Location: ../../admin/login.php');
     exit();
 }
-
-include '../../database/connection.php'; // Include database connection
+include '../../database/connection.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -28,11 +26,9 @@ include '../../includes/head.php';
     <div class="row">
         <!-- Include Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
-
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
-            
             <!-- Add Member Button -->
             <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
