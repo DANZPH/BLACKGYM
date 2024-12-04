@@ -179,7 +179,7 @@ include '../../includes/head.php';
                     $('#editAge').val(data.Age);
                     $('#editAddress').val(data.Address);
                     $('#editMembershipStatus').val(data.MembershipStatus);
-                    $('#editMemberForm').attr('action', 'edit_member_process.php?MemberID=' + memberID);
+                    $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
                     $('#editMemberModal').modal('show');
                 }
             });
