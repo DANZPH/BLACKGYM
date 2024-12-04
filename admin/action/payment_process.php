@@ -143,14 +143,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p><strong>Membership Up To:</strong> $endDate</p>
                             <h4>Payment Details</h4>
                             <table>
-                                <tr><th>Amount Due</th><td>P" . number_format($amount, 2) . "</td></tr>
-                                <tr><th>Amount Paid</th><td>P" . number_format($amountPaid, 2) . "</td></tr>
-                                <tr><th>Change</th><td>P" . number_format($changeAmount, 2) . "</td></tr>
+                                <tr><th>Amount Due</th><td>₱" . number_format($amount, 2) . "</td></tr>
+                                <tr><th>Amount Paid</th><td>₱" . number_format($amountPaid, 2) . "</td></tr>
+                                <tr><th>Change</th><td>₱" . number_format($changeAmount, 2) . "</td></tr>
                             </table>
                         </div>
                         <div class='footer'>
                             <p>Thank you for your payment!</p>
-                            <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
+                            <p>Visit <a href='https://gym.dazx.xyz'>gym.dazx.xyz</a> for more information.</p>
                         </div>
                     </div>
                 </body>
