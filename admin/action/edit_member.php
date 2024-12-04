@@ -1,4 +1,4 @@
-// edit_member.php
+<?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memberID = $_POST['memberID'];
     if ($memberID) {
@@ -19,3 +19,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['error' => 'Invalid request']);
 }
+?>
