@@ -141,7 +141,7 @@ include '../../includes/head.php';
         <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
             <i class='fas fa-edit'></i> Edit
         </button>
-        
+       </br>
         <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
             <i class='fas fa-trash'></i> Delete
         </button>
