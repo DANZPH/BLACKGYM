@@ -36,15 +36,13 @@ include '../../includes/head.php';
 
 <!--modal add member-->
 <?php include 'includes/modal/add_member.php'; ?>
-
-
             <!-- Members Table -->
             <div class="card">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table">
+                    <div class="table-responsive">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -56,6 +54,7 @@ include '../../includes/head.php';
                                     <th>Address</th>
                                     <th>Membership Status</th>
                                     <th>Created At</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,7 +73,7 @@ include '../../includes/head.php';
                                     INNER JOIN Users ON Members.UserID = Users.UserID
                                 ";
                                 $result = $conn1->query($sql);
-
+            
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
@@ -86,10 +85,14 @@ include '../../includes/head.php';
                                             <td>{$row['Address']}</td>
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
+                                            <td>
+                                                <button class='btn btn-warning btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
+                                                <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
+                                            </td>
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
+                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
                                 }
                                 ?>
                             </tbody>
