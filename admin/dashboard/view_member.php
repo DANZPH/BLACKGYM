@@ -136,13 +136,14 @@ include '../../includes/head.php';
                                             <td>{$row['Address']}</td>
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
-                                            <td>
-                                                <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
-                                                    <i class='fas fa-edit'></i>
-                          </button>
-                                                <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
-                                                    <i class='fas fa-trash'></i> </button>
-                                            </td>
+                                                                  <td>
+                            <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
+                                <i class='fas fa-edit'></i>
+                            </button>
+                            <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
+                                <i class='fas fa-trash'></i>
+                            </button>
+                        </td>
                                         </tr>";
                                     }
                                 } else {
