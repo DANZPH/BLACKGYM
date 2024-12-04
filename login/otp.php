@@ -17,7 +17,7 @@
                         <form id="verifyForm">
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required value="<?php echo htmlspecialchars($_GET["email"] ?? ''); ?>" >
+                                <input type="email" id="email" name="email" class="form-control" required value="<?php echo htmlspecialchars($_GET["email"] ?? ''); ?>" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="otp">OTP:</label>
