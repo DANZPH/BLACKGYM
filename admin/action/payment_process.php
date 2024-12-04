@@ -43,15 +43,11 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         // Attach PDF to the email
         $mail->addStringAttachment($pdfContent, 'receipt.pdf', 'base64', 'application/pdf');
 
-        // Enable debug output to troubleshoot email sending
-        $mail->SMTPDebug = 0;  // 0 = off, 1 = client, 2 = client and server
-        $mail->Debugoutput = 'html';  // Show debug info in HTML format
-
         // Attempt to send the email
         $mail->send();
     } catch (Exception $e) {
-        /*error_log("Mail Error: " . $e->getMessage());
-        echo "Error sending email: " . $e->getMessage();*/
+        error_log("Mail Error: " . $e->getMessage());
+        echo "Error sending email: " . $e->getMessage();
     }
 }
 
@@ -112,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $receiptHtml = "
             <html>
                 <head>
+                    <script src='https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js'></script>
                     <style>
                         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
                         .container { width: 100%; max-width: 800px; margin: auto; }
@@ -143,16 +140,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p><strong>Membership Up To:</strong> $endDate</p>
                             <h4>Payment Details</h4>
                             <table>
-                                <tr><th>Amount Due</th><td>Php: " . number_format($amount, 2) . "</td></tr>
-                                <tr><th>Amount Paid</th><td>Php: " . number_format($amountPaid, 2) . "</td></tr>
-                                <tr><th>Change</th><td>Php: " . number_format($changeAmount, 2) . "</td></tr>
+                                <tr><th>Amount Due</th><td>P" . number_format($amount, 2) . "</td></tr>
+                                <tr><th>Amount Paid</th><td>P" . number_format($amountPaid, 2) . "</td></tr>
+                                <tr><th>Change</th><td>P" . number_format($changeAmount, 2) . "</td></tr>
                             </table>
+                            <h4>QR Code for Receipt</h4>
+                            <div id='qrcode'></div>
                         </div>
                         <div class='footer'>
                             <p>Thank you for your payment!</p>
-                            <p>Visit <a href='https://gym.dazx.xyz'>gym.dazx.xyz</a> for more information.</p>
+                            <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
                         </div>
                     </div>
+                    <script>
+                        // Generate QR code based on the receipt number
+                        new QRCode(document.getElementById('qrcode'), '$receiptNumber');
+                    </script>
                 </body>
             </html>
         ";
