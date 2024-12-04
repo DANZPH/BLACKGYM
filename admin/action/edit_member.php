@@ -40,7 +40,7 @@ if (isset($_GET['MemberID']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
         $conn1->commit();
 
         // Redirect to the member list page
-        header('Location: member_list.php');
+        header('Location: /');
         exit();
     } catch (Exception $e) {
         // If there's an error, roll back the transaction
