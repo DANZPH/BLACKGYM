@@ -1,8 +1,11 @@
 <?php
 include '../../database/connection.php'; // Include database connection
 
-// Set timezone to Asia/Manila
+// Set timezone to Asia/Manila in PHP
 date_default_timezone_set('Asia/Manila');
+
+// Set timezone to Asia/Manila in MySQL session
+$conn1->query("SET time_zone = '+08:00'");
 
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
     $memberID = $_POST['memberID'];
