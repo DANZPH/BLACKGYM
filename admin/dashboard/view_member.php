@@ -87,74 +87,74 @@ include '../../includes/head.php';
                 </div>
             </div>
 
- <!-- Members Table -->
-<div class="card">
-    <div class="card-header">
-        <h5>Members Information</h5>
-    </div>
-    <div class="card-body">
-        <div class="table">
-            <table id="membersTable" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-<!--                      <th>MemberID</th>-->
-                       <th>Username</th>
-                        <th>Email</th>
-                        <th>Gender</th>
-                        <th>Age</th>
-                        <th>Address</th>
-                        <th>Membership Status</th>
-                        <th>Created At</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $sql = "
-                        SELECT 
-                            Members.MemberID, 
-                            Users.Username, 
-                            Users.Email, 
-                            Members.Gender, 
-                            Members.Age, 
-                            Members.Address, 
-                            Members.MembershipStatus, 
-                            Members.created_at 
-                        FROM Members 
-                        INNER JOIN Users ON Members.UserID = Users.UserID
-                    ";
-                    $result = $conn1->query($sql);
+            <!-- Members Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Members Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table">
+                        <table id="membersTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                  <th class="d-none">MemberID</th>
+                                   <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Address</th>
+                                    <th>Membership Status</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "
+                                    SELECT 
+                                        Members.MemberID, 
+                                        Users.Username, 
+                                        Users.Email, 
+                                        Members.Gender, 
+                                        Members.Age, 
+                                        Members.Address, 
+                                        Members.MembershipStatus, 
+                                        Members.created_at 
+                                    FROM Members 
+                                    INNER JOIN Users ON Members.UserID = Users.UserID
+                                ";
+                                $result = $conn1->query($sql);
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                <td class='d-none'>{$row['MemberID']}</td>
-                                <td>{$row['Username']}</td>
-                                <td>{$row['Email']}</td>
-                                <td>{$row['Gender']}</td>
-                                <td>{$row['Age']}</td>
-                                <td>{$row['Address']}</td>
-                                <td>{$row['MembershipStatus']}</td>
-                                <td>{$row['created_at']}</td>
-                                <td>
-                                    <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
-                                        <i class='fas fa-edit'></i> Edit
-                                    </button>
-                                    <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
-                                        <i class='fas fa-trash'></i> Delete
-                                    </button>
-                                </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                            <td class='d-none'>{$row['MemberID']}</td>
+                                            <td>{$row['Username']}</td>
+                                            <td>{$row['Email']}</td>
+                                            <td>{$row['Gender']}</td>
+                                            <td>{$row['Age']}</td>
+                                            <td>{$row['Address']}</td>
+                                            <td>{$row['MembershipStatus']}</td>
+                                            <td>{$row['created_at']}</td>
+                                            <td>
+                                                <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
+                                                    <i class='fas fa-edit'></i> Edit
+                                                </button>
+                                                <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
+                                                    <i class='fas fa-trash'></i> Delete
+                                                </button>
+                                            </td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -163,5 +163,9 @@ include '../../includes/head.php';
 <?php include '../../includes/footer.php'; ?>
 
 <script src="includes/JS/script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
 </body>
 </html>
