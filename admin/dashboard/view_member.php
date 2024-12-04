@@ -165,25 +165,29 @@ include '../../includes/head.php';
         $('#membersTable').DataTable();
 
         // Edit button click event
-        $('.editBtn').click(function() {
-            var memberID = $(this).data('id');
-            $.ajax({
-                url: '../action/fetch_member.php',
-                method: 'GET',
-                data: { memberID: memberID },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    $('#editUsername').val(data.Username);
-                    $('#editEmail').val(data.Email);
-                    $('#editGender').val(data.Gender);
-                    $('#editAge').val(data.Age);
-                    $('#editAddress').val(data.Address);
-                    $('#editMembershipStatus').val(data.MembershipStatus);
-                    $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
-                    $('#editMemberModal').modal('show');
-                }
-            });
+   $(document).ready(function() {
+    // Edit button click event
+    $('.editBtn').click(function() {
+        var memberID = $(this).data('id');
+        $.ajax({
+            url: '../action/fetch_member.php',
+            method: 'GET',
+            data: { memberID: memberID },
+            success: function(response) {
+                var data = JSON.parse(response);
+                $('#editUsername').val(data.Username);
+                $('#editEmail').val(data.Email);
+                $('#editGender').val(data.Gender);
+                $('#editAge').val(data.Age);
+                $('#editAddress').val(data.Address);
+                $('#editMembershipStatus').val(data.MembershipStatus);
+                $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
+                $('#editMemberModal').modal('show');
+            }
         });
+    });
+});
+
     });
 </script>
 
