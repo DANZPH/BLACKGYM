@@ -33,7 +33,8 @@ include '../../includes/head.php';
             <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
             </button>
-
+          <!--modal add member-->
+          <?php include 'includes/modal/add_member.php'; ?>
             <!-- Edit Member Modal -->
             <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
