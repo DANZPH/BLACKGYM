@@ -11,7 +11,7 @@ require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
 
 // Manually include Dompdf
-require_once '../../dompdf/autoload.inc.php';
+require_once 'dompdf/autoload.inc.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -105,10 +105,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->close();
 
         // Build HTML content for the receipt
+        // QR Code Generation via an image
+        $qrCodeImage = "qr_code_image.png"; // Path to save QR code image
+        $qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=$receiptNumber&size=150x150"; // Using QR Code API
+
+        // Save QR code image
+        file_put_contents($qrCodeImage, file_get_contents($qrCodeURL));
+
+        // Build HTML content with the QR code image
         $receiptHtml = "
             <html>
                 <head>
-                    <script src='https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js'></script>
                     <style>
                         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
                         .container { width: 100%; max-width: 800px; margin: auto; }
@@ -145,17 +152,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <tr><th>Change</th><td>P" . number_format($changeAmount, 2) . "</td></tr>
                             </table>
                             <h4>QR Code for Receipt</h4>
-                            <div id='qrcode'></div>
+                            <img src='$qrCodeImage' alt='QR Code' style='width: 150px; height: 150px;' />
                         </div>
                         <div class='footer'>
                             <p>Thank you for your payment!</p>
                             <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
                         </div>
                     </div>
-                    <script>
-                        // Generate QR code based on the receipt number
-                        new QRCode(document.getElementById('qrcode'), '$receiptNumber');
-                    </script>
                 </body>
             </html>
         ";
@@ -177,12 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Payment processed successfully. Receipt sent to $email.";
     } catch (Exception $e) {
         $conn1->rollback();
-        echo "Error processing payment: " . $e->getMessage();
+        echo "Error: " . $e->getMessage();
     }
-
-    $stmt->close();
-    $updateMemberStmt->close();
-    $updateMembershipStmt->close();
 }
-$conn1->close();
 ?>
