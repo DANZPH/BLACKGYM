@@ -36,6 +36,8 @@ include '../../includes/head.php';
 
 <!--modal add member-->
 <?php include 'includes/modal/add_member.php'; ?>
+Update this dataTables 
+
             <!-- Members Table -->
             <div class="card">
                 <div class="card-header">
