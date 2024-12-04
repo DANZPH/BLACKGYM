@@ -53,8 +53,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         }
     } else {
         // No existing record, create a new one with AttendanceCount = 1
-        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
-                      VALUES (?, ?, '0000-00-00 00:00:00', 1)";
+        $insertSql = "INSERT INTO Attendance (MemberID, CheckOut, AttendanceCount) 
+                      VALUES (?, '0000-00-00 00:00:00', 1)";
         $stmt = $conn1->prepare($insertSql);
         $stmt->bind_param("is", $memberID, $currentTimestamp);
 
