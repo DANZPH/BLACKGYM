@@ -44,56 +44,18 @@ include '../../includes/head.php';
                 <div class="card-body">
                     <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
-<thead>
-    <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Gender</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>Membership Status</th>
-        <th>Created At</th>
-        <th>Actions</th>
-    </tr>
-</thead>
-<tbody>
-    <?php
-    $sql = "
-        SELECT 
-            Members.MemberID, 
-            Users.Username, 
-            Users.Email, 
-            Members.Gender, 
-            Members.Age, 
-            Members.Address, 
-            Members.MembershipStatus, 
-            Members.created_at 
-        FROM Members 
-        INNER JOIN Users ON Members.UserID = Users.UserID
-    ";
-    $result = $conn1->query($sql);
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>
-                <td>{$row['Username']}</td>
-                <td>{$row['Email']}</td>
-                <td>{$row['Gender']}</td>
-                <td>{$row['Age']}</td>
-                <td>{$row['Address']}</td>
-                <td>{$row['MembershipStatus']}</td>
-                <td>{$row['created_at']}</td>
-                <td>
-                    <button class='btn btn-warning btn-sm' onclick='fetchMember({$row['MemberID']})'>Update</button>
-                    <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
-                </td>
-            </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
-    }
-    ?>
-</tbody>
+                            <thead>
+                                <tr>
+                                    <th>Member ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Address</th>
+                                    <th>Membership Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php
                                 $sql = "
