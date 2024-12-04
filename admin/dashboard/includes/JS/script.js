@@ -122,7 +122,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Perform the delete action if confirmed
-                window.location.href = 'delete_member.php?MemberID=' + memberID;
+                window.location.href = '../action/delete_member.php?MemberID=' + memberID;
             }
         });
     });
