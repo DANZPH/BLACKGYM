@@ -11,7 +11,7 @@ require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
 
 // Manually include Dompdf
-require_once 'dompdf/autoload.inc.php';
+require_once '../../dompdf/autoload.inc.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
