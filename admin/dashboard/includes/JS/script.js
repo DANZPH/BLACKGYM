@@ -89,7 +89,7 @@
     $('.editBtn').click(function() {
         var memberID = $(this).data('id');
         $.ajax({
-            url: 'get_member_data.php',
+            url: 'fetch_member.php',
             method: 'GET',
             data: { memberID: memberID },
             success: function(response) {
