@@ -29,6 +29,59 @@ include '../../includes/head.php';
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
+            
+            <!-- Edit Member Modal -->
+<div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMemberModalLabel">Edit Member</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editMemberForm">
+                    <input type="hidden" id="editMemberID" name="memberID">
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" class="form-control" id="editUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editGender">Gender</label>
+                        <select class="form-control" id="editGender" name="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAge">Age</label>
+                        <input type="number" class="form-control" id="editAge" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress">Address</label>
+                        <input type="text" class="form-control" id="editAddress" name="address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMembershipStatus">Membership Status</label>
+                        <select class="form-control" id="editMembershipStatus" name="membershipStatus" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- Add Member Button -->
             <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
@@ -56,41 +109,43 @@ include '../../includes/head.php';
                                     <th>Created At</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php
-                                $sql = "
-                                    SELECT 
-                                        Members.MemberID, 
-                                        Users.Username, 
-                                        Users.Email, 
-                                        Members.Gender, 
-                                        Members.Age, 
-                                        Members.Address, 
-                                        Members.MembershipStatus, 
-                                        Members.created_at 
-                                    FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID
-                                ";
-                                $result = $conn1->query($sql);
+<tbody>
+    <?php
+    $sql = "
+        SELECT 
+            Members.MemberID, 
+            Users.Username, 
+            Users.Email, 
+            Members.Gender, 
+            Members.Age, 
+            Members.Address, 
+            Members.MembershipStatus, 
+            Members.created_at 
+        FROM Members 
+        INNER JOIN Users ON Members.UserID = Users.UserID
+    ";
+    $result = $conn1->query($sql);
 
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['Gender']}</td>
-                                            <td>{$row['Age']}</td>
-                                            <td>{$row['Address']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['created_at']}</td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                <td>{$row['MemberID']}</td>
+                <td>{$row['Username']}</td>
+                <td>{$row['Email']}</td>
+                <td>{$row['Gender']}</td>
+                <td>{$row['Age']}</td>
+                <td>{$row['Address']}</td>
+                <td>{$row['MembershipStatus']}</td>
+                <td>{$row['created_at']}</td>
+                <td><button type='button' class='btn btn-warning edit-btn' data-toggle='modal' data-target='#editMemberModal' data-id='{$row['MemberID']}' data-username='{$row['Username']}' data-email='{$row['Email']}' data-gender='{$row['Gender']}' data-age='{$row['Age']}' data-address='{$row['Address']}' data-status='{$row['MembershipStatus']}'>Edit</button></td>
+            </tr>";
+        }
+    } else {
+        echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
+    }
+    ?>
+</tbody>
+
                         </table>
                     </div>
                 </div>
@@ -100,6 +155,70 @@ include '../../includes/head.php';
 </div>
 
 <?php include '../../includes/footer.php'; ?>
+<script>
+    // Handle Edit button click
+    $('.edit-btn').on('click', function() {
+        const memberID = $(this).data('id');
+        const username = $(this).data('username');
+        const email = $(this).data('email');
+        const gender = $(this).data('gender');
+        const age = $(this).data('age');
+        const address = $(this).data('address');
+        const status = $(this).data('status');
+
+        // Populate modal fields with current member data
+        $('#editMemberID').val(memberID);
+        $('#editUsername').val(username);
+        $('#editEmail').val(email);
+        $('#editGender').val(gender);
+        $('#editAge').val(age);
+        $('#editAddress').val(address);
+        $('#editMembershipStatus').val(status);
+    });
+
+    // Handle form submission to save changes
+    $('#editMemberForm').submit(function(e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "path/to/your/edit_member_process.php", // Change to your process file
+            data: formData,
+            success: function(response) {
+                if (response === "success") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Member updated successfully!',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload(); // Reload the page to show the updated data
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while updating the member. Please try again.',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Unable to update member. Please try again later.',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+</script>
 
 <!-- JS Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
