@@ -1,22 +1,31 @@
 <?php
 include '../../database/connection.php';
 
-if (isset($_POST['memberID'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memberID = $_POST['memberID'];
-    
-    $sql = "SELECT * FROM Members WHERE MemberID = ?";
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $gender = $_POST['gender'];
+    $age = $_POST['age'];
+    $address = $_POST['address'];
+    $membershipStatus = $_POST['membershipStatus'];
+
+    // Update the member in the database
+    $sql = "UPDATE Members 
+            INNER JOIN Users ON Members.UserID = Users.UserID
+            SET Users.Username = ?, Users.Email = ?, Members.Gender = ?, Members.Age = ?, Members.Address = ?, Members.MembershipStatus = ?
+            WHERE Members.MemberID = ?";
+
     $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("i", $memberID);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        echo json_encode(['success' => $row]);
+    $stmt->bind_param("ssssssi", $username, $email, $gender, $age, $address, $membershipStatus, $memberID);
+
+    if ($stmt->execute()) {
+        echo "success";
     } else {
-        echo json_encode(['error' => 'Member not found']);
+        echo "error";
     }
-} else {
-    echo json_encode(['error' => 'Invalid request']);
+
+    $stmt->close();
+    $conn1->close();
 }
 ?>
