@@ -104,15 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
+        // Generate the QR Code as Base64 Image
+        $qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=$receiptNumber&size=150x150";
+        $qrCodeBase64 = base64_encode(file_get_contents($qrCodeURL)); // Convert to base64
+
         // Build HTML content for the receipt
-        // QR Code Generation via an image
-        $qrCodeImage = "qr_code_image.png"; // Path to save QR code image
-        $qrCodeURL = "https://api.qrserver.com/v1/create-qr-code/?data=$receiptNumber&size=150x150"; // Using QR Code API
-
-        // Save QR code image
-        file_put_contents($qrCodeImage, file_get_contents($qrCodeURL));
-
-        // Build HTML content with the QR code image
         $receiptHtml = "
             <html>
                 <head>
@@ -152,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <tr><th>Change</th><td>P" . number_format($changeAmount, 2) . "</td></tr>
                             </table>
                             <h4>QR Code for Receipt</h4>
-                            <img src='$qrCodeImage' alt='QR Code' style='width: 150px; height: 150px;' />
+                            <img src='data:image/png;base64,$qrCodeBase64' alt='QR Code' style='width: 150px; height: 150px;' />
                         </div>
                         <div class='footer'>
                             <p>Thank you for your payment!</p>
