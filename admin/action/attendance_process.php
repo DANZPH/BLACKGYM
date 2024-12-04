@@ -9,7 +9,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
     $currentTimestamp = date('Y-m-d H:i:s'); // Get current timestamp in Asia/Manila timezone
 
     // Check for an existing attendance record for the member
-    $checkSql = "SELECT AttendanceID, CheckOut FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
+    $checkSql = "SELECT AttendanceID, CheckIn, CheckOut FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
     $stmt = $conn1->prepare($checkSql);
     $stmt->bind_param("i", $memberID);
 
@@ -36,20 +36,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
                 echo "Error: " . $conn1->error;
             }
         } else {
-            // Member is checked out; perform a new check-in and increment AttendanceCount
-            $updateSql = "UPDATE Attendance 
-                          SET CheckIn = ?, 
-                              CheckOut = '0000-00-00 00:00:00', 
-                              AttendanceCount = AttendanceCount + 1 
-                          WHERE AttendanceID = ?";
-            $stmt = $conn1->prepare($updateSql);
-            $stmt->bind_param("si", $currentTimestamp, $attendance['AttendanceID']);
-
-            if ($stmt->execute()) {
-                echo 'checkedIn'; // Success: Member checked in
-            } else {
-                echo "Error: " . $conn1->error;
-            }
+            // Member is already checked out; no need to update CheckIn
+            echo 'alreadyCheckedOut'; // Member already checked out
         }
     } else {
         // No existing record, create a new one with AttendanceCount = 1
