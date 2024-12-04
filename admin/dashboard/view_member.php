@@ -86,7 +86,7 @@ include '../../includes/head.php';
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
                                             <td>
-                                                <button class='btn btn-warning btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
+                                                 <button class='btn btn-warning btn-sm' onclick='fetchMember(<?php echo $row['MemberID']; ?>)'>Edit</button>
                                                 <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
                                             </td>
                                         </tr>";
@@ -100,6 +100,58 @@ include '../../includes/head.php';
                     </div>
                 </div>
             </div>
+            
+            <!-- Update Member Modal -->
+<div class="modal fade" id="updateMemberModal" tabindex="-1" aria-labelledby="updateMemberLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateMemberLabel">Update Member Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updateMemberForm">
+                <div class="modal-body">
+                    <input type="hidden" id="updateMemberID" name="MemberID">
+                    <div class="mb-3">
+                        <label for="updateUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="updateUsername" name="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="updateEmail" name="Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateGender" class="form-label">Gender</label>
+                        <select class="form-select" id="updateGender" name="Gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateAge" class="form-label">Age</label>
+                        <input type="number" class="form-control" id="updateAge" name="Age" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateAddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="updateAddress" name="Address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="updateMembershipStatus" class="form-label">Membership Status</label>
+                        <select class="form-select" id="updateMembershipStatus" name="MembershipStatus" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+            
         </div>
     </div>
 </div>
