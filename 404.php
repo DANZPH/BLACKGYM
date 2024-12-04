@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +80,7 @@
         <h1>404</h1>
         <h2>Oops! Page Not Found</h2>
         <p>The page you’re looking for doesn’t exist or has been moved.</p>
-<p>CHILL LNG WLA PA NA HUMAN.</p>
+        <p>CHILL LNG WLA PA NA HUMAN.</p>
         <p><a href="/">Return to BLACKGYM Home</a></p>
     </div>
 </body>
