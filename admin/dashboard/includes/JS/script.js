@@ -89,7 +89,7 @@
     $('.editBtn').click(function() {
         var memberID = $(this).data('id');
         $.ajax({
-            url: 'fetch_member.php',
+            url: '../action/fetch_member.php',
             method: 'GET',
             data: { memberID: memberID },
             success: function(response) {
@@ -100,7 +100,7 @@
                 $('#editAge').val(data.Age);
                 $('#editAddress').val(data.Address);
                 $('#editMembershipStatus').val(data.MembershipStatus);
-                $('#editMemberForm').attr('action', 'edit_member_process.php?MemberID=' + memberID);
+                $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
                 $('#editMemberModal').modal('show');
             }
         });
