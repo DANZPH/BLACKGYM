@@ -114,7 +114,9 @@ include '../../includes/head.php';
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
                                             <td>
-                                                <button class='btn btn-info btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
+
+    <button class='btn btn-warning btn-sm' onclick='fetchMember(<?php echo $row['MemberID']; ?>)'>Edit</button>
+
                                                 <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
                                             </td>
                                         </tr>";
