@@ -10,7 +10,13 @@ include '../../database/connection.php';
 <!DOCTYPE html>
 <html lang="en">
 <?php 
-include '../../includes/head.php'; 
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    header('Location: ../../admin/login.php');
+    exit();
+}
+include '../../database/connection.php'; 
+include '../../includes/head.php';
 ?>
 <body>
 <!-- Include Header -->
@@ -20,49 +26,108 @@ include '../../includes/head.php';
     <div class="row">
         <!-- Include Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
-
-<div class="modal fade" id="updateMemberModal" tabindex="-1" role="dialog" aria-labelledby="updateMemberModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateMemberModalLabel">Edit Member</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="updateMemberForm">
-                <div class="modal-body">
-                    <input type="hidden" id="memberID" name="memberID">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <!-- Add other form fields as necessary -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
-            
             <!-- Add Member Button -->
             <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
             </button>
 
             <!-- Modal for Add Member -->
-            <?php include 'includes/modal/add_member.php'; ?>
+            <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addMemberModalLabel">Add New Member</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addMemberForm">
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <select class="form-control" id="gender" name="gender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Member</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for Edit Member -->
+            <div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editMemberModalLabel">Edit Member</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editMemberForm">
+                                <input type="hidden" id="editMemberID" name="memberID">
+                                <div class="form-group">
+                                    <label for="editUsername">Username</label>
+                                    <input type="text" class="form-control" id="editUsername" name="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editEmail">Email</label>
+                                    <input type="email" class="form-control" id="editEmail" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editPassword">Password</label>
+                                    <input type="password" class="form-control" id="editPassword" name="password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editGender">Gender</label>
+                                    <select class="form-control" id="editGender" name="gender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAge">Age</label>
+                                    <input type="number" class="form-control" id="editAge" name="age" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAddress">Address</label>
+                                    <input type="text" class="form-control" id="editAddress" name="address" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update Member</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Members Table -->
             <div class="card">
@@ -70,7 +135,7 @@ include '../../includes/head.php';
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -114,10 +179,7 @@ include '../../includes/head.php';
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
                                             <td>
-
-    <button class='btn btn-warning btn-sm' onclick='fetchMember(<?php echo $row['MemberID']; ?>)'>Edit</button>
-
-                                                <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
+                                                <button class='btn btn-warning btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
                                             </td>
                                         </tr>";
                                     }
@@ -144,112 +206,87 @@ include '../../includes/head.php';
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(document).ready(function() {
-    // Initialize DataTable
-    $('#membersTable').DataTable({ scrollX: true });
+    $(document).ready(function() {
+        // Initialize DataTable
+        $('#membersTable').DataTable({ scrollX: true });
 
-    // Toggle membership options
-    $('#membershipType').change(function() {
-        const type = $(this).val();
-        $('#subscriptionOptions').toggle(type === 'Subscription');
-        $('#sessionPriceOptions').toggle(type === 'SessionPrice');
-    });
-
-    // Submit Add Member Form via AJAX
-    $('#registerForm').submit(function(e) {
-        e.preventDefault();
-        var otp = Math.floor(100000 + Math.random() * 900000);
-        var otpExpiration = new Date(new Date().getTime() + 15 * 60000).toISOString(); 
-        
-        $.ajax({
-            type: "POST",
-            url: "../action/add_member_process.php",
-            data: {
-                username: $('#username').val(),
-                email: $('#email').val(),
-                password: $('#password').val(),
-                gender: $('#gender').val(),
-                age: $('#age').val(),
-                address: $('#address').val(),
-                membershipType: $('#membershipType').val(),
-                subscriptionMonths: $('#subscriptionMonths').val(),
-                sessionPrice: $('#sessionPrice').val(),
-                otp: otp,
-                otpExpiration: otpExpiration
-            },
-            success: function(response) {
-                if (response.trim() === "Email already registered.") {
-                    Swal.fire('Error', 'Email already registered.', 'error');
-                } else {
-                    Swal.fire('Success', 'Verification OTP sent to your email.', 'success')
-                        .then(() => location.reload());
-                }
-            },
-            error: function() {
-                Swal.fire('Error', 'Unable to add member. Please try again later.', 'error');
-            }
-        });
-    });
-});
-
-// Delete Member
-function deleteMember(memberID) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'This action cannot be undone!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel',
-    }).then((result) => {
-        if (result.isConfirmed) {
+        // Fetch member details for editing
+        window.fetchMember = function(memberID) {
             $.ajax({
                 type: 'POST',
-                url: '../action/delete_member.php',
+                url: '../action/edit_member.php',
                 data: { memberID: memberID },
                 success: function(response) {
                     const data = JSON.parse(response);
                     if (data.success) {
-                        Swal.fire('Deleted!', data.success, 'success').then(() => location.reload());
+                        $('#editMemberID').val(data.success.MemberID);
+                        $('#editUsername').val(data.success.Username);
+                        $('#editEmail').val(data.success.Email);
+                        $('#editGender').val(data.success.Gender);
+                        $('#editAge').val(data.success.Age);
+                        $('#editAddress').val(data.success.Address);
+
+                        $('#editMemberModal').modal('show');
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                },error: function() {
+                    Swal.fire('Error', 'Something went wrong!', 'error');
+                }
+            });
+        };
+
+        // Handle Add Member Form submission
+        $('#addMemberForm').submit(function(e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '../action/add_member.php',  // Your add member action
+                data: formData,
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire('Success', data.success, 'success');
+                        $('#addMemberModal').modal('hide');
+                        $('#addMemberForm')[0].reset();
+                        $('#membersTable').DataTable().ajax.reload();  // Reload the table
                     } else {
                         Swal.fire('Error', data.error, 'error');
                     }
                 },
                 error: function() {
-                    Swal.fire('Error', 'Failed to delete member.', 'error');
+                    Swal.fire('Error', 'Something went wrong!', 'error');
                 }
             });
-        }
-    });
-}
+        });
 
-// Fetch Member for Editing
-function fetchMember(memberID) {
-    $.ajax({
-        type: 'POST',
-        url: '../action/edit_member.php',
-        data: { memberID: memberID },
-        success: function(response) {
-            const data = JSON.parse(response);
-            if (data.success) {
-                $('#memberID').val(data.success.MemberID);
-                $('#username').val(data.success.Username);
-                $('#email').val(data.success.Email);
-                $('#gender').val(data.success.Gender);
-                $('#age').val(data.success.Age);
-                $('#address').val(data.success.Address);
-                $('#membershipStatus').val(data.success.MembershipStatus);
-
-                $('#updateMemberModal').modal('show');
-            } else {
-                Swal.fire('Error', data.error, 'error');
-            }
-        },
-        error: function() {
-            Swal.fire('Error', 'Failed to fetch member details.', 'error');
-        }
+        // Handle Edit Member Form submission
+        $('#editMemberForm').submit(function(e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: '../action/update_member.php',  // Your update member action
+                data: formData,
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire('Success', data.success, 'success');
+                        $('#editMemberModal').modal('hide');
+                        $('#editMemberForm')[0].reset();
+                        $('#membersTable').DataTable().ajax.reload();  // Reload the table
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error', 'Something went wrong!', 'error');
+                }
+            });
+        });
     });
-}
 </script>
+
 </body>
 </html>
