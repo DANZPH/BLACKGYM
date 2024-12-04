@@ -137,8 +137,8 @@ include '../../includes/head.php';
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
                                           <td>
-    <div class='d-flex '>
-        <button class='btn btn-warning btn-sm editBtn me-2' data-id='{$row['MemberID']}'>
+    <div class='d-flex gap-2'>
+        <button class='btn btn-warning btn-sm editBtn' data-id='{$row['MemberID']}'>
             <i class='fas fa-edit'></i> Edit
         </button>
         
