@@ -5,20 +5,16 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
+require_once '../../vendor/autoload.php';
 include '../../database/connection.php'; 
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
 
-// Manually include Dompdf
-require_once 'dompdf/autoload.inc.php';
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
-function sendReceiptEmail($email, $name, $pdfContent) {
+function sendReceiptEmail($email, $name, $receiptHtml) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -34,9 +30,7 @@ function sendReceiptEmail($email, $name, $pdfContent) {
 
         $mail->isHTML(true);
         $mail->Subject = 'Payment Successful';
-
-        // Attach PDF to the email
-        $mail->addStringAttachment($pdfContent, 'receipt.pdf', 'base64', 'application/pdf');
+        $mail->Body = $receiptHtml;
 
         $mail->send();
     } catch (Exception $e) {
@@ -94,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $emailQuery->fetch();
         $emailQuery->close();
 
-        // Build HTML content for the receipt (This is the same as before)
+        // Build HTML content for the receipt
         $receiptHtml = "
             <html>
                 <head>
@@ -110,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         .receipt-info table, .receipt-info th, .receipt-info td { border: 1px solid #ddd; padding: 10px; }
                         .footer { text-align: center; margin-top: 20px; font-size: 12px; }
                         .footer a { text-decoration: none; color: #007bff; }
+                        .download-pdf-btn { display: block; text-align: center; margin: 20px 0; }
                     </style>
                 </head>
                 <body>
@@ -138,22 +133,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p>Thank you for your payment!</p>
                             <p>Visit <a href='https://www.blackgym.com'>www.blackgym.com</a> for more information.</p>
                         </div>
+                        <div class='download-pdf-btn'>
+                            <button onclick='downloadReceipt()'>Download PDF</button>
+                        </div>
                     </div>
                 </body>
             </html>
+
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js'></script>
+            <script>
+                function downloadReceipt() {
+                    const element = document.querySelector('.container');
+                    const options = {
+                        margin: 10,
+                        filename: 'receipt_$receiptNumber.pdf',
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+                    html2pdf().from(element).set(options).save();
+                }
+            </script>
         ";
 
-        // Convert the HTML to PDF using Dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isPhpEnabled', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($receiptHtml);
-        $dompdf->render();
-        $pdfContent = $dompdf->output();
-
-        // Send the receipt email with PDF attached
-        sendReceiptEmail($email, $name, $pdfContent);
+        // Send the receipt email with HTML content
+        sendReceiptEmail($email, $name, $receiptHtml);
 
         $conn1->commit();
 
