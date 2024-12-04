@@ -25,7 +25,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         if ($attendance['CheckOut'] == '0000-00-00 00:00:00') {
             // Member is currently checked in; perform a checkout
             $updateSql = "UPDATE Attendance 
-                          SET CheckOut = ? 
+                          SET CheckIn = ?, 
+                              CheckOut = '0000-00-00 00:00:00', 
+                              AttendanceCount = AttendanceCount + 1 
                           WHERE AttendanceID = ?";
             $stmt = $conn1->prepare($updateSql);
             $stmt->bind_param("si", $currentTimestamp, $attendance['AttendanceID']);
