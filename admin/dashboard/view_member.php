@@ -97,8 +97,7 @@ include '../../includes/head.php';
             <table id="membersTable" class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Member ID</th>
-                        <th>Username</th>
+                       <th>Username</th>
                         <th>Email</th>
                         <th>Gender</th>
                         <th>Age</th>
