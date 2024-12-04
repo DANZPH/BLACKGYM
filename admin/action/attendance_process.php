@@ -1,15 +1,19 @@
 <?php
 include '../../database/connection.php'; // Include database connection
 
-// Set timezone to Asia/Manila
+// Set timezone to Asia/Manila in PHP
 date_default_timezone_set('Asia/Manila');
+
+// Set timezone to Asia/Manila in MySQL session
+$conn1->query("SET time_zone = '+08:00'");
 
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
     $memberID = $_POST['memberID'];
     $currentTimestamp = date('Y-m-d H:i:s'); // Get current timestamp in Asia/Manila timezone
 
     // Check for an existing attendance record for the member
-    $checkSql = "SELECT AttendanceID, CheckOut FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
+    $checkSql = "SELECT AttendanceID, CheckIn, CheckOut FROM Attendance 
+                 WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
     $stmt = $conn1->prepare($checkSql);
     $stmt->bind_param("i", $memberID);
 
@@ -37,13 +41,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
             }
         } else {
             // Member is checked out; perform a new check-in and increment AttendanceCount
-            $updateSql = "UPDATE Attendance 
-                          SET CheckIn = ?, 
-                              CheckOut = '0000-00-00 00:00:00', 
-                              AttendanceCount = AttendanceCount + 1 
-                          WHERE AttendanceID = ?";
-            $stmt = $conn1->prepare($updateSql);
-            $stmt->bind_param("si", $currentTimestamp, $attendance['AttendanceID']);
+            $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
+                          VALUES (?, ?, '0000-00-00 00:00:00', 1)";
+            $stmt = $conn1->prepare($insertSql);
+            $stmt->bind_param("is", $memberID, $currentTimestamp);
 
             if ($stmt->execute()) {
                 echo 'checkedIn'; // Success: Member checked in
