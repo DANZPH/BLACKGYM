@@ -1,31 +1,51 @@
 <?php
 include '../../database/connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $memberID = $_POST['memberID'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $gender = $_POST['gender'];
-    $age = $_POST['age'];
-    $address = $_POST['address'];
-    $membershipStatus = $_POST['membershipStatus'];
+if (isset($_GET['MemberID']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+    $memberID = $_GET['MemberID'];
 
-    // Update the member in the database
-    $sql = "UPDATE Members 
-            INNER JOIN Users ON Members.UserID = Users.UserID
-            SET Users.Username = ?, Users.Email = ?, Members.Gender = ?, Members.Age = ?, Members.Address = ?, Members.MembershipStatus = ?
-            WHERE Members.MemberID = ?";
+    // Fetch data from the form
+    $username = $_POST['editUsername'];
+    $email = $_POST['editEmail'];
+    $gender = $_POST['editGender'];
+    $age = $_POST['editAge'];
+    $address = $_POST['editAddress'];
+    $membershipStatus = $_POST['editMembershipStatus'];
 
-    $stmt = $conn1->prepare($sql);
-    $stmt->bind_param("ssssssi", $username, $email, $gender, $age, $address, $membershipStatus, $memberID);
+    // Start a transaction to update both Users and Members tables
+    $conn1->begin_transaction();
 
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "error";
+    try {
+        // Update Users table
+        $updateUserQuery = "UPDATE Users 
+                            SET Username = ?, Email = ? 
+                            WHERE UserID = (
+                                SELECT UserID 
+                                FROM Members 
+                                WHERE MemberID = ?
+                            )";
+        $stmtUser = $conn1->prepare($updateUserQuery);
+        $stmtUser->bind_param("ssi", $username, $email, $memberID);
+        $stmtUser->execute();
+
+        // Update Members table
+        $updateMemberQuery = "UPDATE Members 
+                              SET Gender = ?, Age = ?, Address = ?, MembershipStatus = ? 
+                              WHERE MemberID = ?";
+        $stmtMember = $conn1->prepare($updateMemberQuery);
+        $stmtMember->bind_param("sissi", $gender, $age, $address, $membershipStatus, $memberID);
+        $stmtMember->execute();
+
+        // Commit the transaction
+        $conn1->commit();
+
+        // Redirect to the member list page
+        header('Location: member_list.php');
+        exit();
+    } catch (Exception $e) {
+        // If there's an error, roll back the transaction
+        $conn1->rollback();
+        echo "Error updating record: " . $e->getMessage();
     }
-
-    $stmt->close();
-    $conn1->close();
 }
 ?>
