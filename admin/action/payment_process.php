@@ -143,9 +143,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p><strong>Membership Up To:</strong> $endDate</p>
                             <h4>Payment Details</h4>
                             <table>
-                                <tr><th>Amount Due</th><td>₱" . number_format($amount, 2) . "</td></tr>
-                                <tr><th>Amount Paid</th><td>₱" . number_format($amountPaid, 2) . "</td></tr>
-                                <tr><th>Change</th><td>₱" . number_format($changeAmount, 2) . "</td></tr>
+                                <tr><th>Amount Due</th><td>Php: " . number_format($amount, 2) . "</td></tr>
+                                <tr><th>Amount Paid</th><td>Php: " . number_format($amountPaid, 2) . "</td></tr>
+                                <tr><th>Change</th><td>Php: " . number_format($changeAmount, 2) . "</td></tr>
                             </table>
                         </div>
                         <div class='footer'>
