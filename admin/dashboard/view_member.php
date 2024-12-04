@@ -36,70 +36,65 @@ include '../../includes/head.php';
 
 <!--modal add member-->
 <?php include 'includes/modal/add_member.php'; ?>
-<!-- Members Table -->
-<div class="card">
-    <div class="card-header">
-        <h5>Members Information</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="membersTable" class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>Member ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Gender</th>
-                        <th>Age</th>
-                        <th>Address</th>
-                        <th>Membership Status</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $sql = "
-                        SELECT 
-                            Members.MemberID, 
-                            Users.Username, 
-                            Users.Email, 
-                            Members.Gender, 
-                            Members.Age, 
-                            Members.Address, 
-                            Members.MembershipStatus, 
-                            Members.created_at 
-                        FROM Members 
-                        INNER JOIN Users ON Members.UserID = Users.UserID
-                    ";
-                    $result = $conn1->query($sql);
+            <!-- Members Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Members Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table">
+                        <table id="membersTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Member ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Age</th>
+                                    <th>Address</th>
+                                    <th>Membership Status</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "
+                                    SELECT 
+                                        Members.MemberID, 
+                                        Users.Username, 
+                                        Users.Email, 
+                                        Members.Gender, 
+                                        Members.Age, 
+                                        Members.Address, 
+                                        Members.MembershipStatus, 
+                                        Members.created_at 
+                                    FROM Members 
+                                    INNER JOIN Users ON Members.UserID = Users.UserID
+                                ";
+                                $result = $conn1->query($sql);
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<tr>
-                                <td>{$row['MemberID']}</td>
-                                <td>{$row['Username']}</td>
-                                <td>{$row['Email']}</td>
-                                <td>{$row['Gender']}</td>
-                                <td>{$row['Age']}</td>
-                                <td>{$row['Address']}</td>
-                                <td>{$row['MembershipStatus']}</td>
-                                <td>{$row['created_at']}</td>
-                                <td>
-                                    <button class='btn btn-warning btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
-                                    <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
-                                </td>
-                            </tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                            <td>{$row['MemberID']}</td>
+                                            <td>{$row['Username']}</td>
+                                            <td>{$row['Email']}</td>
+                                            <td>{$row['Gender']}</td>
+                                            <td>{$row['Age']}</td>
+                                            <td>{$row['Address']}</td>
+                                            <td>{$row['MembershipStatus']}</td>
+                                            <td>{$row['created_at']}</td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='8' class='text-center'>No members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -229,28 +224,27 @@ include '../../includes/head.php';
 }
 
 function fetchMember(memberID) {
+    // Make an AJAX request to fetch the member's data
     $.ajax({
-        type: 'POST',
-        url: '../action/edit_member.php',
-        data: { memberID: memberID },
-        success: function(response) {
-            const data = JSON.parse(response);
-            if (data.success) {
-                $('#memberID').val(data.success.MemberID);
-                $('#username').val(data.success.Username);
-                $('#email').val(data.success.Email);
-                $('#gender').val(data.success.Gender);
-                $('#age').val(data.success.Age);
-                $('#address').val(data.success.Address);
-                $('#membershipStatus').val(data.success.MembershipStatus);
+        url: "../action/edit_member.php", // Replace with your PHP file to fetch member data
+        type: "POST",
+        data: { MemberID: memberID },
+        success: function (response) {
+            // Parse the response and populate the form fields
+            const member = JSON.parse(response);
+            $("#updateMemberID").val(member.MemberID);
+            $("#updateUsername").val(member.Username);
+            $("#updateEmail").val(member.Email);
+            $("#updateGender").val(member.Gender);
+            $("#updateAge").val(member.Age);
+            $("#updateAddress").val(member.Address);
+            $("#updateMembershipStatus").val(member.MembershipStatus);
 
-                $('#updateMemberModal').modal('show');
-            } else {
-                Swal.fire('Error', data.error, 'error');
-            }
+            // Show the modal
+            $("#updateMemberModal").modal("show");
         },
-        error: function() {
-            Swal.fire('Error', 'Failed to fetch member details.', 'error');
+        error: function () {
+            alert("An error occurred while fetching member data.");
         }
     });
 }
