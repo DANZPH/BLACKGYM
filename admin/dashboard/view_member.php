@@ -154,6 +154,6 @@ include '../../includes/head.php';
 
 <?php include '../../includes/footer.php'; ?>
 
-<script src="includes/JS/add_member.js"></script>
+<script src="includes/JS/script.js"></script>
 </body>
 </html>
