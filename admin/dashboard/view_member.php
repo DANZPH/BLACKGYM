@@ -24,58 +24,8 @@ include '../../includes/head.php';
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
-            
-<!-- Modal for editing member details -->
-<div class="modal fade" id="updateMemberModal" tabindex="-1" aria-labelledby="updateMemberModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateMemberModalLabel">Edit Member</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="updateMemberForm">
-                    <input type="hidden" id="memberID" name="memberID" />
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="age" class="form-label">Age</label>
-                        <input type="number" class="form-control" id="age" name="age" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="membershipStatus" class="form-label">Membership Status</label>
-                        <select class="form-select" id="membershipStatus" name="membershipStatus" required>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                      <!-- Modal for edit Member -->
+            <?php include 'includes/modal/add_member.php'; ?>
             <!-- Add Member Button -->
             <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
                 Add Member
@@ -83,7 +33,7 @@ include '../../includes/head.php';
 
             <!-- Modal for Add Member -->
             <?php include 'includes/modal/add_member.php'; ?>
-
+  
 
             <!-- Members Table -->
             <div class="card">
@@ -245,52 +195,29 @@ function deleteMember(memberID) {
 // Fetch Member for Editing
 function fetchMember(memberID) {
     $.ajax({
-    type: 'GET',
-    url: '../action/edit_member.php',
-    data: { memberID: memberID },
-    success: function(response) {
-        const data = JSON.parse(response);
-        if (data.success) {
-            // Fill the modal fields with the fetched data
-            $('#memberID').val(data.success.MemberID);
-            $('#username').val(data.success.Username);
-            $('#email').val(data.success.Email);
-            $('#gender').val(data.success.Gender);
-            $('#age').val(data.success.Age);
-            $('#address').val(data.success.Address);
-            $('#membershipStatus').val(data.success.MembershipStatus);
-            $('#updateMemberModal').modal('show');
-        } else {
-            Swal.fire('Error', data.error, 'error');
-        }
-    },
-    error: function() {
-        Swal.fire('Error', 'Failed to fetch member details.', 'error');
-    }
-});
-
-$('#updateMemberForm').submit(function(e) {
-    e.preventDefault();
-
-    $.ajax({
         type: 'POST',
         url: '../action/edit_member.php',
-        data: $(this).serialize(),
+        data: { memberID: memberID },
         success: function(response) {
             const data = JSON.parse(response);
             if (data.success) {
-                Swal.fire('Updated!', 'Member details have been updated successfully.', 'success').then(function() {
-                    location.reload(); // Refresh page to show updated data
-                });
+                $('#memberID').val(data.success.MemberID);
+                $('#username').val(data.success.Username);
+                $('#email').val(data.success.Email);
+                $('#gender').val(data.success.Gender);
+                $('#age').val(data.success.Age);
+                $('#address').val(data.success.Address);
+                $('#membershipStatus').val(data.success.MembershipStatus);
+
+                $('#updateMemberModal').modal('show');
             } else {
                 Swal.fire('Error', data.error, 'error');
             }
         },
         error: function() {
-            Swal.fire('Error', 'Failed to update member details. Please try again.', 'error');
+            Swal.fire('Error', 'Failed to fetch member details.', 'error');
         }
     });
-});
 }
 </script>
 </body>
