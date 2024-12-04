@@ -224,29 +224,52 @@ function deleteMember(memberID) {
 // Fetch Member for Editing
 function fetchMember(memberID) {
     $.ajax({
+    type: 'GET',
+    url: '../action/edit_member.php',
+    data: { memberID: memberID },
+    success: function(response) {
+        const data = JSON.parse(response);
+        if (data.success) {
+            // Fill the modal fields with the fetched data
+            $('#memberID').val(data.success.MemberID);
+            $('#username').val(data.success.Username);
+            $('#email').val(data.success.Email);
+            $('#gender').val(data.success.Gender);
+            $('#age').val(data.success.Age);
+            $('#address').val(data.success.Address);
+            $('#membershipStatus').val(data.success.MembershipStatus);
+            $('#updateMemberModal').modal('show');
+        } else {
+            Swal.fire('Error', data.error, 'error');
+        }
+    },
+    error: function() {
+        Swal.fire('Error', 'Failed to fetch member details.', 'error');
+    }
+});
+
+$('#updateMemberForm').submit(function(e) {
+    e.preventDefault();
+
+    $.ajax({
         type: 'POST',
         url: '../action/edit_member.php',
-        data: { memberID: memberID },
+        data: $(this).serialize(),
         success: function(response) {
             const data = JSON.parse(response);
             if (data.success) {
-                $('#memberID').val(data.success.MemberID);
-                $('#username').val(data.success.Username);
-                $('#email').val(data.success.Email);
-                $('#gender').val(data.success.Gender);
-                $('#age').val(data.success.Age);
-                $('#address').val(data.success.Address);
-                $('#membershipStatus').val(data.success.MembershipStatus);
-
-                $('#updateMemberModal').modal('show');
+                Swal.fire('Updated!', 'Member details have been updated successfully.', 'success').then(function() {
+                    location.reload(); // Refresh page to show updated data
+                });
             } else {
                 Swal.fire('Error', data.error, 'error');
             }
         },
         error: function() {
-            Swal.fire('Error', 'Failed to fetch member details.', 'error');
+            Swal.fire('Error', 'Failed to update member details. Please try again.', 'error');
         }
     });
+});
 }
 </script>
 </body>
