@@ -38,7 +38,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         } else {
             // Member is checked out; perform a new check-in and increment AttendanceCount
             $updateSql = "UPDATE Attendance 
-                          SET  
+                          SET CheckIn = ?, 
                               CheckOut = '0000-00-00 00:00:00', 
                               AttendanceCount = AttendanceCount + 1 
                           WHERE AttendanceID = ?";
