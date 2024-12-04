@@ -32,36 +32,7 @@ include '../../includes/head.php';
             <!-- Modal for Add Member -->
             <?php include 'includes/modal/add_member.php'; ?>
             <!-- Modal for edit Member -->
-<div class="modal fade" id="updateMemberModal" tabindex="-1" role="dialog" aria-labelledby="updateMemberModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateMemberModalLabel">Edit Member</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="updateMemberForm">
-                <div class="modal-body">
-                    <input type="hidden" id="memberID" name="memberID">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <!-- Add other form fields as necessary -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+            <?php include 'includes/modal/add_member.php'; ?>
 
             <!-- Members Table -->
             <div class="card">
@@ -73,8 +44,7 @@ include '../../includes/head.php';
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <!-- Remove or hide MemberID column -->
-                                    <th style="display: none;">Member ID</th>
+                                    <th>Member ID</th>
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Gender</th>
@@ -105,7 +75,7 @@ include '../../includes/head.php';
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
-                                            <td style='display: none;'>{$row['MemberID']}</td> <!-- Hide MemberID -->
+                                            <td>{$row['MemberID']}</td>
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['Gender']}</td>
@@ -114,13 +84,8 @@ include '../../includes/head.php';
                                             <td>{$row['MembershipStatus']}</td>
                                             <td>{$row['created_at']}</td>
                                             <td>
-                                                <!-- Replace buttons with icons -->
-                                                <button class='btn btn-info btn-sm' onclick='fetchMember({$row['MemberID']})'>
-                                                    <i class='fas fa-edit'></i>
-                                                </button>
-                                                <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>
-                                                    <i class='fas fa-trash'></i>
-                                                </button>
+                                                <button class='btn btn-info btn-sm' onclick='fetchMember({$row['MemberID']})'>Edit</button>
+                                                <button class='btn btn-danger btn-sm' onclick='deleteMember({$row['MemberID']})'>Delete</button>
                                             </td>
                                         </tr>";
                                     }
@@ -145,8 +110,6 @@ include '../../includes/head.php';
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Add FontAwesome CDN -->
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 <script>
 $(document).ready(function() {
