@@ -7,6 +7,7 @@ date_default_timezone_set('Asia/Manila');
 if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($_POST['memberID'])) {
     $memberID = $_POST['memberID'];
     $currentTimestamp = date('Y-m-d H:i:s'); // Get current timestamp in Asia/Manila timezone
+    $attendanceDate = date('Y-m-d'); // Get the date for AttendanceDate
 
     // Check for an existing attendance record for the member
     $checkSql = "SELECT AttendanceID, CheckOut FROM Attendance WHERE MemberID = ? ORDER BY AttendanceID DESC LIMIT 1";
@@ -40,10 +41,11 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
             $updateSql = "UPDATE Attendance 
                           SET CheckIn = ?, 
                               CheckOut = '0000-00-00 00:00:00', 
-                              AttendanceCount = AttendanceCount + 1 
+                              AttendanceCount = AttendanceCount + 1, 
+                              AttendanceDate = ? 
                           WHERE AttendanceID = ?";
             $stmt = $conn1->prepare($updateSql);
-            $stmt->bind_param("si", $currentTimestamp, $attendance['AttendanceID']);
+            $stmt->bind_param("ssi", $currentTimestamp, $attendanceDate, $attendance['AttendanceID']);
 
             if ($stmt->execute()) {
                 echo 'checkedIn'; // Success: Member checked in
@@ -53,10 +55,10 @@ if (isset($_POST['action']) && $_POST['action'] == 'toggleAttendance' && isset($
         }
     } else {
         // No existing record, create a new one with AttendanceCount = 1
-        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount) 
-                      VALUES (?, ?, '0000-00-00 00:00:00', 1)";
+        $insertSql = "INSERT INTO Attendance (MemberID, CheckIn, CheckOut, AttendanceCount, AttendanceDate) 
+                      VALUES (?, ?, '0000-00-00 00:00:00', 1, ?)";
         $stmt = $conn1->prepare($insertSql);
-        $stmt->bind_param("is", $memberID, $currentTimestamp);
+        $stmt->bind_param("iss", $memberID, $currentTimestamp, $attendanceDate);
 
         if ($stmt->execute()) {
             echo 'checkedIn'; // Success: Member checked in with initial count
