@@ -44,14 +44,14 @@ function sendReceiptEmail($email, $name, $pdfContent) {
         $mail->addStringAttachment($pdfContent, 'receipt.pdf', 'base64', 'application/pdf');
 
         // Enable debug output to troubleshoot email sending
-        $mail->SMTPDebug = 2;  // 0 = off, 1 = client, 2 = client and server
+        $mail->SMTPDebug = 0;  // 0 = off, 1 = client, 2 = client and server
         $mail->Debugoutput = 'html';  // Show debug info in HTML format
 
         // Attempt to send the email
         $mail->send();
     } catch (Exception $e) {
-        error_log("Mail Error: " . $e->getMessage());
-        echo "Error sending email: " . $e->getMessage();
+        /*error_log("Mail Error: " . $e->getMessage());
+        echo "Error sending email: " . $e->getMessage();*/
     }
 }
 
