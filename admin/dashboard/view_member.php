@@ -119,7 +119,7 @@ include '../../includes/head.php';
         $('#membersTable').DataTable({ scrollX: true });
     });
 </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function(){
             $('#membershipType').change(function() {
@@ -191,5 +191,64 @@ include '../../includes/head.php';
             });
         });
     </script>
+    
+<script>
+  function deleteMember(memberID) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: '../action/delete_member.php',
+                data: { memberID: memberID },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire('Deleted!', data.success, 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', data.error, 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error', 'Failed to delete member.', 'error');
+                }
+            });
+        }
+    });
+}
+
+function fetchMember(memberID) {
+    $.ajax({
+        type: 'POST',
+        url: '../action/edit_member.php',
+        data: { memberID: memberID },
+        success: function(response) {
+            const data = JSON.parse(response);
+            if (data.success) {
+                $('#memberID').val(data.success.MemberID);
+                $('#username').val(data.success.Username);
+                $('#email').val(data.success.Email);
+                $('#gender').val(data.success.Gender);
+                $('#age').val(data.success.Age);
+                $('#address').val(data.success.Address);
+                $('#membershipStatus').val(data.success.MembershipStatus);
+
+                $('#updateMemberModal').modal('show');
+            } else {
+                Swal.fire('Error', data.error, 'error');
+            }
+        },
+        error: function() {
+            Swal.fire('Error', 'Failed to fetch member details.', 'error');
+        }
+    });
+}
+</script>
 </body>
 </html>
