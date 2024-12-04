@@ -84,13 +84,12 @@
         // Initialize DataTable
         $('#membersTable').DataTable();
 
-        // Edit button click event
-   $(document).ready(function() {
+ $(document).ready(function() {
     // Edit button click event
     $('.editBtn').click(function() {
         var memberID = $(this).data('id');
         $.ajax({
-            url: '../action/fetch_member.php',
+            url: 'get_member_data.php',
             method: 'GET',
             data: { memberID: memberID },
             success: function(response) {
@@ -101,11 +100,33 @@
                 $('#editAge').val(data.Age);
                 $('#editAddress').val(data.Address);
                 $('#editMembershipStatus').val(data.MembershipStatus);
-                $('#editMemberForm').attr('action', '../action/edit_member.php?MemberID=' + memberID);
+                $('#editMemberForm').attr('action', 'edit_member_process.php?MemberID=' + memberID);
                 $('#editMemberModal').modal('show');
             }
         });
     });
+
+    // Delete button click event
+    $('.deleteBtn').click(function() {
+        var memberID = $(this).data('id');
+        
+        // SweetAlert confirmation for deletion
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will not be able to recover this member!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform the delete action if confirmed
+                window.location.href = 'delete_member.php?MemberID=' + memberID;
+            }
+        });
+    });
 });
+
 
     });
