@@ -142,9 +142,10 @@ include '../../includes/head.php';
             <i class='fas fa-edit'></i> 
         </button>
         
-        <button class='btn btn-danger btn-sm deleteBtn' data-id='{$row['MemberID']}'>
+        <button class='btn btn-danger btn-sm deleteBtn mx-2' data-id='{$row['MemberID']}'>
             <i class='fas fa-trash'></i> 
         </button>
+        
     </div>
 </td>
                                         </tr>";
