@@ -25,7 +25,7 @@
       font-family: 'Roboto', sans-serif;
       background-image: url('img/favicon-512x512.png'); /* Background image */
       background-size: contain; /* Fit image within viewport */
-      background-position: center 20px; /* Center horizontally, move 20px down vertically */
+      background-position: center 50px; /* Center horizontally, move 20px down vertically */
       background-repeat: no-repeat; /* Prevent repeating */
       background-attachment: fixed; /* Stay fixed during scrolling */
       padding-top: 20px;
