@@ -34,3 +34,6 @@ body {
             border-color: #fff; /* White border on focus */
             color: #fff; /* Keep text white on focus */
         }
+        a {
+          color: #fff;
+        }
