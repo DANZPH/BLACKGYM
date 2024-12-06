@@ -8,4 +8,8 @@
       <i class="fas fa-dumbbell"></i> <!-- Example icon for brand (gym-related) -->
       Powered by BLACKGYM
     </p>
+    <p>
+  <img src="../img/logo.png" alt="DANCEL Logo" style="height: 20px; vertical-align: middle;">
+  Powered by BLACKGYM
+</p>
 </footer>
