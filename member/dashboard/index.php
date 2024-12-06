@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['MemberID'])) {
-    header('Location: login.php');
+    header('Location: ../login.php');
     exit();
 }
 include '../../database/connection.php';
