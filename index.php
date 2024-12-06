@@ -150,9 +150,9 @@
     <div>
       <h1>select</h1>
       <div class="d-flex justify-content-center">
-        <a href="#admin" class="btn btn-custom">Admin</a>
-        <a href="#member" class="btn btn-custom">Member</a>
-        <a href="#staff" class="btn btn-custom">Staff</a>
+        <a href="admin/" class="btn btn-custom">Admin</a>
+        <a href="member/" class="btn btn-custom">Member</a>
+        <a href="staff/" class="btn btn-custom">Staff</a>
       </div>
     </div>
   </div>
