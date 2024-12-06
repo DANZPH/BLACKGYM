@@ -62,6 +62,11 @@
                     <li class="nav-item"><a href="receipt_transaction" class="nav-link">Receipts</a></li>
                 </ul>
             </div>
+                    <li class="nav-item">
+            <a class="nav-link" href="#" onclick="confirmLogout()">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </a>
+        </li>
         </li>
     </ul>
 </div>
