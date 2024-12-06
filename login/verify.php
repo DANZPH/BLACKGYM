@@ -1,4 +1,6 @@
 <?php
+session_start();  // Start the session
+
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,13 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
+                // Set session variables for the logged-in user
+                $_SESSION['user_id'] = $user['UserID'];
+                $_SESSION['username'] = $user['Username'];  // You can add more session variables if needed
+
                 echo "OTP verified successfully!";
             }
         } else {
             echo "Error: Invalid OTP.";
         }
-
-        // No need to close $conn1 here if it's handled in connection.php
     } else {
         echo "Error: Email and OTP are required.";
     }
