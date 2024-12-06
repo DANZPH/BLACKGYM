@@ -1,9 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION['MemberID'])) {
-    header('Location: login.php');
-    exit();
-}
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
