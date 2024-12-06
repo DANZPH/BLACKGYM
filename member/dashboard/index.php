@@ -1,7 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['MemberID'])) {
-    header('Location: ../login.php');
+if (!isset($_SESSION['user_id'])) {
+    // If session does not exist, redirect to login page
+    header("Location: ../login.php");
     exit();
 }
 include '../../database/connection.php';
