@@ -16,29 +16,28 @@ if (isset($_SESSION['AdminID'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="dashboard/includes/Loginform.css">
+
 </head>
-<body>
-   
-    <div class="container mt-5">
+<body class="d-flex align-items-center justify-content-center">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header h2 text-center">Admin Login</div>
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="email">Username or Email:</label>
                                 <input type="text" id="email" name="email" class="form-control" placeholder="Username or email" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="password">Password:</label>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="*******" required>
-                                <a href="../login/forgot_password.php">Forgot password?</a>
+                                <a href="../login/forgot_password.php" class="text-white">Forgot password?</a>
                             </div>
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-primary btn-block">Login</button>
@@ -51,9 +50,7 @@ if (isset($_SESSION['AdminID'])) {
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- SweetAlert -->
     <script>
