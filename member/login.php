@@ -28,12 +28,12 @@ if (isset($_SESSION['MemberID'])) {
                                 <a href="../login/forgot_password.php">Forgot password?</a>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                                <button type="submit" class="btn btn-primary btn-block">Login</button>
                             </div>
                         </form>
-                        <div class="mt-3 text-center">
-                            <!-- Sign-up button -->
-                            <a href="../login/register.php" class="btn btn-outline-secondary">Don't have an account? Register here</a>
+                        <div class="form-group mt-3 text-center">
+                            <!-- Register button -->
+                            <a href="../login/register.php" class="btn btn-primary btn-block">Register</a>
                         </div>
                     </div>
                 </div>
