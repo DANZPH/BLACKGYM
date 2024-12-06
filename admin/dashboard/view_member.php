@@ -91,7 +91,7 @@ include '../../includes/head.php';
                 <div class="card-body">
                               <!-- Add Member Button -->
                   <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
-                      <i class="fas fa-user-plus">add new</i>
+                      <i class="fas fa-user-plus">ㅤadd new</i>
                   </button>
                     <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
