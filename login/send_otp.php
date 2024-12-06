@@ -1,6 +1,4 @@
 <?php
-// Start session
-session_start();
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
@@ -55,9 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $userID = $stmt->insert_id;  // Get the inserted user ID
             $stmt->close();
 
-            // Save user ID in session
-            $_SESSION['UserID'] = $userID; // Store the user ID in session
-
             // Insert the user into the Members table with default status 'Inactive' and created_at
             $stmt = $conn1->prepare("INSERT INTO Members (UserID, Gender, Age, Address, MembershipStatus, created_at) VALUES (?, ?, ?, ?, ?, ?)");
             $membershipStatus = 'Inactive';  // Default membership status is 'Inactive'
@@ -106,8 +101,6 @@ function generateOTP() {
     // Generate a 6-digit random OTP
     return sprintf('%06d', mt_rand(0, 999999));
 }
-
-
 
 function sendOTP($email, $otp) {
     $mail = new PHPMailer(true);
