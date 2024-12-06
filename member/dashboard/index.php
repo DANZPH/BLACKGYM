@@ -1,5 +1,4 @@
 <?php
-<?php
 session_start();
 
 // Check if the user is logged in and session variables exist
@@ -14,7 +13,7 @@ echo "Welcome, " . $_SESSION['username'];
 echo "<br>Member ID: " . $_SESSION['member_id'];
 ?>
 
-}
+
 include '../../database/connection.php';
 $memberID = $_SESSION['MemberID'];
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
