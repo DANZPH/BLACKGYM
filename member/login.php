@@ -9,6 +9,7 @@ if (isset($_SESSION['MemberID'])) {
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'dashboard/includes/head.php'; ?>
+<link rel="stylesheet" href="dashboard/includes/Loginform.css">
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
