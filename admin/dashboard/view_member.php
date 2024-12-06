@@ -29,11 +29,6 @@ include '../../includes/head.php';
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
             <h2 class="mb-4">Member List</h2>
-            <!-- Add Member Button -->
-            <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
-                Add Member
-            </button>
-          <!--modal add member-->
           <?php include 'includes/modal/add_member.php'; ?>
             <!-- Edit Member Modal -->
             <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
@@ -92,6 +87,11 @@ include '../../includes/head.php';
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
+                            <!-- Add Member Button -->
+            <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
+                Add Member
+            </button>
+          <!--modal add member-->
                 <div class="card-body">
                     <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
