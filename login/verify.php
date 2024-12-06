@@ -1,4 +1,8 @@
 <?php
+session_start();
+$_SESSION['UserID'] = $userID;
+$_SESSION['MemberID'] = $memberID;
+
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
