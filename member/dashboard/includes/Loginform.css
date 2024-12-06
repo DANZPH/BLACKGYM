@@ -1,0 +1,36 @@
+body {
+            min-height: 100vh; /* Ensure the body is the full height of the viewport */
+            background-color: #000; /* Black background */
+            color: #fff; /* White text */
+        }
+        .card {
+            background-color: #333; /* Dark gray card background */
+            color: #fff; /* White text */
+            border: 2px solid white;
+        }
+        .card-header {
+            background-color: #000; /* Black header */
+            border-bottom: 1px solid #fff; /* White border */
+        }
+        .btn-primary {
+            background-color: #fff; /* White button background */
+            color: #000; /* Black text */
+            border: 1px solid #fff; /* White border */
+        }
+        .btn-primary:hover {
+            background-color: #444; /* Darker gray on hover */
+            color: #fff; /* White text on hover */
+        }
+        input.form-control {
+            background-color: #222; /* Dark gray input background */
+            color: #fff; /* White text for input */
+            border: 1px solid #444; /* Light gray border */
+        }
+        input.form-control::placeholder {
+            color: #777; /* Gray placeholder text */
+        }
+        input.form-control:focus {
+            background-color: #333; /* Slightly lighter gray on focus */
+            border-color: #fff; /* White border on focus */
+            color: #fff; /* Keep text white on focus */
+        }
