@@ -37,7 +37,7 @@
       color: #ffffff !important;
     }
     .marquee {
-      background-color: #444; /* Dark gray background */
+      background-color: #444;
       color: #fff;
       padding: 10px;
       overflow: hidden;
@@ -121,7 +121,7 @@
 
   <!-- Marquee -->
   <div class="marquee">
-    <span>🔥 Limited Time Offer: Get 50% Off Your First Month! Sign Up Today! 🔥</span>
+    <span>🔥 SHEEESH 🔥</span>
   </div>
 
   <!-- Main Content -->
