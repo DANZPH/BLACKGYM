@@ -17,41 +17,8 @@ if (isset($_SESSION['AdminID'])) {
     <title>Admin Login</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-        body {
-            background-color: #f8f9fa;
-            color: #000;
-        }
-        .card {
-            background-color: #fff;
-            border: 1px solid #000;
-        }
-        .card-header {
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-        }
-        .form-control {
-            border: 1px solid #000;
-            color: #000;
-        }
-        .btn-primary {
-            background-color: #000;
-            border: none;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            background-color: #333;
-        }
-        a {
-            color: #000;
-            text-decoration: underline;
-        }
-        a:hover {
-            color: #333;
-        }
-    </style>
+    <!-- SweetAlert2 CSS -->
+        <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -61,20 +28,20 @@ if (isset($_SESSION['AdminID'])) {
                 <div class="card">
                     <div class="card-header h2">Admin Login</div>
                     <div class="card-body">
-                        <form action="action/login_process.php" method="POST">
-                            <div class="form-group">
-                                <label for="email">Username or Email:</label>
-                                <input type="text" id="email" name="email" class="form-control" placeholder="username or email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="form-control" placeholder="*******" required>
-                                <a href="../login/forgot_password.php">Forgot password?</a>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                            </div>
-                        </form>
+                      <form action="action/login_process.php" method="POST">
+                          <div class="form-group">
+                              <label for="email">Username or Email:</label>
+                              <input type="text" id="email" name="email" class="form-control" placeholder="username or email" required>
+                          </div>
+                          <div class="form-group">
+                              <label for="password">Password:</label>
+                              <input type="password" id="password" name="password" class="form-control" placeholder="*******" required>
+                              <a href="../login/forgot_password.php">Forgot password?</a>
+                          </div>
+                          <div class="form-group">
+                              <button type="submit" class="btn btn-primary">Login</button>
+                          </div>
+                      </form>
                     </div>
                 </div>
             </div>
@@ -86,7 +53,7 @@ if (isset($_SESSION['AdminID'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- SweetAlert for error message -->
+    <!-- Check if there's an error message in the session and display it using SweetAlert -->
     <script>
         <?php if (isset($_SESSION['error'])): ?>
             Swal.fire({
@@ -95,7 +62,7 @@ if (isset($_SESSION['AdminID'])) {
                 text: '<?php echo $_SESSION['error']; ?>',
                 confirmButtonText: 'OK'
             });
-            <?php unset($_SESSION['error']); ?>
+            <?php unset($_SESSION['error']); // Clear the error message after displaying it ?>
         <?php endif; ?>
     </script>
 </body>
