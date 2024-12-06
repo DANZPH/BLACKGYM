@@ -48,12 +48,12 @@
       color: #ff4500 !important;
     }
     .marquee {
-      background-color: #333; /* Dark gray background */
+      /*background-color: #333; */
       color: #fff;
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);*/
     }
     .marquee span {
       display: inline-block;
@@ -140,7 +140,10 @@
     </div>
   </nav>
 
-
+  <!-- Marquee -->
+  <div class="marquee">
+    <span>🔥 Welcome to BLACKGYM! Build your strength, achieve your goals, and join our community today! 🔥</span>
+  </div>
 
   <!-- Main Content -->
   <div class="main-content container">
@@ -153,10 +156,7 @@
       </div>
     </div>
   </div>
-  <!-- Marquee -->
-  <div class="marquee">
-    <span>🔥 Welcome to BLACKGYM! Build your strength, achieve your goals, and join our community today! 🔥</span>
-  </div>
+
   <!-- Footer -->
   <footer>
     <p>© 2024 BLACKGYM. All Rights Reserved.</p>
