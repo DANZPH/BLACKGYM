@@ -25,7 +25,7 @@
       font-family: 'Roboto', sans-serif;
       background-image: url('img/favicon-512x512.png'); /* Background image */
       background-size: contain; /* Fit image within viewport */
-      background-position: center; /* Center the image */
+      background-position: center 20px; /* Center horizontally, move 20px down vertically */
       background-repeat: no-repeat; /* Prevent repeating */
       background-attachment: fixed; /* Stay fixed during scrolling */
       padding-top: 20px;
@@ -43,7 +43,7 @@
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);*/
     }
     .marquee span {
       display: inline-block;
