@@ -1,13 +1,13 @@
 <?php
 
 // login.php
-session_start();
+/*session_start();
 include '../../database/connection.php';
 
 if (isset($_SESSION['MemberID'])) {
     header('Location: dashboard/index.php');
     exit();
-}
+}*/
 ?>
 
 <!DOCTYPE html>
