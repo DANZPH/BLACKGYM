@@ -23,7 +23,7 @@
       display: flex;
       flex-direction: column;
       font-family: 'Roboto', sans-serif;
-      background-image: url('img/logo.jpg'); /* Background image */
+      background-image: url('img/favicon-512x512.png'); /* Background image */
       background-size: cover; /* Cover the entire background */
       background-position: center; /* Center the image */
       background-attachment: fixed; /* Stay fixed during scrolling */
@@ -35,20 +35,21 @@
       color: #ffffff !important;
     }
     .btn-custom {
-      margin: 10px;
-      background-color: #fff; /* White button background */
-      color: #000; /* Black text */
-      border: 2px solid #fff; /* White border */
+      margin: 20px;
+      background-color: #fff;
+      color: #000; 
+      border: 2px solid #fff; 
       text-decoration: none;
-      padding: 15px 30px; /* Larger padding for bigger buttons */
-      border-radius: 10px; /* Rounded corners */
-      font-size: 1.2rem; /* Larger font size */
-      transition: all 0.3s ease; /* Smooth hover effect */
+      padding: 15px 30px; 
+      border-radius: 10px; 
+      font-size: 1.2rem; 
+      border: 2px solid #fff;
+      transition: all 0.3s ease;
     }
     .btn-custom:hover {
-      background-color: #000; /* Black background on hover */
-      color: #fff; /* White text on hover */
-      border: 2px solid #fff; /* Retain white border */
+      background-color: #000;
+      color: #fff; 
+      border: 2px solid #fff;
     }
     .main-content {
       flex-grow: 1;
@@ -79,13 +80,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#admin">Admin</a>
+            <a class="nav-link" href="#">contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#member">Member</a>
+            <a class="nav-link" href="#">about</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#staff">Staff</a>
+            <a class="nav-link" href="#">support</a>
           </li>
         </ul>
       </div>
