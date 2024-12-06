@@ -23,7 +23,7 @@
       display: flex;
       flex-direction: column;
       font-family: 'Roboto', sans-serif;
-      background-image: url('img/favicon-512x512.png'); /* Background image */
+      background-image: url('img/logo.png'); /* Background image */
       background-size: cover; /* Cover the entire background */
       background-position: center; /* Center the image */
       background-attachment: fixed; /* Stay fixed during scrolling */
