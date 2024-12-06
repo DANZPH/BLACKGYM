@@ -33,7 +33,7 @@ if (isset($_SESSION['MemberID'])) {
                         </form>
                         <div class="mt-3 text-center">
                             <!-- Sign-up button -->
-                            <a href="../login/register.php" class="btn btn-outline-secondary">Don't have an account? Register here</a>
+                            <a href="../login/register.php" class="btn btn-outline-secondary">Click Here To Enroll</a>
                         </div>
                     </div>
                 </div>
