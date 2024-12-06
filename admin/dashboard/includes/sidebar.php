@@ -1,14 +1,18 @@
 <div class="sidebar">
     <ul class="nav flex-column">
-        <li class="nav-item ">
-            <img src="../../../img/logo.jpg" alt="Logo" class="img-fluid" style="max-width: 250px;  position: relative; bottom: 20px; border: solid;">
+        <!-- Logo -->
+        <li class="nav-item">
+            <img src="../../../img/logo.jpg" alt="Logo" class="img-fluid" style="max-width: 250px; position: relative; bottom: 20px; border: solid;">
         </li>
-      
+        
+        <!-- Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="index">
                 <i class="fa fa-tachometer-alt"></i> Dashboard
             </a>
         </li>
+        
+        <!-- Manage Members -->
         <li class="nav-item">
             <a class="nav-link" href="#manageMembers" data-toggle="collapse" aria-expanded="false">
                 <i class="fa fa-users"></i> Manage Members
@@ -20,6 +24,8 @@
                 </ul>
             </div>
         </li>
+        
+        <!-- Manage Attendance -->
         <li class="nav-item">
             <a class="nav-link" href="#manageAttendance" data-toggle="collapse" aria-expanded="false">
                 <i class="fa fa-calendar-check"></i> Manage Attendance
@@ -31,6 +37,8 @@
                 </ul>
             </div>
         </li>
+        
+        <!-- Payments -->
         <li class="nav-item">
             <a class="nav-link" href="#managePayments" data-toggle="collapse" aria-expanded="false">
                 <i class="fa fa-credit-card"></i> Payments
@@ -41,6 +49,8 @@
                 </ul>
             </div>
         </li>
+        
+        <!-- Reports -->
         <li class="nav-item">
             <a class="nav-link" href="#reports" data-toggle="collapse" aria-expanded="false">
                 <i class="fa fa-chart-bar"></i> Reports
@@ -52,6 +62,8 @@
                 </ul>
             </div>
         </li>
+        
+        <!-- Transactions -->
         <li class="nav-item">
             <a class="nav-link" href="#transactions" data-toggle="collapse" aria-expanded="false">
                 <i class="fa fa-exchange-alt"></i> Transactions
@@ -62,13 +74,38 @@
                     <li class="nav-item"><a href="receipt_transaction" class="nav-link">Receipts</a></li>
                 </ul>
             </div>
-                <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#" onclick="confirmLogout()">Logout</a>
-            </li>
-        </ul>
-    </div>
+        </li>
+        
+        <!-- Logout -->
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="confirmLogout()">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </a>
         </li>
     </ul>
 </div>
+
+<!-- JS Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will be logged out!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '../action/logout_process.php';
+            }
+        });
+    }
+</script>
