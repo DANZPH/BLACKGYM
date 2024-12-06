@@ -20,7 +20,7 @@ if (isset($_SESSION['AdminID'])) {
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="dashboard/includes/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="dashboard/loginform.css">
+<link rel="stylesheet" href="dashboard/Loginform.css">
 </head>
 <body>
     <div class="container mt-5">
