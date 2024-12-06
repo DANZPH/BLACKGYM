@@ -28,6 +28,7 @@
       background-position: center; /* Center the image */
       background-repeat: no-repeat; /* Prevent repeating */
       background-attachment: fixed; /* Stay fixed during scrolling */
+      padding-top: 20px;
     }
     .navbar {
       background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
@@ -37,7 +38,7 @@
       color: #ffffff !important;
     }
     .marquee {
-      background-color: #444;
+      /*background-color: #444;*/
       color: #fff;
       padding: 10px;
       overflow: hidden;
@@ -121,7 +122,7 @@
 
   <!-- Marquee -->
   <div class="marquee">
-    <span>🔥 SHEEESH 🔥</span>
+    <span>🔥 Limited Time Offer: Get 50% Off Your First Month! Sign Up Today! 🔥</span>
   </div>
 
   <!-- Main Content -->
