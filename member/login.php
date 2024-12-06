@@ -15,7 +15,7 @@ if (isset($_SESSION['MemberID'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                     <img class="card-header h2 text-center" src="../img/logo.jpg" alt="Logo">
+                    <img class="card-header h2 text-center" src="../img/logo.jpg" alt="Logo">
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
                             <div class="form-group">
@@ -25,14 +25,15 @@ if (isset($_SESSION['MemberID'])) {
                             <div class="form-group">
                                 <label for="password">Password:</label>
                                 <input type="password" id="password" name="password" class="form-control" required>
-<a href="../login/forgot_password.php">forgot password</a>
+                                <a href="../login/forgot_password.php">Forgot password?</a>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                         </form>
-                        <div class="mt-3">
-                            <a href="../login/register.php">Don't have an account? Register here</a>
+                        <div class="mt-3 text-center">
+                            <!-- Sign-up button -->
+                            <a href="../login/register.php" class="btn btn-outline-secondary">Don't have an account? Register here</a>
                         </div>
                     </div>
                 </div>
