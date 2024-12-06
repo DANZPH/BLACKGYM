@@ -25,25 +25,35 @@
       font-family: 'Roboto', sans-serif;
       background-image: url('img/favicon-512x512.png'); /* Background image */
       background-size: contain; /* Fit image within viewport */
-      background-position: center 50px; /* Center horizontally, move 20px down vertically */
+      background-position: center 50px; /* Center horizontally, move slightly down */
       background-repeat: no-repeat; /* Prevent repeating */
       background-attachment: fixed; /* Stay fixed during scrolling */
-      padding-top: 20px;
+      overflow: hidden; /* Prevent scrollbars from animations */
     }
     .navbar {
       background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
       padding: 15px;
+      transition: all 0.5s ease;
+    }
+    .navbar:hover {
+      background-color: rgba(255, 255, 255, 0.1); /* Lighter effect on hover */
     }
     .navbar-brand, .nav-link {
       color: #ffffff !important;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .navbar-brand:hover {
+      color: #ff4500 !important;
     }
     .marquee {
-      /*background-color: #444;*/
+      background-color: #333; /* Dark gray background */
       color: #fff;
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
-      /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);*/
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     }
     .marquee span {
       display: inline-block;
@@ -60,14 +70,17 @@
       border: 5px solid #fff; 
       text-decoration: none;
       padding: 15px 30px; 
-      border-radius: 10px; 
+      border-radius: 50px; 
       font-size: 1.2rem; 
+      font-weight: bold;
       transition: all 0.3s ease;
+      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     }
     .btn-custom:hover {
-      background-color: #000;
+      background-color: #ff4500;
       color: #fff; 
-      border: 2px solid #fff;
+      border: 5px solid #ff4500;
+      box-shadow: 0 0 15px #ff4500;
     }
     .main-content {
       flex-grow: 1;
@@ -80,6 +93,8 @@
       font-size: 3rem;
       margin-bottom: 20px;
       animation: fadeIn 2s ease-in-out;
+      color: #ff4500;
+      text-shadow: 2px 2px 10px rgba(255, 69, 0, 0.8);
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
@@ -93,6 +108,11 @@
       position: fixed;
       width: 100%;
       bottom: 0;
+      animation: slideIn 2s ease-in-out;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
   </style>
 </head>
@@ -120,6 +140,11 @@
     </div>
   </nav>
 
+  <!-- Marquee -->
+  <div class="marquee">
+    <span>🔥 Welcome to BLACKGYM! Build your strength, achieve your goals, and join our community today! 🔥</span>
+  </div>
+
   <!-- Main Content -->
   <div class="main-content container">
     <div>
@@ -127,17 +152,14 @@
       <div class="d-flex justify-content-center">
         <a href="admin/login.php" class="btn btn-custom">Admin</a>
         <a href="member/login.php" class="btn btn-custom">Member</a>
-        <a href="admin/login.php" class="btn btn-custom">Staff</a>
+        <a href="staff/login.php" class="btn btn-custom">Staff</a>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
   <footer>
-  <!-- Marquee -->
-  <div class="marquee">
-    <span>💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀</span>
-  </div>
+    <p>© 2024 BLACKGYM. All Rights Reserved.</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
