@@ -15,58 +15,60 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="BLACKGYM">
   <style>
-    body {
-      background-color: #000; /* Black background */
-      color: #fff; /* White text color */
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      font-family: 'Roboto', sans-serif;
-      background-image: url('img/favicon-512x512.png'); /* Background image */
-      background-size: fit; /* Cover the entire background */
-      background-position: center; /* Center the image */
-      background-attachment: fixed; /* Stay fixed during scrolling */
-    }
-    .navbar {
-      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-    }
-    .navbar-brand, .nav-link {
-      color: #ffffff !important;
-    }
-    .btn-custom {
-      margin: 20px;
-      background-color: #fff;
-      color: #000; 
-      border: 5px solid #fff; 
-      text-decoration: none;
-      padding: 15px 30px; 
-      border-radius: 10px; 
-      font-size: 1.2rem; 
-      transition: all 0.3s ease;
-    }
-    .btn-custom:hover {
-      background-color: #000;
-      color: #fff; 
-      border: 2px solid #fff;
-    }
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    footer {
-      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
-    }
-  </style>
+  body {
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    background-image: url('img/favicon-512x512.png'); /* Background image */
+    background-size: contain; /* Contain the image within the viewport */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating */
+    background-attachment: fixed; /* Stay fixed during scrolling */
+  }
+  .navbar {
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  }
+  .navbar-brand, .nav-link {
+    color: #ffffff !important;
+  }
+  .btn-custom {
+    margin: 20px;
+    background-color: #fff;
+    color: #000; 
+    border: 5px solid #fff; 
+    text-decoration: none;
+    padding: 15px 30px; 
+    border-radius: 10px; 
+    font-size: 1.2rem; 
+    transition: all 0.3s ease;
+  }
+  .btn-custom:hover {
+    background-color: #000;
+    color: #fff; 
+    border: 2px solid #fff;
+  }
+  .main-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  footer {
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+</style>
+
 </head>
 <body>
   <!-- Navbar -->
