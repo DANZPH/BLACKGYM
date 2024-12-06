@@ -120,11 +120,6 @@
     </div>
   </nav>
 
-  <!-- Marquee -->
-  <div class="marquee">
-    <span>🔥 Limited Time Offer: Get 50% Off Your First Month! Sign Up Today! 🔥</span>
-  </div>
-
   <!-- Main Content -->
   <div class="main-content container">
     <div>
@@ -139,7 +134,10 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2024 BLACKGYM. All Rights Reserved.</p>
+  <!-- Marquee -->
+  <div class="marquee">
+    <span>💀💀💀💀💀>💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀</span>
+  </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
