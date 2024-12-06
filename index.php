@@ -16,42 +16,49 @@
   <meta property="og:site_name" content="BLACKGYM">
   <style>
     body {
-      background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-      height: 100vh; /* Full viewport height */
+      background-color: #000; /* Black background */
+      color: #fff; /* White text color */
+      height: 100vh;
       margin: 0;
       display: flex;
       flex-direction: column;
       font-family: 'Roboto', sans-serif;
+      background-image: url('img/logo.png'); /* Background image */
+      background-size: cover; /* Cover the entire background */
+      background-position: center; /* Center the image */
+      background-attachment: fixed; /* Stay fixed during scrolling */
     }
     .navbar {
-      background-color: #343a40;
+      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
     }
     .navbar-brand, .nav-link {
       color: #ffffff !important;
     }
     .btn-custom {
       margin: 10px;
-      background-color: #343a40;
-      color: #ffffff;
-      border: none;
+      background-color: #fff; /* White button background */
+      color: #000; /* Black text */
+      border: 2px solid #fff; /* White border */
       text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: inline-block;
+      padding: 15px 30px; /* Larger padding for bigger buttons */
+      border-radius: 10px; /* Rounded corners */
+      font-size: 1.2rem; /* Larger font size */
+      transition: all 0.3s ease; /* Smooth hover effect */
     }
     .btn-custom:hover {
-      background-color: #343a40;
-      color: #ffffff;
+      background-color: #000; /* Black background on hover */
+      color: #fff; /* White text on hover */
+      border: 2px solid #fff; /* Retain white border */
     }
     .main-content {
-      flex-grow: 1; /* Occupy remaining space */
-      display: flex; /* Flexbox for centering */
-      justify-content: center; /* Center horizontally */
-      align-items: center; /* Center vertically */
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
     }
     footer {
-      background-color: #343a40;
+      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
       color: white;
       text-align: center;
       padding: 15px;
@@ -85,15 +92,12 @@
     </div>
   </nav>
 
-
-
-  
   <!-- Main Content -->
   <div class="main-content container">
     <div>
-      <h1 class="text-white mb-4">Welcome to BLACKGYM</h1>
+      <h1 class="mb-4">Welcome to BLACKGYM</h1>
       <div class="d-flex justify-content-center">
-        <a href="admin/login.php" class="btn btn-custom">Admin </a>
+        <a href="admin/login.php" class="btn btn-custom">Admin</a>
         <a href="member/login.php" class="btn btn-custom">Member</a>
         <a href="admin/login.php" class="btn btn-custom">Staff</a>
       </div>
@@ -101,7 +105,9 @@
   </div>
 
   <!-- Footer -->
-                    <?php include 'includes/footer.php'; ?>
+  <footer>
+    <p>© 2024 BLACKGYM. All Rights Reserved.</p>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
