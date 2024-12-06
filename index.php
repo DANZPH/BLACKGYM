@@ -140,15 +140,12 @@
     </div>
   </nav>
 
-  <!-- Marquee -->
-  <div class="marquee">
-    <span>🔥 Welcome to BLACKGYM! Build your strength, achieve your goals, and join our community today! 🔥</span>
-  </div>
+
 
   <!-- Main Content -->
   <div class="main-content container">
     <div>
-      <h1>Choose</h1>
+      <h1>select</h1>
       <div class="d-flex justify-content-center">
         <a href="admin" class="btn btn-custom">Admin</a>
         <a href="member" class="btn btn-custom">Member</a>
@@ -156,7 +153,10 @@
       </div>
     </div>
   </div>
-
+  <!-- Marquee -->
+  <div class="marquee">
+    <span>🔥 Welcome to BLACKGYM! Build your strength, achieve your goals, and join our community today! 🔥</span>
+  </div>
   <!-- Footer -->
   <footer>
     <p>© 2024 BLACKGYM. All Rights Reserved.</p>
