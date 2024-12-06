@@ -38,12 +38,11 @@
       margin: 20px;
       background-color: #fff;
       color: #000; 
-      border: 2px solid #fff; 
+      border: 5px solid #fff; 
       text-decoration: none;
       padding: 15px 30px; 
       border-radius: 10px; 
       font-size: 1.2rem; 
-      border: 2px solid #fff;
       transition: all 0.3s ease;
     }
     .btn-custom:hover {
