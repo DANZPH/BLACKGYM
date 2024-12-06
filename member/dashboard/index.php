@@ -11,8 +11,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['member_id'])) {
 // Use the session data to display member details
 echo "Welcome, " . $_SESSION['username'];
 echo "<br>Member ID: " . $_SESSION['member_id'];
-?>
-
 
 include '../../database/connection.php';
 $memberID = $_SESSION['MemberID'];
