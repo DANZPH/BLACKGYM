@@ -29,12 +29,12 @@ if (isset($_SESSION['MemberID'])) {
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Login</button>
-                                     <div class="mt-3 text-center">
-                            <a href="../login/register.php" class="btn btn-outline-secondary">Click Here To Enroll</a>
-                        </div>
                             </div>
                         </form>
-                   
+                        <div class="mt-3 text-center">
+                            <!-- Sign-up button -->
+                            <a href="../login/register.php" class="btn btn-outline-secondary">Don't have an account? Register here</a>
+                        </div>
                     </div>
                 </div>
             </div>
