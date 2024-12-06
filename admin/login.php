@@ -27,7 +27,8 @@ if (isset($_SESSION['AdminID'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <img class="card-header h2 text-center" href="../img/logo.jpg">
+                   <img class="card-header h2 text-center" src="../img/logo.jpg" alt="Logo">
+
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
                             <div class="form-group mb-3">
