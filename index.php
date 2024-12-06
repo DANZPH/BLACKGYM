@@ -148,11 +148,11 @@
   <!-- Main Content -->
   <div class="main-content container">
     <div>
-      <h1>Welcome to BLACKGYM</h1>
+      <h1>Choose</h1>
       <div class="d-flex justify-content-center">
-        <a href="admin/login.php" class="btn btn-custom">Admin</a>
-        <a href="member/login.php" class="btn btn-custom">Member</a>
-        <a href="staff/login.php" class="btn btn-custom">Staff</a>
+        <a href="admin" class="btn btn-custom">Admin</a>
+        <a href="member" class="btn btn-custom">Member</a>
+        <a href="staff" class="btn btn-custom">Staff</a>
       </div>
     </div>
   </div>
