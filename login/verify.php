@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,20 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
-                // Set the session with MemberID to log in the user
-                $_SESSION['UserID'] = $user['UserID'];  // Assume MemberID exists in Users table
-
-                // Redirect to dashboard or membership page
-                header('Location: ../dashboard.php');
-                exit();
+                echo "OTP verified successfully!";
             }
         } else {
             echo "Error: Invalid OTP.";
         }
+
+        // No need to close $conn1 here if it's handled in connection.php
     } else {
         echo "Error: Email and OTP are required.";
     }
-} else {
-    echo "Error: Invalid request method.";
 }
 ?>
