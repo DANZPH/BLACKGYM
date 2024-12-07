@@ -12,15 +12,6 @@ include '../../database/connection.php';
 // Fetch the MemberID from the session
 $memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
 
-// Fetch Username from the Users table using MemberID
-$sql = "SELECT Username FROM Users WHERE MemberID = ?";
-$stmt = $conn1->prepare($sql);
-$stmt->bind_param("d", $memberID); // Binding MemberID parameter
-$stmt->execute();
-$stmt->bind_result($username);
-$stmt->fetch();
-$stmt->close();
-
 // Fetch the Membership data from the database
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
@@ -41,6 +32,7 @@ if ($endDate) {
 } else {
     $remainingTime = "No expiration date set."; // Fallback if no EndDate found
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -143,7 +135,7 @@ if ($endDate) {
             <!-- Main Content -->
             <div class="col-md-9">
                 <h2>Hi, 
-                <?php echo $username; ?>  <!-- Displaying username fetched from the database -->
+                <?php echo $_SESSION['username']; ?>
                 </h2>
                 <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
 
