@@ -5,16 +5,12 @@ if (isset($_SESSION['MemberID'])) {
     header('Location: dashboard/index.php');
     exit();
 }
-$memberID = $_SESSION['MemberID']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'dashboard/includes/head.php'; ?>
 <link rel="stylesheet" href="dashboard/includes/Loginform.css">
 <body>
-  <h2>Hi, 
-                <?php echo $_SESSION['MemberID']; ?>
-                </h2>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
