@@ -1,5 +1,6 @@
 <?php
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
+session_start();  // Start the session
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email and OTP are provided
@@ -27,6 +28,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("s", $email);
                 $stmt->execute();
                 $stmt->close();
+
+                // Fetch MemberID from the Members table based on the verified user
+                $stmt = $conn1->prepare("SELECT MemberID FROM Members WHERE Email = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $stmt->bind_result($memberID);
+                $stmt->fetch();
+                $stmt->close();
+
+                // Check if MemberID is found
+                if ($memberID) {
+                    // Store MemberID in the session for auto-login
+                    $_SESSION['MemberID'] = $memberID;
+
+                    // Optionally, you can redirect the user to the dashboard or a different page
+                    header("Location: dashboard.php");  // Replace with your desired page
+                    exit();
+                } else {
+                    echo "Error: Member not found.";
+                }
 
                 echo "OTP verified successfully!";
             }
