@@ -13,7 +13,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header h2">User Registration</div>
+                    <div class="card-header h2 text-center">User Registration</div>
                     <div class="card-body">
                         <form id="registerForm">
                             <div class="form-group">
@@ -67,7 +67,8 @@
                             </div>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Register</button>
+                                <!-- Register button styled like the login button -->
+                                <button type="submit" class="btn btn-primary btn-block">Register</button>
                             </div>
                         </form>
                     </div>
