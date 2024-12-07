@@ -2,6 +2,10 @@
 session_start();
 
 // Check if the user is logged in and the MemberID session is set
+if (!isset($_SESSION['MemberID'])) {
+    header('Location: login.php');
+    exit();
+}
 
 include '../../database/connection.php';
 
