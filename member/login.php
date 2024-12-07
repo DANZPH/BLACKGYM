@@ -18,9 +18,9 @@ if (isset($_SESSION['MemberID'])) {
                     <img class="card-header h2 text-center" src="../img/logo.jpg" alt="Logo">
                     <div class="card-body">
                         <form action="action/login_process.php" method="POST">
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
+                            <div class="form-group"><label for="email">Email: </label>
+<input type="email" id="email" name="email" placeholder="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+
                             </div>
                             <div class="form-group">
                                 <label for="password">Password:</label>
