@@ -1,4 +1,5 @@
 <?php
+$_SESSION['MemberID'] = $user['MemberID'];
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
