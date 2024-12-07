@@ -5,6 +5,7 @@ if (isset($_SESSION['MemberID'])) {
     header('Location: dashboard/index.php');
     exit();
 }
+$memberID = $_SESSION['MemberID']; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
