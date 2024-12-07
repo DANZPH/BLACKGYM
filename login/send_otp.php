@@ -1,5 +1,6 @@
 <?php
-session_start
+session_start();
+
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
