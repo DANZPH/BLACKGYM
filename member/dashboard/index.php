@@ -10,7 +10,7 @@ if (!isset($_SESSION['MemberID'])) {
 include '../../database/connection.php';
 
 // Fetch the MemberID from the session
-$memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
+$memberID = $_SESSION['member_id'];  // Use session member_id instead of MemberID
 
 // Fetch the Membership data from the database
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
