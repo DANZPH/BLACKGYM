@@ -6,7 +6,10 @@ if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id']))  {
     header('Location: ../login.php');
     exit();
 }
-
+if (!isset($_SESSION['MemberID'])) {
+    header('Location: ../login.php');
+    exit();
+}
 include '../../database/connection.php';
 
 // Fetch the MemberID from the session
