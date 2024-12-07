@@ -11,6 +11,9 @@ if (isset($_SESSION['MemberID'])) {
 <?php include 'dashboard/includes/head.php'; ?>
 <link rel="stylesheet" href="dashboard/includes/Loginform.css">
 <body>
+      <h2>Hi!, 
+                <?php echo $_SESSION['username']; ?>
+                </h2>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
