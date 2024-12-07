@@ -1,21 +1,14 @@
 <?php
 session_start();
-
-// Check if the user is logged in and the MemberID session is set
-if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
+if (!isset($_SESSION['MemberID'])) {
+    header('Location: login.php');
     exit();
 }
-
 include '../../database/connection.php';
-
-// Fetch the MemberID from the session
-$memberID = $_SESSION['member_id'];  // Use session member_id instead of MemberID
-
-// Fetch the Membership data from the database
+$memberID = $_SESSION['MemberID'];
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
-$stmt->bind_param("d", $memberID); // Binding MemberID parameter
+$stmt->bind_param("d", $memberID);
 $stmt->execute();
 $stmt->bind_result($endDate, $membershipStatus);
 $stmt->fetch();
@@ -134,7 +127,7 @@ if ($endDate) {
 
             <!-- Main Content -->
             <div class="col-md-9">
-                <h2>Hi, 
+                <h2>Hi!, 
                 <?php echo $_SESSION['username']; ?>
                 </h2>
                 <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
