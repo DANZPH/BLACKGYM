@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->close();
 
                 // Set session variables for the logged-in user
-                $_SESSION['MemberID'] = $user['MemberID'];  // Store UserID in session
+                $_SESSION['user_id'] = $user['UserID'];  // Store UserID in session
                 $_SESSION['username'] = $user['Username'];  // Store Username in session
 
                 // Now, fetch MemberID from the Members table based on UserID
