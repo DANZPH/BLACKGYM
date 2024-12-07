@@ -13,7 +13,7 @@ $memberID = $_SESSION['MemberID'];
 <link rel="stylesheet" href="dashboard/includes/Loginform.css">
 <body>
   <h2>Hi, 
-                <?php echo $_SESSION['username']; ?>
+                <?php echo $_SESSION['MemberID']; ?>
                 </h2>
     <div class="container mt-5">
         <div class="row justify-content-center">
