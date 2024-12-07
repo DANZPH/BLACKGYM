@@ -117,9 +117,6 @@
   </style>
 </head>
 <body>
-      <h2>SESSION FOR DEBUG, 
-                <?php echo $_SESSION['username']; ?>
-                </h2>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container">
