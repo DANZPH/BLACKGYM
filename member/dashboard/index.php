@@ -2,15 +2,15 @@
 session_start();
 
 // Check if the user is logged in and the MemberID session is set
-if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
+if (!isset($_SESSION['MemberID'])) {
+    header('Location: login.php');
     exit();
 }
 
 include '../../database/connection.php';
 
 // Fetch the MemberID from the session
-$memberID = $_SESSION['member_id'];  // Use session member_id instead of MemberID
+$memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
 
 // Fetch the Membership data from the database
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
