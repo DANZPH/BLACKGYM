@@ -1,4 +1,6 @@
 <?php
+session_start(); // Start the session
+
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -28,7 +30,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
-                echo "OTP verified successfully!";
+                // Fetch MemberID from Members table
+                $stmt = $conn1->prepare("SELECT MemberID FROM Members WHERE Email = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if ($result->num_rows == 1) {
+                    $member = $result->fetch_assoc();
+                    $_SESSION['MemberID'] = $member['MemberID']; // Store MemberID in session
+                    
+                    // Send a success response
+                    echo "OTP verified successfully!";
+                } else {
+                    echo "Error: Member not found.";
+                }
+
+                $stmt->close();
             }
         } else {
             echo "Error: Invalid OTP.";
