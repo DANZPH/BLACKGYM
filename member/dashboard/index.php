@@ -2,11 +2,11 @@
 session_start();
 
 // Check if the user is logged in and the MemberID session is set
-/*if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
     exit();
 }
-*/
+
 include '../../database/connection.php';
 
 // Fetch the MemberID from the session
