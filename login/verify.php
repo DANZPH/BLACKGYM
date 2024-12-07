@@ -1,7 +1,5 @@
 <?php
-// Include the database connection
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
-session_start();  // Start the session to access session variables
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email and OTP are provided
@@ -9,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
         $otp = $_POST["otp"];
 
-        // Prepare SQL to check if the OTP is correct and not expired
+        // Verify OTP and check expiration
         $stmt = $conn1->prepare("SELECT * FROM Users WHERE Email = ? AND OTP = ?");
         $stmt->bind_param("ss", $email, $otp);
         $stmt->execute();
@@ -30,26 +28,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
-                // Now, let's fetch the MemberID and set it in the session
-                $stmt = $conn1->prepare("SELECT MemberID FROM Members WHERE Email = ?");
-                $stmt->bind_param("s", $email);
-                $stmt->execute();
-                $memberResult = $stmt->get_result();
-                $stmt->close();
-
-                if ($memberResult->num_rows > 0) {
-                    $member = $memberResult->fetch_assoc();
-                    $_SESSION['MemberID'] = $member['MemberID'];  // Set MemberID session
-
-                    // Send success message
-                    echo "OTP verified successfully!";
-                } else {
-                    echo "Error: Member not found.";
-                }
+                echo "OTP verified successfully!";
             }
         } else {
             echo "Error: Invalid OTP.";
         }
+
+        // No need to close $conn1 here if it's handled in connection.php
     } else {
         echo "Error: Email and OTP are required.";
     }
