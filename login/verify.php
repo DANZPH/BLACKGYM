@@ -1,6 +1,5 @@
 <?php
-session_start();  // Start the session
-
+session_start();
 include '../database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -30,23 +29,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->execute();
                 $stmt->close();
 
-                // Set session variables for the logged-in user
-                $_SESSION['user_id'] = $user['UserID'];  // Store UserID in session
-                $_SESSION['username'] = $user['Username'];  // Store Username in session
+                // Set the session with MemberID to log in the user
+                $_SESSION['UserID'] = $user['UserID'];  // Assume MemberID exists in Users table
 
-                // Now, fetch MemberID from the Members table based on UserID
-                $stmt = $conn1->prepare("SELECT MemberID FROM Members WHERE UserID = ?");
-                $stmt->bind_param("i", $user['UserID']);
-                $stmt->execute();
-                $memberResult = $stmt->get_result();
-                $stmt->close();
-
-                if ($memberResult->num_rows == 1) {
-                    $member = $memberResult->fetch_assoc();
-                    $_SESSION['member_id'] = $member['MemberID'];  // Store MemberID in session
-                }
-
-                echo "OTP verified successfully!";
+                // Redirect to dashboard or membership page
+                header('Location: ../dashboard.php');
+                exit();
             }
         } else {
             echo "Error: Invalid OTP.";
@@ -54,5 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: Email and OTP are required.";
     }
+} else {
+    echo "Error: Invalid request method.";
 }
 ?>
