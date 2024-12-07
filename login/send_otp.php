@@ -1,7 +1,9 @@
 <?php
 session_start();
-$_SESSION['UserID'] = $userID;
-$_SESSION['MemberID'] = $memberID;
+/*$_SESSION['UserID'] = $userID;
+$_SESSION['MemberID'] = $memberID;*/
+
+$memberID = $_SESSION['MemberID']
 
 require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
