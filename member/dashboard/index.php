@@ -1,53 +1,37 @@
 <?php
 session_start();
 
-// Ensure all required session variables are set
-if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id']) || !isset($_SESSION['MemberID'])) {
+// Check if the user is logged in and the MemberID session is set
+if (!isset($_SESSION['member_id']) || !isset($_SESSION['user_id']))  {
     header('Location: ../login.php');
     exit();
 }
 
 include '../../database/connection.php';
 
-// Use member_id from the session
-$memberID = $_SESSION['member_id'];
+// Fetch the MemberID from the session
+$memberID = $_SESSION['member_id'];  // Use session member_id instead of MemberID
 
 // Fetch the Membership data from the database
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
+$stmt->bind_param("d", $memberID); // Binding MemberID parameter
+$stmt->execute();
+$stmt->bind_result($endDate, $membershipStatus);
+$stmt->fetch();
+$stmt->close();
 
-if ($stmt) {
-    $stmt->bind_param("d", $memberID); // Bind the MemberID parameter
-    $stmt->execute();
-    $stmt->bind_result($endDate, $membershipStatus);
-    $stmt->fetch();
-    $stmt->close();
+// Check if a valid EndDate exists
+if ($endDate) {
+    $currentDate = new DateTime(); // Current date and time
+    $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
+    $interval = $currentDate->diff($endDateObj); // Calculate the difference between the current date and the EndDate
 
-    // Check if a valid EndDate exists
-    if ($endDate) {
-        $currentDate = new DateTime(); // Get the current date and time
-        $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
-        $interval = $currentDate->diff($endDateObj); // Calculate the difference between the current date and EndDate
-
-        // Check if membership is expired
-        if ($interval->invert) {
-            $remainingTime = "Membership expired.";
-        } else {
-            // Display remaining time in months and days format
-            $remainingTime = $interval->format('%m months, %d days');
-        }
-    } else {
-        $remainingTime = "No expiration date set."; // Fallback if no EndDate found
-    }
+    // Display remaining time in months and days format
+    $remainingTime = $interval->format('%m months, %d days'); // Months and Days format
 } else {
-    // Handle errors in statement preparation
-    die("Error: Unable to prepare the statement.");
+    $remainingTime = "No expiration date set."; // Fallback if no EndDate found
 }
-
-// Display the results (for debugging or front-end usage)
-// Make sure to sanitize output in a real application
-echo "Membership Status: " . htmlspecialchars($membershipStatus) . "<br>";
-echo "Remaining Time: " . htmlspecialchars($remainingTime);
 
 ?>
 
