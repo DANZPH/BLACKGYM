@@ -6,8 +6,11 @@ if (!isset($_SESSION['AdminID'])) {
 }
 include '../../database/connection.php';
 
-// Set the timezone to Asia/Manila
+// Set PHP default timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
+
+// Set MySQL timezone to Asia/Manila
+$conn1->query("SET time_zone = '+08:00'");
 
 //cards
 // Total Members with Active Membership Status
@@ -30,7 +33,7 @@ $currentPeopleQuery = "SELECT COUNT(*) AS current_people FROM Attendance WHERE C
 $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
-// Daily Earnings (Ensure the timezone is considered)
+// Daily Earnings
 $dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
                        FROM Payments 
                        WHERE DATE(CONVERT_TZ(PaymentDate, '+00:00', '+08:00')) = CURDATE()";
