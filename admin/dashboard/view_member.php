@@ -10,82 +10,95 @@ include '../../database/connection.php';
 <!DOCTYPE html>
 <html lang="en">
 <?php 
+session_start();
+if (!isset($_SESSION['AdminID'])) {
+    header('Location: ../../admin/login.php');
+    exit();
+}
+include '../../database/connection.php'; 
 include '../../includes/head.php';
 ?>
 <body>
 <!-- Include Header -->
 <?php include 'includes/header.php'; ?>
 
-<div class="container-fluid p-0">
-    <div class="row no-gutters">
+<div class="container-fluid mt-3">
+    <div class="row">
         <!-- Include Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
         <!-- Main Content -->
-        <div class="col-md-9 ml-sm-auto col-lg-10 px-4" style="min-height: 100vh; display: flex; flex-direction: column;">
-            <div class="card flex-grow-1 d-flex" style="margin-top: 20px;">
-                <div class="card-header">
-                    <h5 class="mb-0">Members Information</h5>
+        <div class="col-md-9 content-wrapper">
+            <h2 class="mb-4">Member List</h2>
+            
+            <!--modal add member-->
+            <?php include 'includes/modal/add_member.php'; ?>
+
+            <!-- Edit Member Modal -->
+            <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editMemberModalLabel">Edit Member</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="editMemberForm" action="../action/edit_member.php" method="POST">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="editUsername">Username</label>
+                                    <input type="text" class="form-control" id="editUsername" name="editUsername" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editEmail">Email</label>
+                                    <input type="email" class="form-control" id="editEmail" name="editEmail" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editGender">Gender</label>
+                                    <select class="form-control" id="editGender" name="editGender" required>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAge">Age</label>
+                                    <input type="number" class="form-control" id="editAge" name="editAge" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editAddress">Address</label>
+                                    <input type="text" class="form-control" id="editAddress" name="editAddress" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editMembershipStatus">Membership Status</label>
+                                    <select class="form-control" id="editMembershipStatus" name="editMembershipStatus" required>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body d-flex flex-column">
+            </div>
+
+            <!-- Members Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Members Information</h5>
+                </div>
+                <div class="card-body">
                     <!-- Add Member Button -->
-                    <button type="button" class="btn btn-primary mb-4 align-self-start" data-toggle="modal" data-target="#addMemberModal">
-                        <i class="fas fa-user-plus"></i> Add new
+                    <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
+                        <i class="fas fa-user-plus"> Add new</i>
                     </button>
 
-                    <!-- Edit Member Modal -->
-                    <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editMemberModalLabel">Edit Member</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <form id="editMemberForm" action="../action/edit_member.php" method="POST">
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="editUsername">Username</label>
-                                            <input type="text" class="form-control" id="editUsername" name="editUsername" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editEmail">Email</label>
-                                            <input type="email" class="form-control" id="editEmail" name="editEmail" required readonly>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editGender">Gender</label>
-                                            <select class="form-control" id="editGender" name="editGender" required>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editAge">Age</label>
-                                            <input type="number" class="form-control" id="editAge" name="editAge" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editAddress">Address</label>
-                                            <input type="text" class="form-control" id="editAddress" name="editAddress" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="editMembershipStatus">Membership Status</label>
-                                            <select class="form-control" id="editMembershipStatus" name="editMembershipStatus" required>
-                                                <option value="Active">Active</option>
-                                                <option value="Inactive">Inactive</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive flex-grow-1">
-                        <table id="membersTable" class="table table-striped table-bordered w-100">
+                    <!-- Members Table -->
+                    <div class="table-responsive">
+                        <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th class="d-none">MemberID</th>
@@ -132,6 +145,7 @@ include '../../includes/head.php';
                                                     <button class='btn btn-warning btn-sm editBtn mx-2' data-id='{$row['MemberID']}'>
                                                         <i class='fas fa-edit'></i> 
                                                     </button>
+                                                    
                                                     <button class='btn btn-danger btn-sm deleteBtn mx-2' data-id='{$row['MemberID']}'>
                                                         <i class='fas fa-trash'></i> 
                                                     </button>
@@ -148,14 +162,31 @@ include '../../includes/head.php';
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
 <?php include '../../includes/footer.php'; ?>
 
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="includes/JS/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#membersTable').DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ['copy', 'csv', 'excel', 'pdf', 'print']
+        }).buttons().container().appendTo('#membersTable_wrapper .col-md-6:eq(0)');
+    });
+</script>
 
 </body>
 </html>
