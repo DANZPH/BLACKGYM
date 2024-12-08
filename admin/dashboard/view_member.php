@@ -9,6 +9,19 @@ include '../../database/connection.php';
 
 <!DOCTYPE html>
 <html lang="en">
+  <style>
+    .active-status {
+        background-color: #28a745; /* Green for active */
+        color: white;
+        text-align: center;
+    }
+
+    .inactive-status {
+        background-color: #dc3545; /* Red for inactive */
+        color: white;
+        text-align: center;
+    }
+</style>
 <?php 
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -28,11 +41,9 @@ include '../../includes/head.php';
         <?php include 'includes/sidebar.php'; ?>
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
-            <h2 class="mb-4">Member List</h2>
-            
-            <!--modal add member-->
-            <?php include 'includes/modal/add_member.php'; ?>
-
+  
+          <!--modal add member-->
+          <?php include 'includes/modal/add_member.php'; ?>
             <!-- Edit Member Modal -->
             <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -51,7 +62,7 @@ include '../../includes/head.php';
                                 </div>
                                 <div class="form-group">
                                     <label for="editEmail">Email</label>
-                                    <input type="email" class="form-control" id="editEmail" name="editEmail" required readonly>
+                                    <input type="email" class="form-control" id="editEmail" name="editEmail" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="editGender">Gender</label>
@@ -91,18 +102,16 @@ include '../../includes/head.php';
                     <h5>Members Information</h5>
                 </div>
                 <div class="card-body">
-                    <!-- Add Member Button -->
-                    <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
-                        <i class="fas fa-user-plus"> Add new</i>
-                    </button>
-
-                    <!-- Members Table -->
-                    <div class="table-responsive">
+                              <!-- Add Member Button -->
+                  <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#addMemberModal">
+                      <i class="fas fa-user-plus"> Add new</i>
+                  </button>
+                    <div class="table">
                         <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="d-none">MemberID</th>
-                                    <th>Username</th>
+                                  <th class="d-none">MemberID</th>
+                                   <th>Username</th>
                                     <th>Email</th>
                                     <th>Gender</th>
                                     <th>Age</th>
@@ -112,52 +121,7 @@ include '../../includes/head.php';
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php
-                                $sql = "
-                                    SELECT 
-                                        Members.MemberID, 
-                                        Users.Username, 
-                                        Users.Email, 
-                                        Members.Gender, 
-                                        Members.Age, 
-                                        Members.Address, 
-                                        Members.MembershipStatus, 
-                                        Members.created_at 
-                                    FROM Members 
-                                    INNER JOIN Users ON Members.UserID = Users.UserID
-                                ";
-                                $result = $conn1->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                            <td class='d-none'>{$row['MemberID']}</td>
-                                            <td>{$row['Username']}</td>
-                                            <td>{$row['Email']}</td>
-                                            <td>{$row['Gender']}</td>
-                                            <td>{$row['Age']}</td>
-                                            <td>{$row['Address']}</td>
-                                            <td>{$row['MembershipStatus']}</td>
-                                            <td>{$row['created_at']}</td>
-                                            <td>
-                                                <div class='d-flex gap-2'>
-                                                    <button class='btn btn-warning btn-sm editBtn mx-2' data-id='{$row['MemberID']}'>
-                                                        <i class='fas fa-edit'></i> 
-                                                    </button>
-                                                    
-                                                    <button class='btn btn-danger btn-sm deleteBtn mx-2' data-id='{$row['MemberID']}'>
-                                                        <i class='fas fa-trash'></i> 
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
+                          Users.Email
                         </table>
                     </div>
                 </div>
@@ -169,24 +133,17 @@ include '../../includes/head.php';
 
 <?php include '../../includes/footer.php'; ?>
 
-<!-- JS Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="includes/JS/script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-<script>
-    $(document).ready(function() {
-        $('#membersTable').DataTable({
-            "responsive": true,
-            "lengthChange": false,
-            "autoWidth": false,
-            "buttons": ['copy', 'csv', 'excel', 'pdf', 'print']
-        }).buttons().container().appendTo('#membersTable_wrapper .col-md-6:eq(0)');
-    });
-</script>
 
 </body>
+<script>
+$(document).ready(function() {
+    $('#membersTable').DataTable({
+        "responsive": true,
+        "lengthChange": false
+    });
+});
+</script>
 </html>
