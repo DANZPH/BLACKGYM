@@ -28,11 +28,13 @@ $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
 // Daily Earnings
-$dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
-                       FROM Payments 
-                       WHERE DATE(PaymentDate) = DATE(NOW())";
+$dailyEarningsQuery = "
+    SELECT SUM(Amount) AS daily_earnings 
+    FROM Payments 
+    WHERE DATE(PaymentDate) = CURDATE()";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 
+// Ensure a result is fetched, and fallback to 0 if null
 if ($dailyEarningsResult && $dailyEarningsResult->num_rows > 0) {
     $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 } else {
