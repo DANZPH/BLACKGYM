@@ -5,13 +5,6 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 include '../../database/connection.php';
-
-// Set PHP default timezone to Asia/Manila
-date_default_timezone_set('Asia/Manila');
-
-// Set MySQL timezone to Asia/Manila
-$conn1->query("SET time_zone = '+08:00'");
-
 //cards
 // Total Members with Active Membership Status
 $totalMembersQuery = "SELECT COUNT(*) AS total_members FROM Members WHERE MembershipStatus = 'Active'";
@@ -36,15 +29,15 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 // Daily Earnings
 $dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
                        FROM Payments 
-                       WHERE DATE(CONVERT_TZ(PaymentDate, '+00:00', '+08:00')) = CURDATE()";
+                       WHERE DATE(PaymentDate) = CURDATE()";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 
 // Monthly Earnings
 $monthlyEarningsQuery = "SELECT SUM(AmountPaid) AS monthly_earnings 
                          FROM Payments 
-                         WHERE MONTH(CONVERT_TZ(PaymentDate, '+00:00', '+08:00')) = MONTH(CURDATE()) 
-                         AND YEAR(CONVERT_TZ(PaymentDate, '+00:00', '+08:00')) = YEAR(CURDATE())";
+                         WHERE MONTH(PaymentDate) = MONTH(CURDATE()) 
+                         AND YEAR(PaymentDate) = YEAR(CURDATE())";
 $monthlyEarningsResult = $conn1->query($monthlyEarningsQuery);
 $monthlyEarnings = $monthlyEarningsResult->fetch_assoc()['monthly_earnings'] ?? 0;
 
