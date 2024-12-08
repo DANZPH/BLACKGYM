@@ -85,7 +85,7 @@ include '../../includes/head.php';
             </div>
 
             <!-- Members Table -->
-            <div class="card col-md-12">
+            <div class="card">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
@@ -95,7 +95,7 @@ include '../../includes/head.php';
                       <i class="fas fa-user-plus"> Add new</i>
                   </button>
                     <div class="table">
-                        <table id="membersTable" class="table table-striped table-bordered">
+                        <table id="membersTable" class="table table-striped table-bordered col-md-12">
                             <thead>
                                 <tr>
                                   <th class="d-none">MemberID</th>
