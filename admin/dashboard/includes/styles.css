@@ -56,10 +56,11 @@ html, body {
 
 /* Content Wrapper */
 .content-wrapper {
-  margin-left: 250px; /* Matches the sidebar width */
+  margin-left: 290px; /* Matches the sidebar width */
   margin-top: 56px; /* Matches the navbar height */
   padding: 20px;
   flex-grow: 1;
+  width: 100%;
   min-height: calc(100vh - 56px); /* Ensures the content always fills the available space */
   box-sizing: border-box;
 }
