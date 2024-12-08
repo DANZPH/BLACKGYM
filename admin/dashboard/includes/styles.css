@@ -1,5 +1,4 @@
 html, body {
-  /*background: linear-gradient(90deg, #bdc3c7, #2c3e50);*/
   background-color: #bbbbbb;
   height: 100%;
   margin: 0;
@@ -14,7 +13,7 @@ html, body {
   top: 0;
   bottom: 0;
   width: 250px;
-  background-color: black;
+  background-color: #000;
   color: #fff;
   padding-top: 20px;
   z-index: 1000;
@@ -26,6 +25,8 @@ html, body {
   padding: 15px;
   display: block;
   text-decoration: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .sidebar a:hover {
@@ -36,22 +37,30 @@ html, body {
 .navbar {
   height: 56px; /* Standard height */
   padding: 0.75rem 1rem;
-  background-color: black;
+  background-color: #000;
   position: fixed;
   top: 0;
   left: 250px;
   width: calc(100% - 250px);
-  
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .navbar-nav .nav-link {
   color: #fff;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ccc;
 }
 
 .navbar-brand {
   color: #fff;
   text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /* Content Wrapper */
@@ -61,7 +70,9 @@ html, body {
   padding: 20px;
   flex-grow: 1;
   min-height: calc(100vh - 56px); /* Ensures the content always fills the available space */
+  background-color: #f8f9fa;
   box-sizing: border-box;
+  overflow-y: auto; /* Ensures scrolling for long content */
 }
 
 /* Card Styles */
@@ -69,11 +80,13 @@ html, body {
   border-radius: 8px;
   margin-bottom: 1.5rem;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slightly softer shadow */
 }
 
 .card-header {
   font-weight: bold;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .card-body {
@@ -89,23 +102,37 @@ html, body {
   width: 100%;
   margin-bottom: 1rem;
   background-color: transparent;
+  border-collapse: collapse;
 }
 
 .table th,
 .table td {
   padding: 0.75rem;
-  vertical-align: top;
+  vertical-align: middle; /* Aligns text vertically */
   border-top: 1px solid #dee2e6;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.table tbody tr:hover {
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
 }
 
 /* Footer */
 .footer {
-  background-color: #000000;
+  background-color: #000;
   color: #fff;
   text-align: center;
-  padding-top: 10px;
-  height: 40px;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
   width: 100%;
+  font-size: 14px;
 }
 
 /* Responsive Adjustments */
@@ -127,4 +154,17 @@ html, body {
     margin-top: 56px; /* Adjust for navbar height */
   }
 }
-    
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 16px;
+  }
+
+  .sidebar a {
+    font-size: 14px;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 14px;
+  }
+}
