@@ -15,13 +15,14 @@ include '../../database/connection.php';
 <body>
 <?php include 'includes/header.php'; ?>
 
-
+<div class="container-fluid mt-3">
     <div class="row">
         <!-- Include Sidebar -->
         <?php include 'includes/sidebar.php'; ?>
 
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
+
             <!-- Card Container for the Table -->
             <div class="card">
                 <div class="card-header">
@@ -105,7 +106,7 @@ include '../../database/connection.php';
 
         </div>
     </div>
-
+</div>
     <?php include '../../includes/footer.php'; ?>
 <!-- Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

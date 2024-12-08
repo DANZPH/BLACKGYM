@@ -13,7 +13,7 @@ html, body {
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 250px; /* Adjust width to make the sidebar larger if needed */
+  width: 250px;
   background-color: black;
   color: #fff;
   padding-top: 20px;
@@ -39,8 +39,8 @@ html, body {
   background-color: black;
   position: fixed;
   top: 0;
-  left: 250px; /* Sidebar width */
-  width: calc(100% - 250px); /* Adjust to match the remaining space */
+  left: 250px;
+  width: calc(100% - 250px);
   
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
@@ -56,11 +56,11 @@ html, body {
 
 /* Content Wrapper */
 .content-wrapper {
-  margin-left: 290px; /* Matches the sidebar width */
+  margin-left: 2px; /* Matches the sidebar width */
   margin-top: 56px; /* Matches the navbar height */
   padding: 20px;
   flex-grow: 1;
-  width: calc(100% - 290px); /* Ensures it takes up the remaining space */
+  width: 100%;
   min-height: calc(100vh - 56px); /* Ensures the content always fills the available space */
   box-sizing: border-box;
 }
@@ -84,50 +84,19 @@ html, body {
 /* Table Styles */
 .table-responsive {
   overflow-x: auto;
-  max-width: 100%; /* Ensure it doesn't overflow horizontally */
 }
 
 .table {
-  width: 100%; /* Make the table take up the full width of the container */
-  table-layout: fixed; /* Makes the column widths fixed and more consistent */
+  width: 100%;
   margin-bottom: 1rem;
   background-color: transparent;
 }
 
 .table th,
 .table td {
-  padding: 1rem; /* Increase padding for better spacing */
+  padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
-}
-
-/* Specific Column Width Adjustments */
-#membersTable th:nth-child(1), #membersTable td:nth-child(1) {
-  width: 15%; /* Adjust width for first column */
-}
-
-#membersTable th:nth-child(2), #membersTable td:nth-child(2) {
-  width: 25%; /* Adjust width for second column */
-}
-
-#membersTable th:nth-child(3), #membersTable td:nth-child(3) {
-  width: 20%; /* Adjust width for third column */
-}
-
-#membersTable th:nth-child(4), #membersTable td:nth-child(4) {
-  width: 15%; /* Adjust width for fourth column */
-}
-
-#membersTable th:nth-child(5), #membersTable td:nth-child(5) {
-  width: 10%; /* Adjust width for fifth column */
-}
-
-#membersTable th:nth-child(6), #membersTable td:nth-child(6) {
-  width: 20%; /* Adjust width for sixth column */
-}
-
-#membersTable th:nth-child(7), #membersTable td:nth-child(7) {
-  width: 10%; /* Adjust width for seventh column */
 }
 
 /* Footer */
@@ -158,12 +127,5 @@ html, body {
     margin-left: 0;
     margin-top: 56px; /* Adjust for navbar height */
   }
-
-  .table-responsive {
-    overflow-x: scroll; /* Allow horizontal scrolling on smaller screens */
-  }
-
-  .table {
-    width: auto; /* Let the table shrink on smaller screens */
-  }
 }
+    
