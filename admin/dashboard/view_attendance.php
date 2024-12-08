@@ -30,7 +30,6 @@ include '../../database/connection.php'; // Include database connection
             <!-- Card Container for the Table -->
             <div class="card">
                 <div class="card-header">
-                    <h5>Members Attendance Information</h5>
                 </div>
                 <div class="card-body">
                     <!-- Wrap table in a responsive div -->
