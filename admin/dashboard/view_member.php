@@ -9,19 +9,6 @@ include '../../database/connection.php';
 
 <!DOCTYPE html>
 <html lang="en">
-  <style>
-    .active-status {
-        background-color: #28a745; /* Green for active */
-        color: white;
-        text-align: center;
-    }
-
-    .inactive-status {
-        background-color: #dc3545; /* Red for inactive */
-        color: white;
-        text-align: center;
-    }
-</style>
 <?php 
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -41,7 +28,7 @@ include '../../includes/head.php';
         <?php include 'includes/sidebar.php'; ?>
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
-  
+       
           <!--modal add member-->
           <?php include 'includes/modal/add_member.php'; ?>
             <!-- Edit Member Modal -->
@@ -121,7 +108,53 @@ include '../../includes/head.php';
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                          Users.Email
+                            <tbody>
+                                <?php
+                                $sql = "
+                                    SELECT 
+                                        Members.MemberID, 
+                                        Users.Username, 
+                                        Users.Email, 
+                                        Members.Gender, 
+                                        Members.Age, 
+                                        Members.Address, 
+                                        Members.MembershipStatus, 
+                                        Members.created_at 
+                                    FROM Members 
+                                    INNER JOIN Users ON Members.UserID = Users.UserID
+                                ";
+                                $result = $conn1->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                            <td class='d-none'>{$row['MemberID']}</td>
+                                            <td>{$row['Username']}</td>
+                                            <td>{$row['Email']}</td>
+                                            <td>{$row['Gender']}</td>
+                                            <td>{$row['Age']}</td>
+                                            <td>{$row['Address']}</td>
+                                            <td>{$row['MembershipStatus']}</td>
+                                            <td>{$row['created_at']}</td>
+                                          <td>
+    <div class='d-flex gap-2'>
+        <button class='btn btn-warning btn-sm editBtn mx-2' data-id='{$row['MemberID']}'>
+            <i class='fas fa-edit'></i> 
+        </button>
+        
+        <button class='btn btn-danger btn-sm deleteBtn mx-2' data-id='{$row['MemberID']}'>
+            <i class='fas fa-trash'></i> 
+        </button>
+        
+    </div>
+</td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='9' class='text-center'>No members found</td></tr>";
+                                }
+                                ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -138,12 +171,4 @@ include '../../includes/head.php';
 
 
 </body>
-<script>
-$(document).ready(function() {
-    $('#membersTable').DataTable({
-        "responsive": true,
-        "lengthChange": false
-    });
-});
-</script>
 </html>
