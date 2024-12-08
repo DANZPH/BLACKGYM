@@ -3,14 +3,16 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-<!--    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-            </li>
-        </ul>
-    </div>-->
+
+    <!-- Display current date and time -->
+    <div class="ml-auto text-white">
+        <span class="navbar-text">
+            <?php echo date("l, F j, Y g:i A"); ?>
+        </span>
+    </div>
+
     <script src="includes/JS/sweetalert.js"></script>
-  <script src="includes/JS/script.js"></script>
+    <script src="includes/JS/script.js"></script>
     <!-- JS Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
