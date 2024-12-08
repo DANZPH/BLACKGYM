@@ -25,7 +25,6 @@ include '../../database/connection.php'; // Include database connection
             <h2 class="mb-4">Member Payments</h2>
             <div class="card">
                 <div class="card-header">
-                    <h5>Members Payment Information</h5>
                 </div>
                 <div class="card-body">
                     <div class="table">

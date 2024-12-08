@@ -41,7 +41,6 @@ include '../../database/connection.php'; // Include database connection
             <?php include 'includes/sidebar.php'; ?>
 
             <div class="col-md-9 content-wrapper">
-                <h2 class="mb-4">Member History</h2>
                 <div class="card">
                     <div class="card-header">
                         <h5>Member Details</h5>
