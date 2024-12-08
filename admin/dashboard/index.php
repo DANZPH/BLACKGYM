@@ -26,10 +26,10 @@ $currentPeopleQuery = "SELECT COUNT(*) AS current_people FROM Attendance WHERE C
 $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
-// Daily Earnings
+// Daily Earnings using NOW() for current date and time
 $dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
                        FROM Payments 
-                       WHERE DATE(PaymentDate) = CURDATE()";
+                       WHERE DATE(PaymentDate) = DATE(NOW())"; // Use DATE(NOW()) instead of CURDATE()
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 
