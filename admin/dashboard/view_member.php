@@ -85,7 +85,7 @@ include '../../includes/head.php';
             </div>
 
             <!-- Members Table -->
-            <div class="card">
+            <div class="card col-md-12">
                 <div class="card-header">
                     <h5>Members Information</h5>
                 </div>
