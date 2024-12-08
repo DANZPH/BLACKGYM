@@ -38,7 +38,7 @@ $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 if ($dailyEarningsResult && $dailyEarningsResult->num_rows > 0) {
     $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 } else {
-    $dailyEarnings = 0;
+    $dailyEarnings = 1;
 }
 
 // Monthly Earnings
