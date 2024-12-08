@@ -95,7 +95,7 @@ include '../../includes/head.php';
                       <i class="fas fa-user-plus"> Add new</i>
                   </button>
                     <div class="table">
-                        <table id="membersTable" class="table table-striped table-bordered col-md-12">
+                        <table id="membersTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                   <th class="d-none">MemberID</th>
