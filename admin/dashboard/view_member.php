@@ -9,6 +9,7 @@ include '../../database/connection.php';
 
 <!DOCTYPE html>
 <html lang="en">
+  
 <?php 
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -28,7 +29,7 @@ include '../../includes/head.php';
         <?php include 'includes/sidebar.php'; ?>
         <!-- Main Content -->
         <div class="col-md-9 content-wrapper">
-       
+  
           <!--modal add member-->
           <?php include 'includes/modal/add_member.php'; ?>
             <!-- Edit Member Modal -->
