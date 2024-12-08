@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 if (!isset($_SESSION['AdminID'])) {
@@ -29,9 +30,14 @@ $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 // Daily Earnings
 $dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
                        FROM Payments 
-                       WHERE DATE(PaymentDate) = CURDATE()";
+                       WHERE DATE(PaymentDate) = DATE(NOW())";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
-$dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
+
+if ($dailyEarningsResult && $dailyEarningsResult->num_rows > 0) {
+    $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
+} else {
+    $dailyEarnings = 0;
+}
 
 // Monthly Earnings
 $monthlyEarningsQuery = "SELECT SUM(AmountPaid) AS monthly_earnings 
