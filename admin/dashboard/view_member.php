@@ -49,7 +49,7 @@ include '../../includes/head.php';
                                 </div>
                                 <div class="form-group">
                                     <label for="editEmail">Email</label>
-                                    <input type="email" class="form-control" id="editEmail" name="editEmail" required>
+                                    <input type="email" class="form-control" id="editEmail" name="editEmail" required readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="editGender">Gender</label>
