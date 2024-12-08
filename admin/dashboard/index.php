@@ -28,9 +28,10 @@ $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
 // Daily Earnings
-$dailyEarningsQuery = "SELECT SUM(AmountPaid) AS daily_earnings 
-                       FROM Payments 
-                       WHERE DATE(PaymentDate) = CURDATE()";
+$dailyEarningsQuery = "
+    SELECT SUM(Amount) AS daily_earnings 
+    FROM Payments 
+    WHERE DATE(PaymentDate) = CURDATE()";
 $dailyEarningsResult = $conn1->query($dailyEarningsQuery);
 $dailyEarnings = $dailyEarningsResult->fetch_assoc()['daily_earnings'] ?? 0;
 
@@ -144,21 +145,21 @@ $sessionPriceCount = $membershipCounts['sessionPriceCount'];
         </div>
     </div>
     
-    <!-- Daily Earnings Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card shadow-lg border-0">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <h4 class="card-title">
-                        <i class="fas fa-calendar-day text-info"></i> 
-                    Earnings D
-                    </h4>
-                    <h2 class="card-text text-info">₱<?php echo number_format($monthlyEarnings, 2); ?></h2>
-                </div>
-                <a href="payments" class="btn btn-outline-info btn-sm">View</a>
+<!-- Daily Earnings Card -->
+<div class="col-md-4 mb-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="card-title">
+                    <i class="fas fa-calendar-day text-info"></i> 
+                    Earnings Today
+                </h4>
+                <h2 class="card-text text-info">₱<?php echo number_format($dailyEarnings, 2); ?></h2>
             </div>
+            <a href="payments" class="btn btn-outline-info btn-sm">View</a>
         </div>
     </div>
+</div>
     <!-- Monthly Earnings Card -->
     <div class="col-md-4 mb-4">
         <div class="card shadow-lg border-0">
