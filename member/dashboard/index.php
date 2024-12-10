@@ -57,10 +57,8 @@ include 'includes/header.php';
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
-					               <h2>Hi!, 
-                <?php echo $_SESSION['username']; ?>
-                </h2>
+					<h1><?php echo $_SESSION['username']; ?>'s, Dashboard</h1>
+					
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
