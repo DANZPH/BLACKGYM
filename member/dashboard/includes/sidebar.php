@@ -2,7 +2,7 @@
 <!-- SIDEBAR -->
 <section id="sidebar">
     <a href="#" class="brand">
-        <img src="img/logo.jpg" alt="AdminHub" class="adminhub-image" style="width: 200px; height: auto;">
+        <img src="../img/logo.jpg" alt="AdminHub" class="adminhub-image" style="width: 200px; height: auto;">
     </a>
 
     <ul class="side-menu top">
