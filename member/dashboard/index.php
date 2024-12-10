@@ -40,10 +40,13 @@ if ($endDate) {
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         html, body {
-            background: linear-gradient(90deg, #bdc3c7, #2c3e50);
-            height: 100%;
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
+  background-color: #bbbbbb;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+            
         }
 
         header {
