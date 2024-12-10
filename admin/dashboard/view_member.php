@@ -11,12 +11,6 @@ include '../../database/connection.php';
 <html lang="en">
   
 <?php 
-session_start();
-if (!isset($_SESSION['AdminID'])) {
-    header('Location: ../../admin/login.php');
-    exit();
-}
-include '../../database/connection.php'; 
 include '../../includes/head.php';
 ?>
 <body>
