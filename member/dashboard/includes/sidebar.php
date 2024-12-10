@@ -21,7 +21,7 @@
         <li>
             <a href="#">
                 <i class='bx bxs-message-dots'></i>
-                <span class="text">Message</span>
+                <span class="text">anoucement</span>
             </a>
         </li>
         <li>
