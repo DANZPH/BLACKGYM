@@ -39,8 +39,8 @@
             </a>
         </li>
         <li>
-            <a href="#" class="logout">
-                <i class='bx bxs-log-out-circle'></i>
+            <a class="logout">
+                <i class='bx bxs-log-out-circle' href="#" onclick="confirmLogout()"></i>
                 <span class="text">Logout</span>
             </a>
         </li>
