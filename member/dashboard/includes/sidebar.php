@@ -14,12 +14,6 @@
         </li>
         <li>
             <a href="#">
-                <i class='bx bxs-shopping-bag-alt'></i>
-                <span class="text">My Store</span>
-            </a>
-        </li>
-        <li>
-            <a href="#">
                 <i class='bx bxs-doughnut-chart'></i>
                 <span class="text">Analytics</span>
             </a>
