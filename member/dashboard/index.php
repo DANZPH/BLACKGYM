@@ -38,7 +38,7 @@ if ($endDate) {
     <title>Member Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    	<link rel="stylesheet" href="style.css">
+    	<link rel="stylesheet" href="includes/style.css">
     <style>
         html, body {
   background-color: #bbbbbb;
