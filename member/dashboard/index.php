@@ -71,7 +71,7 @@ include 'includes/header.php';
 				</div>
 				<a href="#" class="btn-download">
 					<i class='bx bxs-cloud-download' ></i>
-					<span class="text">Download PDF</span>
+					<span class="text">Download QRPASS</span>
 				</a>
 			</div>
 
@@ -128,7 +128,7 @@ include 'includes/header.php';
 			<div class="table-data">
 				<div class="order">
 					<div class="head">
-						<h3>Recent Orders</h3>
+						<h3>payment History</h3>
 						<i class='bx bx-search' ></i>
 						<i class='bx bx-filter' ></i>
 					</div>
