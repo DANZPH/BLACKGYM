@@ -38,10 +38,9 @@
                 <span class="text">Settings</span>
             </a>
         </li>
-        <li>
-            <a href="#" class="logout">
-                <i class='bx bxs-log-out-circle'></i>
-                <span class="text">Logout</span>
+                    <li class="nav-item">
+            <a class="nav-link" href="#" onclick="confirmLogout()">
+                <i class="bx bxs-log-out-circle"></i> Logout
             </a>
         </li>
     </ul>
