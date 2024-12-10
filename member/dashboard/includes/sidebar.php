@@ -40,7 +40,7 @@
         </li>
         <li>
             <a href="#" class="logout">
-                <i class='bx bxs-log-out-circle'></i>
+                <i class='fa fa-sign-out-alt'></i>
                 <span class="text">Logout</span>
             </a>
         </li>
