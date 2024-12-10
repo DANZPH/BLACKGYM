@@ -67,15 +67,10 @@ window.addEventListener('resize', function () {
 
 const switchMode = document.getElementById('switch-mode');
 
-// Set default dark mode on page load
-document.body.classList.add('dark');
-switchMode.checked = true;
-
 switchMode.addEventListener('change', function () {
-    if (this.checked) {
-        document.body.classList.add('dark');
-    } else {
-        document.body.classList.remove('dark');
-    }
-});
+	if(this.checked) {
+		document.body.classList.add('dark');
+	} else {
+		document.body.classList.remove('dark');
+	}
 })
