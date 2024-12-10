@@ -4,35 +4,23 @@ if (!isset($_SESSION['MemberID'])) {
     header('Location: ../login.php');
     exit();
 }
-
-include '../../database/connection.php'; // Assuming $conn1 is initialized in this file
-
+include '../../database/connection.php';
 // Fetch the MemberID from the session
 $memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
 
-// Query to fetch payment history
-$query = "SELECT p.PaymentDate, p.Amount, p.PaymentMethod, p.Status, u.Username 
-          FROM Payments p 
-          INNER JOIN Members m ON p.MemberID = m.MemberID
-          INNER JOIN Users u ON m.UserID = u.UserID
-          WHERE p.MemberID = ? ORDER BY p.PaymentDate DESC";
 
-// Prepare and bind the query with member ID
-$stmt = $conn1->prepare($query);
-$stmt->bind_param("i", $memberID); // "i" for integer
-$stmt->execute();
-$result = $stmt->get_result();
 
-// Query to fetch Membership data
+
+// Fetch the Membership data from the database
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
-$stmt->bind_param("i", $memberID); // "i" for integer since MemberID is an integer
+$stmt->bind_param("d", $memberID); // Binding MemberID parameter
 $stmt->execute();
 $stmt->bind_result($endDate, $membershipStatus);
 $stmt->fetch();
 $stmt->close();
 
-// Calculate remaining time
+// Check if a valid EndDate exists
 if ($endDate) {
     $currentDate = new DateTime(); // Current date and time
     $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
@@ -45,7 +33,6 @@ if ($endDate) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -142,42 +129,95 @@ include 'includes/na.php';
 			</ul>
 
 
-<div class="table-data">
-    <div class="order">
-        <div class="head">
-            <h3>Payment History</h3>
-            <i class='bx bx-search'></i>
-            <i class='bx bx-filter'></i>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Payment Date</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td>
-                            <img src="img/people.png" alt="User">
-                            <p><?php echo htmlspecialchars($row['Username']); ?></p>
-                        </td>
-                        <td><?php echo date('d-m-Y', strtotime($row['PaymentDate'])); ?></td>
-                        <td><?php echo number_format($row['Amount'], 2); ?></td>
-                        <td>
-                            <span class="status <?php echo strtolower($row['Status']); ?>">
-                                <?php echo ucfirst($row['Status']); ?>
-                            </span>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3>payment History</h3>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Date Order</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status completed">Completed</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status pending">Pending</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status process">Process</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status pending">Pending</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status completed">Completed</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="todo">
+					<div class="head">
+						<h3>Todos</h3>
+						<i class='bx bx-plus' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<ul class="todo-list">
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="not-completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="not-completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</main>
 		<!-- MAIN -->
 	</section>
