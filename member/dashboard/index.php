@@ -83,15 +83,13 @@ include 'includes/header.php';
     <!-- Membership Status Section -->
     <?php if ($membershipStatus === 'Active'): ?>
         <div>
-            <h5>Membership Status</h5>
-            <h5>Active Membership</h5>
-            <p>Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+            <p>Valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
             <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
         </div>
     <?php elseif ($membershipStatus === 'Expired'): ?>
         <div>
             <p>&#x26A0; Membership Expired</p> <!-- Warning Symbol -->
-            <p>Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+            <p>Expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
             <p>Please renew your membership to regain access to BLACKGYM facilities.</p>
             <a href="renew.php">Renew Membership</a>
         </div>
