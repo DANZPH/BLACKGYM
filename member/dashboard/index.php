@@ -96,7 +96,7 @@ $paymentStmt->close();
                         <?php if ($membershipStatus === 'Active'): ?>
                             <div>
                                 <p>Until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                                <p> <span><?php echo $remainingTime; ?></span></p>
+                                <p> <span><strong><?php echo $remainingTime; ?></strong></span></p>
                             </div>
                         <?php elseif ($membershipStatus === 'Expired'): ?>
                             <div>
