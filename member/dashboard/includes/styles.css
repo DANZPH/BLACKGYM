@@ -17,7 +17,9 @@ li {
 :root {
 	--poppins: 'Poppins', sans-serif;
 	--lato: 'Lato', sans-serif;
-
+	--light: #0C0C1E;
+	--grey: #060714;
+	--dark: #FBFBFB;
 
 }
 
