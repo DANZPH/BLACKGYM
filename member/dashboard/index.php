@@ -198,6 +198,6 @@ include 'includes/headbar.php';
 	<!-- CONTENT -->
 	
 
-	<script src="script.js"></script>
+	<script src="includes/script.js"></script>
 </body>
 </html>
