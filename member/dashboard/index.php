@@ -1,94 +1,198 @@
 <?php
 session_start();
-
-// Check if user is logged in
 if (!isset($_SESSION['MemberID'])) {
     header('Location: ../login.php');
     exit();
 }
-
-// Include database connection
 include '../../database/connection.php';
-
 // Fetch the MemberID from the session
-$memberID = $_SESSION['MemberID'];
-
-// Fetch membership data
-$sql = "SELECT EndDate, Status, Role FROM Membership WHERE MemberID = ?";
+$memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
+// Fetch the Membership data from the database
+$sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
-$stmt->bind_param("i", $memberID);
+$stmt->bind_param("d", $memberID); // Binding MemberID parameter
 $stmt->execute();
-$stmt->bind_result($endDate, $membershipStatus, $userRole);
+$stmt->bind_result($endDate, $membershipStatus);
 $stmt->fetch();
 $stmt->close();
 
-// Role-based access restriction
-if ($userRole !== 'Admin') { // Restrict access to Admin only
-    header('Location: ../access_denied.php');
-    exit();
+// Check if a valid EndDate exists
+if ($endDate) {
+    $currentDate = new DateTime(); // Current date and time
+    $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
+    $interval = $currentDate->diff($endDateObj); // Calculate the difference between the current date and the EndDate
+
+    // Display remaining time in months and days format
+    $remainingTime = $interval->format('%m months, %d days'); // Months and Days format
+} else {
+    $remainingTime = "No expiration date set."; // Fallback if no EndDate found
 }
 
-// Calculate remaining membership time
-$remainingTime = "Membership expired or not set.";
-if ($endDate) {
-    $currentDate = new DateTime();
-    $endDateObj = new DateTime($endDate);
-    if ($currentDate < $endDateObj) {
-        $interval = $currentDate->diff($endDateObj);
-        $remainingTime = $interval->format('%m months, %d days remaining');
-    } else {
-        $membershipStatus = 'Expired';
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membership Portal</title>
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Boxicons -->
-    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-    <!-- CSS -->
-    <link rel="stylesheet" href="includes/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	
+	<link rel="stylesheet" href="includes/styles.css">
+
+	<title>BLACKGYM</title>
 </head>
 <body>
-<?php include 'includes/sidebar.php'; ?>
-<section id="content">
-    <?php include 'includes/header.php'; ?>
-    <main>
-        <div class="head-title">
-            <div class="left">
-                <h1>Dashboard</h1>
-                <ul class="breadcrumb">
-                    <li><a href="#">Dashboard</a></li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li><a class="active" href="#">Home</a></li>
-                </ul>
-            </div>
-        </div>
+<?php
+include 'includes/sidebar.php';
+?>
+	<!-- CONTENT -->
+	<section id="content">
+<?php
+include 'includes/header.php';
+?>
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Dashboard</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Dashboard</a>
+						</li>
+						<li><i class='bx bx-chevron-right' ></i></li>
+						<li>
+							<a class="active" href="#">Home</a>
+						</li>
+					</ul>
+				</div>
+				<a href="#" class="btn-download">
+					<i class='bx bxs-cloud-download' ></i>
+					<span class="text">Download PDF</span>
+				</a>
+			</div>
 
-        <div class="membership-info">
-            <h2>Membership Details</h2>
-            <p><strong>Status:</strong> <?= htmlspecialchars($membershipStatus) ?></p>
-            <p><strong>Remaining Time:</strong> <?= htmlspecialchars($remainingTime) ?></p>
-        </div>
+			<ul class="box-info">
+				<li>
+					<i class='bx bxs-calendar-check' ></i>
+					<span class="text">
+						<h3>1020</h3>
+						<p>New Order</p>
+					</span>
+				</li>
+				<li>
+					<i class='bx bxs-group' ></i>
+					<span class="text">
+						<h3>2834</h3>
+						<p>Visitors</p>
+					</span>
+				</li>
+				<li>
+					<i class='bx bxs-dollar-circle' ></i>
+					<span class="text">
+						<h3>$2543</h3>
+						<p>Total Sales</p>
+					</span>
+				</li>
+			</ul>
 
-        <!-- Admin Functionalities -->
-        <div class="admin-tools">
-            <h2>Admin Tools</h2>
-            <ul>
-                <li><a href="manage_users.php">Manage Users</a></li>
-                <li><a href="view_reports.php">View Reports</a></li>
-                <li><a href="manage_memberships.php">Manage Memberships</a></li>
-            </ul>
-        </div>
-    </main>
-</section>
 
-<script src="includes/script.js"></script>
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3>Recent Orders</h3>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th>User</th>
+								<th>Date Order</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status completed">Completed</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status pending">Pending</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status process">Process</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status pending">Pending</span></td>
+							</tr>
+							<tr>
+								<td>
+									<img src="img/people.png">
+									<p>John Doe</p>
+								</td>
+								<td>01-10-2021</td>
+								<td><span class="status completed">Completed</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="todo">
+					<div class="head">
+						<h3>Todos</h3>
+						<i class='bx bx-plus' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<ul class="todo-list">
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="not-completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+						<li class="not-completed">
+							<p>Todo List</p>
+							<i class='bx bx-dots-vertical-rounded' ></i>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
 <script>
     function confirmLogout() {
         Swal.fire({
@@ -106,5 +210,6 @@ if ($endDate) {
         });
     }
 </script>
+	<script src="includes/script.js"></script>
 </body>
 </html>
