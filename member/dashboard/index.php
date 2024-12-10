@@ -67,7 +67,7 @@ include 'includes/sidebar.php';
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="../img/favicon-512x512.png">
+				<img src="../../img/favicon-512x512.png">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
