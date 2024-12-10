@@ -40,7 +40,7 @@
         </li>
         <li>
             <a class="logout">
-                <i class='bx bxs-log-out-circle' href="#" onclick="confirmLogout()"></i>
+                <i class='bx bxs-log-out-circle' onclick="confirmLogout()"></i>
                 <span class="text">Logout</span>
             </a>
         </li>
