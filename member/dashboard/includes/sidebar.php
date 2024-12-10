@@ -40,7 +40,7 @@
         </li>
                     <li class="nav-item">
             <a class="nav-link" href="#" onclick="confirmLogout()">
-                <i class="bx bxs-log-out-circle"></i> Logout
+                <i class="fa fa-sign-out-alt"></i> Logout
             </a>
         </li>
     </ul>
