@@ -38,12 +38,13 @@ if ($endDate) {
     <title>Member Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         html, body {
-            background: linear-gradient(90deg, #bdc3c7, #2c3e50);
+            background: linear-gradient(90deg, #f8f9fa, #eef2f3);
             height: 100%;
             margin: 0;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         header {
@@ -52,59 +53,74 @@ if ($endDate) {
             left: 0;
             width: 100%;
             z-index: 1000;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(90deg, #007bff, #6a11cb);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
         .content-container {
-            margin-top: 70px; /* Adjust based on header height */
+            margin-top: 80px; /* Adjust based on header height */
+            padding: 20px;
         }
 
         .membership-card {
-            background-color: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border: none;
+            border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .membership-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
         .membership-card h5 {
             font-weight: bold;
         }
 
-        .membership-card .status-active {
-            color: green;
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             font-weight: bold;
+            color: white;
         }
 
-        .membership-card .status-expired,
-        .membership-card .status-pending {
-            color: red;
-            font-weight: bold;
+        .status-active .status-badge {
+            background-color: #28a745;
         }
 
-        .remaining-time {
-            font-size: 1.2em;
-            margin-top: 10px;
+        .status-expired .status-badge {
+            background-color: #dc3545;
         }
 
-        .remaining-time span {
-            font-weight: bold;
-            color: #007bff;
+        .status-pending .status-badge {
+            background-color: #ffc107;
+            color: black;
         }
 
         .status-icon {
-            font-size: 4rem;
+            font-size: 3rem;
             margin-bottom: 15px;
+            color: #6c757d;
         }
 
         .status-expired .status-icon {
-            color: red;
+            color: #dc3545;
         }
 
         .status-pending .status-icon {
-            color: orange;
+            color: #ffc107;
         }
 
         .status-actions {
@@ -115,71 +131,95 @@ if ($endDate) {
             background-color: #007bff;
             color: white;
             font-weight: bold;
+            border-radius: 20px;
+        }
+
+        .sidebar {
+            background: linear-gradient(90deg, #6a11cb, #007bff);
+            color: white;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            margin-top: 70px;
+            width: 250px;
+            z-index: 1;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .sidebar a:hover {
+            color: #ffc107;
         }
     </style>
 </head>
 <body>
     <header>
-        <?php include 'includes/header.php'; ?>
+        <h1>BLACKGYM Member Dashboard</h1>
     </header>
 
-    <div class="container content-container">
-        <div class="row">
-            <?php include 'includes/sidebar.php'; ?>
+    <div class="d-flex">
+        <aside class="sidebar">
+            <a href="#">Dashboard</a>
+            <a href="#">Membership</a>
+            <a href="#">Payments</a>
+            <a href="#">Attendance</a>
+            <a href="#">Profile</a>
+        </aside>
 
-            <!-- Main Content -->
-            <div class="col-md-9">
-                <h2>Hi, 
-                <?php echo $_SESSION['username']; ?>
-                </h2>
-                <p>Here you can view and manage your BLACKGYM membership, payments, and attendance.</p>
+        <div class="container content-container">
+            <h2>Hi, <?php echo $_SESSION['username']; ?>!</h2>
+            <p>Welcome to your BLACKGYM dashboard. Manage your membership, payments, and attendance.</p>
 
-                <!-- Membership Status Section -->
-                <?php if ($membershipStatus === 'Active'): ?>
-                    <div class="card membership-card">
-                        <div class="card-header">
-                            <h5>Membership Status</h5>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title status-active">Active Membership</h5>
-                            <p class="card-text">Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                            <div class="remaining-time">
-                                <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
-                            </div>
+            <!-- Membership Status Section -->
+            <?php if ($membershipStatus === 'Active'): ?>
+                <div class="card membership-card status-active">
+                    <div class="card-header">
+                        <span class="status-badge">Active</span>
+                    </div>
+                    <div class="card-body">
+                        <h5>Membership Valid</h5>
+                        <p>Valid until: <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong></p>
+                        <div class="remaining-time">
+                            Time remaining: <span><?php echo $remainingTime; ?></span>
                         </div>
                     </div>
-                <?php elseif ($membershipStatus === 'Expired'): ?>
-                    <div class="card membership-card status-expired">
-                        <div class="text-center">
-                            <div class="status-icon">&#x26A0; <!-- Warning Symbol --></div>
-                            <h5 class="card-title">Membership Expired</h5>
-                            <p class="card-text">Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                            <p>Please renew your membership to regain access to BLACKGYM facilities.</p>
-                        </div>
-                        <div class="status-actions text-center">
+                </div>
+            <?php elseif ($membershipStatus === 'Expired'): ?>
+                <div class="card membership-card status-expired">
+                    <div class="text-center">
+                        <div class="status-icon">&#x26A0;</div>
+                        <h5>Membership Expired</h5>
+                        <p>Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+                        <div class="status-actions">
                             <a href="renew.php" class="btn btn-renew">Renew Membership</a>
                         </div>
                     </div>
-                <?php elseif ($membershipStatus === 'Pending'): ?>
-                    <div class="card membership-card status-pending">
-                        <div class="text-center">
-                            <div class="status-icon">&#x1F6A8; <!-- Emergency Light Symbol --></div>
-                            <h5 class="card-title">Membership Pending</h5>
-                            <p>Your membership is currently pending. Please make the necessary payment and wait for approval.</p>
-                        </div>
-                        <div class="status-actions text-center">
+                </div>
+            <?php elseif ($membershipStatus === 'Pending'): ?>
+                <div class="card membership-card status-pending">
+                    <div class="text-center">
+                        <div class="status-icon">&#x1F6A8;</div>
+                        <h5>Membership Pending</h5>
+                        <p>Your membership is pending. Please complete payment.</p>
+                        <div class="status-actions">
                             <a href="payment.php" class="btn btn-primary">Make Payment</a>
                         </div>
                     </div>
-                <?php else: ?>
-                    <div class="card membership-card">
-                        <div class="card-body">
-                            <h5 class="card-title">No Active Membership</h5>
-                            <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support for assistance.</p>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php else: ?>
+                <div class="card membership-card">
+                    <h5>No Membership</h5>
+                    <p>You don't have an active membership. Please contact support.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
