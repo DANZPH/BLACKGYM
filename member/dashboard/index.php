@@ -53,7 +53,7 @@ include 'includes/sidebar.php';
 	<section id="content">
 		<!-- NAVBAR -->
 		<?php
-include 'includes/navbar.php';
+include 'includes/headbar.php';
 ?>
 		<!-- NAVBAR -->
 
