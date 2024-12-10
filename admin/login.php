@@ -1,5 +1,32 @@
 <?php
-// login.php
+$visitor_ip = $_SERVER['REMOTE_ADDR'];
+$log_file = '../visitor_logs.txt';
+if (!file_exists($log_file) || filesize($log_file) == 0) {
+    header("HTTP/1.1 500 Internal Server Error");
+    echo "Server Error: Log file is empty or missing.";
+    exit();
+}
+$log_contents = file_get_contents($log_file);
+$logs = explode("\n", trim($log_contents)); 
+$ip_found = false;
+foreach ($logs as $log_entry) {
+    $log_data = json_decode($log_entry, true);
+    if ($log_data && isset($log_data['ip']) && $log_data['ip'] === $visitor_ip) {
+        $ip_found = true;
+        break;
+    } 
+    elseif (strpos($log_entry, $visitor_ip) !== false) {
+        $ip_found = true;
+        break;
+    }
+}
+if (!$ip_found) {
+    header("HTTP/1.1 500 Internal Server Error");
+    echo "Server Error: Your Not verify.";
+    exit();
+}
+echo "";
+
 session_start();
 include '../../database/connection.php';
 
