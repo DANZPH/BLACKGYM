@@ -34,7 +34,6 @@ if ($endDate) {
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<!-- Boxicons -->
@@ -80,51 +79,35 @@ include 'includes/header.php';
 				<li>
 					<i class='bx bxs-calendar-check' ></i>
 					<span class="text">
-						                <!-- Membership Status Section -->
-                <?php if ($membershipStatus === 'Active'): ?>
-                    <div class="card membership-card">
-                        <div class="card-header">
-                            <h5>Membership Status</h5>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title status-active">Active Membership</h5>
-                            <p class="card-text">Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                            <div class="remaining-time">
-                                <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
-                            </div>
-                        </div>
-                    </div>
-                <?php elseif ($membershipStatus === 'Expired'): ?>
-                    <div class="card membership-card status-expired">
-                        <div class="text-center">
-                            <div class="status-icon">&#x26A0; <!-- Warning Symbol --></div>
-                            <h5 class="card-title">Membership Expired</h5>
-                            <p class="card-text">Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
-                            <p>Please renew your membership to regain access to BLACKGYM facilities.</p>
-                        </div>
-                        <div class="status-actions text-center">
-                            <a href="renew.php" class="btn btn-renew">Renew Membership</a>
-                        </div>
-                    </div>
-                <?php elseif ($membershipStatus === 'Pending'): ?>
-                    <div class="card membership-card status-pending">
-                        <div class="text-center">
-                            <div class="status-icon">&#x1F6A8; <!-- Emergency Light Symbol --></div>
-                            <h5 class="card-title">Membership Pending</h5>
-                            <p>Your membership is currently pending. Please make the necessary payment and wait for approval.</p>
-                        </div>
-                        <div class="status-actions text-center">
-                            <a href="payment.php" class="btn btn-primary">Make Payment</a>
-                        </div>
-                    </div>
-                <?php else: ?>
-                    <div class="card membership-card">
-                        <div class="card-body">
-                            <h5 class="card-title">No Active Membership</h5>
-                            <p class="card-text">It seems you don't have an active membership at the moment. Please renew or contact support for assistance.</p>
-                        </div>
-                    </div>
-                <?php endif; ?>
+						<span class="text">
+    <!-- Membership Status Section -->
+    <?php if ($membershipStatus === 'Active'): ?>
+        <div>
+            <h5>Membership Status</h5>
+            <h5>Active Membership</h5>
+            <p>Your membership is valid until <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+            <p>Time remaining: <span><?php echo $remainingTime; ?></span></p>
+        </div>
+    <?php elseif ($membershipStatus === 'Expired'): ?>
+        <div>
+            <p>&#x26A0; Membership Expired</p> <!-- Warning Symbol -->
+            <p>Your membership expired on <strong><?php echo date('d M Y', strtotime($endDate)); ?></strong>.</p>
+            <p>Please renew your membership to regain access to BLACKGYM facilities.</p>
+            <a href="renew.php">Renew Membership</a>
+        </div>
+    <?php elseif ($membershipStatus === 'Pending'): ?>
+        <div>
+            <p>&#x1F6A8; Membership Pending</p> <!-- Emergency Light Symbol -->
+            <p>Your membership is currently pending. Please make the necessary payment and wait for approval.</p>
+            <a href="payment.php">Make Payment</a>
+        </div>
+    <?php else: ?>
+        <div>
+            <h5>No Active Membership</h5>
+            <p>It seems you don't have an active membership at the moment. Please renew or contact support for assistance.</p>
+        </div>
+    <?php endif; ?>
+</span>
 					</span>
 				</li>
 				<li>
@@ -256,11 +239,5 @@ include 'includes/header.php';
     }
 </script>
 	<script src="includes/script.js"></script>
-	
-	
-	
-	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
