@@ -50,28 +50,9 @@ include 'includes/sidebar.php';
 ?>
 	<!-- CONTENT -->
 	<section id="content">
-	<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu' ></i>
-			<a href="#" class="nav-link">Categories</a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell' ></i>
-				<span class="num">8</span>
-			</a>
-			<a href="#" class="profile">
-				<img src="../../img/favicon-512x512.png">
-			</a>
-		</nav>
-		<!-- NAVBAR -->
-
+<?php
+include 'includes/headbar.php';
+?>
 		<!-- MAIN -->
 		<main>
 			<div class="head-title">
