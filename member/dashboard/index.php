@@ -111,15 +111,15 @@ include 'includes/header.php';
 				<li>
 					<i class='bx bxs-group' ></i>
 					<span class="text">
-						<h3>2834</h3>
-						<p>Visitors</p>
+						<h3>0/50</h3>
+						<p>Current people</p>
 					</span>
 				</li>
 				<li>
 					<i class='bx bxs-dollar-circle' ></i>
 					<span class="text">
-						<h3>$2543</h3>
-						<p>Total Sales</p>
+						<h3>₱</h3>
+						<p>Total Spend</p>
 					</span>
 				</li>
 			</ul>
