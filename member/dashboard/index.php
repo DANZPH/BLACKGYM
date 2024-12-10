@@ -44,9 +44,6 @@ if ($endDate) {
 </head>
 <body>
 <?php
-echo $_SERVER['DOCUMENT_ROOT'];
-?>
-<?php
 include 'includes/sidebar.php';
 ?>
 	<!-- CONTENT -->
