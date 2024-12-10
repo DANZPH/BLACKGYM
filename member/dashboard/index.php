@@ -55,6 +55,9 @@ include 'includes/header.php';
 ?>
 		<!-- MAIN -->
 		<main>
+		                 <h2>Hi!, 
+                <?php echo $_SESSION['username']; ?>
+                </h2>
 			<div class="head-title">
 				<div class="left">
 					<h1>Dashboard</h1>
