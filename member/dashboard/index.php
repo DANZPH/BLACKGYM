@@ -51,7 +51,7 @@ include 'includes/sidebar.php';
 	<!-- CONTENT -->
 	<section id="content">
 <?php
-include 'includes/header.php';
+include 'includes/navbar.php';
 ?>
 		<!-- MAIN -->
 		<main>
@@ -69,9 +69,9 @@ include 'includes/header.php';
 						</li>
 					</ul>
 				</div>
-				<a href="#" class="btn-download">
+				<a href="../action/fetch_receipt.php" class="btn-download">
 					<i class='bx bxs-cloud-download' ></i>
-					<span class="text">Download QRPASS</span>
+					<span class="text">QRPASS</span>
 				</a>
 			</div>
 
