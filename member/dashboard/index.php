@@ -51,7 +51,7 @@ include 'includes/sidebar.php';
 	<!-- CONTENT -->
 	<section id="content">
 <?php
-include 'includes/headbar.php';
+include 'includes/header.php';
 ?>
 		<!-- MAIN -->
 		<main>
