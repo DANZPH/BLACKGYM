@@ -42,7 +42,7 @@ if ($endDate) {
 	
 	<link rel="stylesheet" href="includes/styles.css">
 
-	<title>AdminHub</title>
+	<title>BLACKGYM</title>
 </head>
 <body>
 <?php
