@@ -4,33 +4,35 @@ if (!isset($_SESSION['MemberID'])) {
     header('Location: ../login.php');
     exit();
 }
-include '../../database/connection.php';
+
+include '../../database/connection.php'; // Assuming $conn1 is initialized in this file
+
 // Fetch the MemberID from the session
 $memberID = $_SESSION['MemberID'];  // Use session member_id instead of MemberID
 
-
-
+// Query to fetch payment history
 $query = "SELECT p.PaymentDate, p.Amount, p.PaymentMethod, p.Status, u.Username 
           FROM Payments p 
           INNER JOIN Members m ON p.MemberID = m.MemberID
           INNER JOIN Users u ON m.UserID = u.UserID
           WHERE p.MemberID = ? ORDER BY p.PaymentDate DESC";
-// Prepare the query and bind the member ID
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $memberID);
+
+// Prepare and bind the query with member ID
+$stmt = $conn1->prepare($query);
+$stmt->bind_param("i", $memberID); // "i" for integer
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Fetch the Membership data from the database
+// Query to fetch Membership data
 $sql = "SELECT EndDate, Status FROM Membership WHERE MemberID = ?";
 $stmt = $conn1->prepare($sql);
-$stmt->bind_param("d", $memberID); // Binding MemberID parameter
+$stmt->bind_param("i", $memberID); // "i" for integer since MemberID is an integer
 $stmt->execute();
 $stmt->bind_result($endDate, $membershipStatus);
 $stmt->fetch();
 $stmt->close();
 
-// Check if a valid EndDate exists
+// Calculate remaining time
 if ($endDate) {
     $currentDate = new DateTime(); // Current date and time
     $endDateObj = new DateTime($endDate); // Convert EndDate to DateTime object
@@ -43,6 +45,7 @@ if ($endDate) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
