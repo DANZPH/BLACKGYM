@@ -1,9 +1,9 @@
 php_value date.timezone "Asia/Manila"
 
 # Handle custom error pages
-ErrorDocument 403 https://gym.dazx.xyz/404.php
-ErrorDocument 404 https://gym.dazx.xyz/404.php
-ErrorDocument 500 https://gym.dazx.xyz/404.php
+ErrorDocument 403 https://admin.dazx.xyz/404.php
+ErrorDocument 404 https://admin.dazx.xyz/404.php
+ErrorDocument 500 https://admin.dazx.xyz/404.php
 # Enable mod_rewrite
 RewriteEngine On
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
@@ -28,5 +28,5 @@ RewriteRule ^(.+[^/])$ $1/ [L,R=301]
 <Files "visitor_logs.txt">
     Order Allow,Deny
     Deny from all
-    ErrorDocument 403 https://gym.dazx.xyz/403.php
+    ErrorDocument 403 https://dazx.xyz/403.php
 </Files>
