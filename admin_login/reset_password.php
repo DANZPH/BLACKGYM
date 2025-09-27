@@ -10,43 +10,42 @@ use PHPMailer\PHPMailer\Exception;
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-include '../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if user exists in the database
+    $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
 
-        // Check if user exists in the database
-        $stmt = $conn->prepare("SELECT * FROM Users WHERE Email = ?");
-        $stmt->bind_param("s", $email);
+    if ($result->num_rows > 0) {
+        // User exists, generate reset token and expiration time
+        $resetToken = generateResetToken();
+        $resetTokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour'));  // Token expiration time (1 hour from now)
+
+        // Update the reset token and expiration time in the Users table
+        $stmt = $conn->prepare("UPDATE Users SET ResetToken = ?, ResetTokenExpiration = ? WHERE Email = ?");
+        $stmt->bind_param("sss", $resetToken, $resetTokenExpiration, $email);
         $stmt->execute();
-        $result = $stmt->get_result();
         $stmt->close();
 
-        if ($result->num_rows > 0) {
-            // User exists, generate reset token and expiration time
-            $resetToken = generateResetToken();
-            $resetTokenExpiration = date('Y-m-d H:i:s', strtotime('+1 hour'));  // Token expiration time (1 hour from now)
+        // Send reset link via email
+        $result = sendResetEmail($email, $resetToken);
 
-            // Update the reset token and expiration time in the Users table
-            $stmt = $conn->prepare("UPDATE Users SET ResetToken = ?, ResetTokenExpiration = ? WHERE Email = ?");
-            $stmt->bind_param("sss", $resetToken, $resetTokenExpiration, $email);
-            $stmt->execute();
-            $stmt->close();
-
-            // Send reset link via email
-            $result = sendResetEmail($email, $resetToken);
-
-            if ($result === true) {
-                echo "Reset link sent to your email.";
-            } else {
-                echo "Error sending reset link: " . $result;
-            }
+        if ($result === true) {
+            echo "Reset link sent to your email.";
         } else {
-            echo "Error: Email not found.";
+            echo "Error sending reset link: " . $result;
         }
-
-        $conn->close();
     } else {
-        echo "Error: Email is required.";
+        echo "Error: Email not found.";
     }
+
+    $conn->close();
+} else {
+    echo "Error: Email is required.";
+}
 }
 
 function generateResetToken() {

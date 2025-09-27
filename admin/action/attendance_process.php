@@ -1,5 +1,5 @@
 <?php
-include '../../database/connection.php'; // Include database connection
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php'; // Include database connection
 
 // Set timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');

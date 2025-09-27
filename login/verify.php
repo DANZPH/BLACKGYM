@@ -1,6 +1,6 @@
 <?php
 session_start();  // Start the session to access session variables
-include '../database/connection.php';  // Assuming connection.php sets up $conn1
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';  // Assuming connection.php sets up $conn1
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email and OTP are provided

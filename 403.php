@@ -1,27 +1,3 @@
-<?php
-$visitor_ip = $_SERVER['REMOTE_ADDR'];
-
-// Define the path to the log file
-$log_file = 'visitor_logs.txt';
-
-// Check if the log file exists and is not empty
-if (!file_exists($log_file) || filesize($log_file) == 0) {
-    // If the log file is empty or does not exist, redirect the user
-    header("Location: index.php");
-    exit();
-}
-
-// Read the content of the log file
-$log_contents = file_get_contents($log_file);
-
-// Check if the visitor's IP address is in the log file
-if (strpos($log_contents, $visitor_ip) === false) {
-    // If the IP address is not found in the log file, redirect the user
-    header("Location: https://dazx.xyz/verify");
-    exit();
-}
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">

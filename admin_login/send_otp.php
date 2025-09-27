@@ -3,7 +3,7 @@
 require '../login/phpmailer/src/Exception.php';
 require '../login/phpmailer/src/PHPMailer.php';
 require '../login/phpmailer/src/SMTP.php';
-include '../database/connection.php'; // Include the connection file without internal SQL connection
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php'; // Include the connection file without internal SQL connection
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

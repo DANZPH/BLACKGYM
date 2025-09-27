@@ -1,14 +1,14 @@
 <?php
-$host = "sql104.infinityfree.com";
-$username = "if0_36048499";
-$password = "LokK4Hhvygq";
+$host = "localhost";
+$username = "root";
+$password = "";
 
-$dbname1 = "if0_36048499_db_user";
+$dbname1 = "blackgym";
 
 $conn1 = new mysqli($host, $username, $password, $dbname1);
 
 if ($conn1->connect_error) {
-    die("Connection failed for first database: " . $conn1->connect_error);
-    }
+     die("Connection failed for first database: " . $conn1->connect_error);
+     }
 ?>
         

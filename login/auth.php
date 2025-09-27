@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 if (isset($_GET['email']) && isset($_GET['token'])) {
     $email = $_GET['email'];

@@ -8,7 +8,7 @@ if (!isset($_SESSION['AdminID'])) {
     exit();
 }
 
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Get POST data from the AJAX request
 $memberID = $_POST['memberID'];

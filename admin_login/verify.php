@@ -1,5 +1,5 @@
 <?php
-include '../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if email and OTP are provided
     if (isset($_POST["email"]) && isset($_POST["otp"])) {

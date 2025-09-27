@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: login.php'); 
     exit();
 }
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +20,8 @@ include '../../database/connection.php';
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <script src="includes/JS/sweetalert.js"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="includes/styles.css">
@@ -234,6 +236,11 @@ $(document).ready(function () {
         updateTotalAmount();
     });
 
+    // Event listener for amount paid input to calculate change
+    $('#amountPaid').on('input', function () {
+        calculateChange();
+    });
+
     // Function to update the total amount based on multiplier or amount
     function updateTotalAmount() {
         var amount = parseFloat($('#amount').val()) || 0;
@@ -246,11 +253,9 @@ $(document).ready(function () {
     // Function to calculate change after payment
     function calculateChange() {
         var amountPaid = parseFloat($('#amountPaid').val()) || 0;
-        var totalAmount = parseFloat($('#totalAmount').val()) || 0;
+        var totalAmount = parseFloat($('#totalAmount').val()) || parseFloat($('#amount').val()) || 0;
         var change = amountPaid - totalAmount;
         $('#change').val(change.toFixed(2));  // Display the calculated change
-
-        // Allow for negative change (if Amount Paid < Total Amount)
     }
 
     // Form submission to process payment
@@ -263,11 +268,8 @@ $(document).ready(function () {
         var addToBalance = $('#addToBalance').val();
         var memberID = $('#memberID').val();
 
-        // Prevent form submission if Amount Paid is less than Total Bill and no balance is added
-        if (amountPaid < amount && addToBalance === 'no') {
-            alert("Error: Amount Paid cannot be less than the Total Bill unless you add the negative balance to your Balance.");
-            return; // Prevent form submission
-        }
+        // Allow flexible payment processing
+        // No strict validation - let the backend handle the logic
 
         var formData = $(this).serialize();
 

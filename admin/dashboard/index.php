@@ -4,6 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: login.php'); 
     exit();
 }
+// Use relative path for localhost compatibility
 include '../../database/connection.php';
 
 // Set timezone to Asia/Manila
@@ -30,9 +31,18 @@ $totalPaymentsResult = $conn1->query($totalPaymentsQuery);
 $totalPayments = $totalPaymentsResult->fetch_assoc()['total_amount'] ?? 0;
 
 // Total Borrow Balance (sum of negative balances)
-$totalBorrowBalanceQuery = "SELECT SUM(Balance) AS borrow_balance FROM Members WHERE Balance < 0";
-$totalBorrowBalanceResult = $conn1->query($totalBorrowBalanceQuery);
-$totalBorrowBalance = $totalBorrowBalanceResult->fetch_assoc()['borrow_balance'] ?? 0;
+// Check if Balance column exists first
+$columnCheckQuery = "SHOW COLUMNS FROM Members LIKE 'Balance'";
+$columnCheckResult = $conn1->query($columnCheckQuery);
+$balanceColumnExists = $columnCheckResult->num_rows > 0;
+
+if ($balanceColumnExists) {
+    $totalBorrowBalanceQuery = "SELECT SUM(COALESCE(Balance, 0)) AS borrow_balance FROM Members WHERE COALESCE(Balance, 0) < 0";
+    $totalBorrowBalanceResult = $conn1->query($totalBorrowBalanceQuery);
+    $totalBorrowBalance = $totalBorrowBalanceResult->fetch_assoc()['borrow_balance'] ?? 0;
+} else {
+    $totalBorrowBalance = 0;
+}
 
 // Adjusted Total Payments (subtracting Borrow Balance)
 $adjustedTotalPayments = $totalPayments - abs($totalBorrowBalance); // abs() to ensure the borrow balance is a positive value
@@ -48,9 +58,13 @@ $currentPeopleResult = $conn1->query($currentPeopleQuery);
 $currentPeople = $currentPeopleResult->fetch_assoc()['current_people'];
 
 // Total Available Balance (sum of positive balances)
-$totalAvailableBalanceQuery = "SELECT SUM(Balance) AS available_balance FROM Members WHERE Balance > 0";
-$totalAvailableBalanceResult = $conn1->query($totalAvailableBalanceQuery);
-$totalAvailableBalance = $totalAvailableBalanceResult->fetch_assoc()['available_balance'] ?? 0;
+if ($balanceColumnExists) {
+    $totalAvailableBalanceQuery = "SELECT SUM(COALESCE(Balance, 0)) AS available_balance FROM Members WHERE COALESCE(Balance, 0) > 0";
+    $totalAvailableBalanceResult = $conn1->query($totalAvailableBalanceQuery);
+    $totalAvailableBalance = $totalAvailableBalanceResult->fetch_assoc()['available_balance'] ?? 0;
+} else {
+    $totalAvailableBalance = 0;
+}
 
 // Daily Payments (for today)
 $today = date('Y-m-d');

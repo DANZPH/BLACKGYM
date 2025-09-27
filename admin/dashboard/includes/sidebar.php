@@ -6,44 +6,44 @@
 
     <ul class="side-menu top">
         <li class="active">
-            <a href="/admin/dashboard/">
+            <a href="index.php">
                 <i class='bx bxs-dashboard'></i>
                 <span class="text">Dashboard</span>
             </a>
         </li>
         <li>
-            <a href="view_member">
+            <a href="view_member.php">
                 <i class='bx bxs-group'></i>
                 <span class="text">Member</span>
             </a>
         </li>
         <li>
-            <a href="attendance">
+            <a href="attendance.php">
                 <i class='bx bxs-calendar-check'></i>
                 <span class="text">Attendance</span>
             </a>
         </li>
         <li>
-            <a href="payments">
+            <a href="payments.php">
                 <i class='bx bxs-wallet'></i>
                 <span class="text">Payment</span>
             </a>
         </li>
         <li>
-            <a href="payment_history">
+            <a href="payment_history.php">
                 <i class='bx bxs-credit-card'></i>
                 <span class="text">Transaction</span>
             </a>
         </li>
         <!-- New "Staff" button -->
         <li>
-            <a href="view_staff">
+            <a href="view_staff.php">
                 <i class='bx bxs-user'></i>
                 <span class="text">Staff</span>
             </a>
         </li>
         <li>
-            <a href="chart">
+            <a href="chart.php">
                 <i class='bx bxs-doughnut-chart'></i>
                 <span class="text">Chart</span>
             </a>

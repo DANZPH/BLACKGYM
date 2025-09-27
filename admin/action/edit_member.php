@@ -1,5 +1,5 @@
 <?php
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 if (isset($_GET['MemberID']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     $memberID = $_GET['MemberID'];

@@ -1,6 +1,6 @@
 <?php
 session_start();  // Start the session to store session variables
-include '../../database/connection.php';  // Include the database connection
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';  // Include the database connection
 
 // Check if the user is logged in
 if (isset($_SESSION['MemberID'])) {

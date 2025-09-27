@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-include '../../database/connection.php'; 
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php'; 
 ?>
 
 <!DOCTYPE html>

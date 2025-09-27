@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: login.php'); 
     exit();
 }
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +20,8 @@ include '../../database/connection.php';
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="includes/styles.css">

@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Check if the session is already active
 if (isset($_SESSION['AdminID'])) {

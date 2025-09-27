@@ -1,5 +1,5 @@
 <?php
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Check if MemberID is passed
 if (isset($_GET['memberID'])) {

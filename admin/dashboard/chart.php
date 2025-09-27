@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: login.php'); 
     exit();
 }
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Set timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
@@ -51,12 +51,12 @@ while ($row = $membersResult->fetch_assoc()) {
     $membersData[$row['MembershipStatus']] = $row['count'];
 }
 
-// Total Payments by Type
-$paymentsQuery = "SELECT PaymentType, SUM(Amount) AS total FROM Payments GROUP BY PaymentType";
+// Total Payments by Method (using PaymentMethod instead of PaymentType for now)
+$paymentsQuery = "SELECT COALESCE(PaymentMethod, 'Unknown') AS PaymentMethod, SUM(Amount) AS total FROM Payments GROUP BY PaymentMethod";
 $paymentsResult = $conn1->query($paymentsQuery);
 $paymentsData = [];
 while ($row = $paymentsResult->fetch_assoc()) {
-    $paymentsData[$row['PaymentType']] = $row['total'];
+    $paymentsData[$row['PaymentMethod']] = $row['total'];
 }
 
 // Attendance Trends

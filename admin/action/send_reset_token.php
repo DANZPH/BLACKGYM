@@ -4,7 +4,7 @@ session_start();
 require '../../login/phpmailer/src/Exception.php';
 require '../../login/phpmailer/src/PHPMailer.php';
 require '../../login/phpmailer/src/SMTP.php';
-include '../../database/connection.php'; // Include the connection file
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php'; // Include the connection file
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

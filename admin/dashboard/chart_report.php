@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: login.php');
     exit();
 }
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Total Members by Status
 $membersQuery = "SELECT MembershipStatus, COUNT(*) AS count FROM Members GROUP BY MembershipStatus";

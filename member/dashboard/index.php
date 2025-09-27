@@ -4,7 +4,7 @@ if (!isset($_SESSION['MemberID'])) {
     header('Location: ../login.php');
     exit();
 }
-include '../../database/connection.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php';
 
 // Fetch the MemberID from the session
 $memberID = $_SESSION['MemberID'];

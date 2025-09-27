@@ -4,7 +4,7 @@ if (!isset($_SESSION['AdminID'])) {
     header('Location: ../../admin/login.php');
     exit();
 }
-include '../../database/connection.php'; 
+include $_SERVER['DOCUMENT_ROOT'] . '/BLACKGYM/database/connection.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +21,8 @@ include '../../database/connection.php';
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="includes/styles.css">
@@ -73,9 +75,17 @@ include '../../database/connection.php';
                 </a>
             </div>
             <!-- Add Staff Modal -->
-            <?php include 'includes/modal/add_staff.php'; ?>
-            <?php include 'includes/modal/edit_staff.php'; ?>
-            <?php include 'includes/modal/manage_attendance.php'; ?> 
+            <?php 
+            if (file_exists('includes/modal/add_staff.php')) {
+                include 'includes/modal/add_staff.php'; 
+            }
+            if (file_exists('includes/modal/edit_staff.php')) {
+                include 'includes/modal/edit_staff.php'; 
+            }
+            if (file_exists('includes/modal/manage_attendance.php')) {
+                include 'includes/modal/manage_attendance.php'; 
+            }
+            ?> 
             <!-- Staff Table -->
             <div class="card">
                 <div class="card-header">
@@ -89,7 +99,7 @@ include '../../database/connection.php';
                         <table id="staffTable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="d-none">StaffID</th>
+                                    <th style="display:none;">StaffID</th>
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Job Title</th>
@@ -107,7 +117,7 @@ include '../../database/connection.php';
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
-                                            <td class='d-none'>{$row['StaffID']}</td>
+                                            <td style='display:none;'>{$row['StaffID']}</td>
                                             <td>{$row['Username']}</td>
                                             <td>{$row['Email']}</td>
                                             <td>{$row['JobTitle']}</td>
@@ -129,7 +139,7 @@ include '../../database/connection.php';
                                         </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='6' class='text-center'>No staff found</td></tr>";
+                                    echo "<tr><td colspan='5' class='text-center'>No staff found</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -155,6 +165,34 @@ include '../../database/connection.php';
     
     <script>
 $(document).ready(function() {
+    // Check for success/error messages in URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const error = urlParams.get('error');
+    
+    if (success) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: success,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        });
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
     // Handle Manage Attendance button click
     $('.manageAttendanceBtn').click(function() {
         var staffID = $(this).data('id');
@@ -282,7 +320,8 @@ $(document).ready(function() {
         columnDefs: [
             {
                 targets: [0],  // Hides the StaffID column (index 0)
-                visible: false
+                visible: false,
+                searchable: false
             }
         ]
     });
